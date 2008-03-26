@@ -107,9 +107,10 @@ class DatabaseObject {
     array_push($this->has_manys,$tablename);
     $this->$tablename = $that->find(array($corresponding_key => $this->$primary_key),'',false);
   }
-  function has_one($classname,$corresponding_key) {
+  function has_one($classname,$corresponding_key,$attribute_name=NULL) {
+    if(is_null($attribute_name)) $attribute_name = $classname;
     eval("\$that = new $classname();");
-    $this->$classname = $that->find_one(array($that->primary_key => $this->$corresponding_key),'',false);
+    $this->$attribute_name = $that->find_one(array($that->primary_key => $this->$corresponding_key),'',false);
   }
 }
 ?>
