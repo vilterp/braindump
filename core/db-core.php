@@ -69,7 +69,7 @@ class DatabaseTable {
     return $this->db->query(stripslashes(trim($querystring)));
   }
   function select($params='',$options) {
-    $querystring = "SELECT * FROM $this->name ".where_clause($params)." ".$options;
+    $querystring = "SELECT * FROM $this->name ".where_clause($params)." ".sql_options($options);
     $result = $this->runquery($querystring)->fetchAll(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;
@@ -79,12 +79,12 @@ class DatabaseTable {
   }
   // select one row
   function selectRow($params='',$options='') {
-    $querystring = "SELECT DISTINCT * FROM $this->name ".where_clause($params)." ".$options;
+    $querystring = "SELECT DISTINCT * FROM $this->name ".where_clause($params)." ".sql_options($options);
     return $this->runquery($querystring)->fetch(SQLITE_ASSOC);
   }
   // select specified columns
   function selectColumns($columns,$options='') {
-    $querystring = "SELECT ".implode(', ',$columns)." FROM $this->name ".where_clause($params)." ".$options;
+    $querystring = "SELECT ".implode(', ',$columns)." FROM $this->name ".where_clause($params)." ".sql_options($options);
     return $this->runquery($querystring)->fetch(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;
@@ -94,7 +94,7 @@ class DatabaseTable {
   }
   // select one cell
   function selectOne($column,$params='',$options='') {
-    $querystring = "SELECT $column FROM $this->name ".where_clause($params)." ".$options;
+    $querystring = "SELECT $column FROM $this->name ".where_clause($params)." ".sql_options($options);
     return $this->runquery($querystring)->fetchSingle(SQLITE_ASSOC);
   }
   function insert($data) {
@@ -152,5 +152,13 @@ function where_clause($params=NULL) {
     $finished = 'WHERE ';
     return $finished.implode(" AND ",$pairs);
   }
+}
+function sql_options($options='') {
+  if(is_string($options)) return $options;
+  $final = '';
+  foreach($options as $key=>$value) {
+    $final .= strtoupper($key).' '.$value.' ';
+  }
+  return trim($final);
 }
 ?>

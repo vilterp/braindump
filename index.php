@@ -16,7 +16,7 @@ do_hooks('absolute_beginning');
 include_dir('helpers');
 // connect to database
 if(!empty($config['database'])) {
-  $db = new Database($config['database']);
+  $db = new Database($config['database'],$config['database_print_queries']);
 }
 // load application
 include_dir('app/models');

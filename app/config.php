@@ -1,5 +1,6 @@
 <?php
 $config['database'] = 'database.sqlite';
-$config['base_url'] = 'http://mac-mini.local/~petevilter/svn/phpskeleton/trunk/';
+$config['database_print_queries'] = false;
+$config['base_url'] = 'http://mac-mini.local/~petevilter/svn/braindump/trunk/';
 $config['enable_mod_rewrite'] = false;
 ?>
