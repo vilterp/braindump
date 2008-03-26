@@ -1,0 +1,105 @@
+<?php
+include 'helpers/string-helpers.php';
+function scaffold_models() {
+  include 'core/db-core.php';
+  include 'app/config.php';
+  if(isset($config['database'])) {
+    $db = new Database($config['database']);
+    foreach($db->tables as $table_name) {
+      $singular = singularize($table_name);
+      $path = "app/models/$singular.php";
+      if(file_exists($path)) {
+        echo "exists $path\n";
+      } else {
+        echo "create $path\n";
+        $singular = singularize($table_name);
+        file_put_contents($path,"<?php
+class $singular extends DatabaseObject {
+  function __construct(\$id=NULL) {
+    parent::__construct('$table_name','id',\$id);
+  }
+  function connect() {
+
+  }
+}
+?>");
+      }
+    }
+  } else {
+    echo "no database setting found in app/config.php\n";
+    die();
+  }
+}
+function scaffold_controller($controller_name) {
+  $path = "app/controllers/$controller_name-controller.php";
+  if(file_exists($path)) {
+    echo "exists $path\n";
+  } else {
+    echo "create $path\n";
+    $singular = singularize($controller_name); 
+    file_put_contents($path,"<?php
+class $controller_name"."_controller {
+  function __construct() {
+    \$this->$singular = new $singular(\$GLOBALS['ident']);
+  }
+  function index() {
+
+  }
+}
+?>");
+  }
+}
+function make_views($controller) {
+  $path = "app/views/html/wrapper.php";
+  if(file_exists($path)) {
+    echo "exists $path\n";
+  } else {
+    echo "create $path\n";
+    file_put_contents($path,'');
+  }
+  $path = "app/views/html/$controller/";
+  if(file_exists($path)) {
+    echo "exists $path\n";
+  } else {
+    echo "create $path\n";
+    mkdir($path);
+  }
+}
+function delete_greeting() {
+  $paths = array(
+    'app/views/html/wrapper.php',
+    'app/views/html/greeting/helloworld.php',
+    'app/controllers/greeting-controller.php'
+  );
+  foreach($paths as $path) {
+    if(file_exists($path)) {
+      echo "delete $path\n";
+      unlink($path);
+    }
+  }
+  echo "delete app/views/html/greeting/\n";
+  rmdir('app/views/html/greeting/');
+}
+// action
+switch($_SERVER['argv'][1]) {
+  case 'models':
+    scaffold_models();
+    break;
+    
+  case 'controllers':
+    scaffold_controller($_SERVER['argv'][2]);
+    break;
+    
+  case 'delgreet':
+    delete_greeting();
+    break;
+  
+  default:
+    delete_greeting();
+    make_views($_SERVER['argv'][1]);
+    scaffold_models();
+    scaffold_controller($_SERVER['argv'][1]);
+    break;
+}
+echo "done\n";
+?>
