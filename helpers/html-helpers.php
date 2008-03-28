@@ -44,9 +44,9 @@ function js_options($options='') {
   }
 }
 function rss_link($url,$title) {
-  return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"$title\" href=\"".getURL($url)."\" />"
+  return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"$title\" href=\"".getURL($url)."\" />";
 }
 function opensearch_link($url,$title) {
-  return "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"$title\" href=\"".getURL($url)."\" />"
+  return "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"$title\" href=\"".getURL($url)."\" />";
 }
 ?>

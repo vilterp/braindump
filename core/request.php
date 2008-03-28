@@ -1,7 +1,7 @@
 <?php
 // get the juicy part of the url
 // ex: /index.php/class/function/id/ => array('class','function','id')
-function split_url($config) {
+function parse_request($config) {
   $url = array();
   $start = split("\?",$_SERVER['REQUEST_URI']);
   if($config['enable_mod_rewrite']) {

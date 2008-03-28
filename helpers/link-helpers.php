@@ -1,5 +1,5 @@
 <?php
-function getLink($url,$text) {
+function getLink($text,$url) {
   return "<a href='".getURL($url)."'>$text</a>";
 }
 function getURL($url) {

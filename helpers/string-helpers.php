@@ -6,10 +6,10 @@ function limit_string($string,$words) {
   $limited = array_chunk($split,$words);
   return implode(' ',$limited[0])."&#8230;";
 }
-function pluralize($string) {
+function plural($string) {
   return $string.'s';
 }
-function singularize($string) {
+function singular($string) {
   return substr($string,0,strlen($string)-1);
 }
 ?>

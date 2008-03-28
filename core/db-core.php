@@ -1,5 +1,4 @@
 <?php
-// TODO: standardize/clean up
 class Database {
   function __construct($filename,$print_queries=false) {
     $this->filename = $filename;

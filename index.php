@@ -22,7 +22,7 @@ if(!empty($config['database'])) {
 include_dir('app/models');
 include_dir('app/helpers');
 // decide which controller, action, ident
-$url = split_url($config);
+$url = parse_request($config);
 include 'app/routes.php';
 // decide which format
 if(!empty($_GET['format'])){
