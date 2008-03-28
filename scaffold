@@ -50,7 +50,7 @@ class $controller_name"."_controller {
   }
 }
 function make_views($controller) {
-  $path = "app/views/html/wrapper.php";
+  $path = "app/views/html/layout.php";
   if(file_exists($path)) {
     echo "exists $path\n";
   } else {
@@ -67,7 +67,7 @@ function make_views($controller) {
 }
 function delete_greeting() {
   $paths = array(
-    'app/views/html/wrapper.php',
+    'app/views/html/layout.php',
     'app/views/html/greeting/helloworld.php',
     'app/controllers/greeting-controller.php'
   );
