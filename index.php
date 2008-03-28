@@ -38,8 +38,8 @@ $view = "app/views/$format/$controller/$action.php";
 if($action == 'list'){$action='all';}; // 'list' is already a php function
 // load, initialize the main class
 include "app/controllers/$controller-controller.php";
-eval("\$controller = new $controller"."_controller();");
-eval("\$controller -> $action();");
+eval("\$main_controller = new $controller"."_controller();");
+eval("\$main_controller -> $action();");
 // get the show on the road
 include "app/views/$format/layout.php";
 // finish up

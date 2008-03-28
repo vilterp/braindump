@@ -1,6 +1,7 @@
 <?php
 function load_view($path) {
   global $format;
-  $GLOBALS['view'] = "app/views/$format/$path";
+  global $controller;
+  $GLOBALS['view'] = "app/views/$format/$controller/$path";
 }
 ?>

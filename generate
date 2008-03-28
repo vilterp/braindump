@@ -56,7 +56,6 @@ class $singular extends DatabaseObject {
 }
 function scaffold_controller($controller_name) {
   $path = "app/controllers/$controller_name-controller.php";
-  var_dump($path);
   if(file_exists($path)) {
     echo "exists $path\n";
   } else {

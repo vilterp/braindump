@@ -1,6 +1,6 @@
 <?php
-function getLink($text,$url) {
-  return "<a href='".getURL($url)."'>$text</a>";
+function getLink($text,$url,$options='') {
+  return "<a href='".getURL($url)."' ".html_options($options).">$text</a>";
 }
 function getURL($url) {
   if($GLOBALS['config']['enable_mod_rewrite']) {

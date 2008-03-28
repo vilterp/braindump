@@ -1,0 +1,14 @@
+body {
+  font-family: 'lucida grande' arial sans-serif;
+  padding: 5px;
+}
+a {
+  color: blue;
+  text-decoration: none;
+}
+a:hover {
+  color: green;
+}
+a:active {
+  color: orange;
+}
