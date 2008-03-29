@@ -1,6 +1,7 @@
 <?php if(!$pages): ?>
   <p>No pages. <?php echo getLink('make one &raquo;','pages/edit') ?></p>
 <?php else: ?>
+  <?php echo getLink('Revisions','revisions') ?> | 
   <?php echo getLink('New page &raquo;','pages/edit') ?>
   <ul>
     <?php foreach ($pages as $page): ?>

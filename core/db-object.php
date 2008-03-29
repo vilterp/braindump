@@ -65,6 +65,15 @@ class DatabaseObject {
     }
     $this->delete();
   }
+  /** app helpers **/
+  function exchange($from_key,$to_key,$value) { // ugghhh
+    $item = $GLOBALS['db']->selectOne(plural(get_class($this)),$to_key,array($from_key=>$value));
+    if(!$item) {
+      return NULL;
+    } else {
+      return $item;
+    }
+  }
   /** domain logic helpers **/
   function find($params='',$options='',$keep_going=true) {
     $items = array();
@@ -91,7 +100,7 @@ class DatabaseObject {
       return $result;
     }
   }
-  function find_one($params='',$options='',$keep_going) {
+  function find_one($params='',$options='',$keep_going=true) {
     $result = $this->find($params,$options,$keep_going);
     if($result != false) {
       return $result[0];
@@ -100,16 +109,18 @@ class DatabaseObject {
     }
   }
   /** domain logic **/
-  function has_many($classname,$corresponding_key) { // guess key? singularize(tablename) + this->primary key
+  function has_many($classname,$corresponding_key=NULL) {
+    if(is_null($corresponding_key)) $corresponding_key = get_class($this).'_'.$this->primary_key; // eg 'page_id'
     eval("\$that = new $classname();");
     $primary_key = $this->primary_key;
     $tablename = $that->tablename;
     array_push($this->has_manys,$tablename);
     $this->$tablename = $that->find(array($corresponding_key => $this->$primary_key),'',false);
   }
-  function has_one($classname,$corresponding_key,$attribute_name=NULL) {
+  function has_one($classname,$corresponding_key=NULL,$attribute_name=NULL) {
     if(is_null($attribute_name)) $attribute_name = $classname;
     eval("\$that = new $classname();");
+    if(is_null($corresponding_key)) $corresponding_key = $classname.'_'.$that->primary_key;
     $this->$attribute_name = $that->find_one(array($that->primary_key => $this->$corresponding_key),'',false);
   }
 }

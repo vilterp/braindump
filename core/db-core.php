@@ -94,7 +94,12 @@ class DatabaseTable {
   // select one cell
   function selectOne($column,$params='',$options='') {
     $querystring = "SELECT $column FROM $this->name ".where_clause($params)." ".sql_options($options);
-    return $this->runquery($querystring)->fetchSingle(SQLITE_ASSOC);
+    $result = $this->runquery($querystring)->fetchSingle(SQLITE_ASSOC);
+    if(!$result) {
+      return NULL;
+    } else {
+      return $result;
+    }
   }
   function insert($data) {
     $keys = array();

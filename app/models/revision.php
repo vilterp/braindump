@@ -4,7 +4,7 @@ class revision extends DatabaseObject {
     parent::__construct('revisions','id',$id);
   }
   function connect() {
-    $this->has_one('page','page_id');
+    $this->has_one('page');
   }
 }
 ?>

@@ -2,6 +2,7 @@
 class pages_controller {
   function __construct() {
     $this->page = new page(page::id_from_name($GLOBALS['ident']));
+    if(is_null($this->page->name)) $this->page->name = $GLOBALS['ident'];
   }
   function index() {
     $this->all();
@@ -25,8 +26,6 @@ class pages_controller {
     $revision = new revision();
     $revision->page_id = $this->page->id; // hmm...
     $revision->time = time();
-    $revision->ip = $_SERVER['REMOTE_ADDR'];
-    $revision->author = $_POST['rev_author'];
     $revision->body = $_POST['rev_body'];
     $revision->save();
     setcookie('author',$revision->author,time()+60*60*24*30); // agghh!! not working!!
@@ -34,6 +33,7 @@ class pages_controller {
   }
   function delete() {
     $this->page->delete_all();
+    redirect("pages/show/".$this->page->name);
   }
 }
 ?>

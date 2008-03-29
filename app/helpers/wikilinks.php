@@ -1,13 +1,17 @@
 <?php
-function parse_wiki_links($input) {
+function parse_wiki_links($input) { // I need to learn regular expressions...
   $final = "";
   $split = split("}",$input);
   for($i=0; $i<count($split)-1; $i++) {
     $segment = $split[$i];
     $split2 = split("{",$segment);
     $final .= $split2[0];
-    $linkcontents = urlencode($split2[1]);
-    $final .= getLink($linkcontents,"pages/show/$linkcontents");
+    $page_name = $split2[1];
+    if(page::exists($page_name)) {
+      $final .= getLink($page_name,"pages/show/".urlencode($page_name));
+    } else {
+      $final .= getLink($page_name,"pages/edit/".urlencode($page_name),array('class'=>'non_existent_page'));
+    }
   }
   $final .= $split[count($split)-1];
   return $final;

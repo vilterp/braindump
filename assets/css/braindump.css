@@ -12,3 +12,21 @@ a:hover {
 a:active {
   color: orange;
 }
+a.non_existent_page {
+  color: red;
+}
+.revision {
+  padding: 5px;
+}
+.revision_name {
+  font-weight: bold;
+}
+.revision_time {
+  font-style: italic;
+}
+ins {
+  background-color: lightgreen;
+}
+del {
+  background-color: pink;
+}
