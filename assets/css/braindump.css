@@ -15,6 +15,9 @@ a:active {
 a.non_existent_page {
   color: red;
 }
+a.non_existent_page:hover {
+  color: purple;
+}
 .revision {
   padding: 5px;
 }

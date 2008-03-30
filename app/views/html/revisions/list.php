@@ -1,5 +1,5 @@
 <?php if(!empty($ident)): ?>
-  <p>Revisions for <?php echo getLink($ident,"pages/show/$ident") ?></p>
+  <p><?php echo getLink('Revisions','revisions/') ?> for <?php echo getLink($ident,"pages/show/$ident") ?></p>
 <?php endif ?>
 <ul>
   <?php foreach ($revisions as $revision): ?>
