@@ -109,13 +109,14 @@ class DatabaseObject {
     }
   }
   /** domain logic **/
-  function has_many($classname,$corresponding_key=NULL) {
+  function has_many($classname,$corresponding_key=NULL,$attribute_name=NULL) {
     if(is_null($corresponding_key)) $corresponding_key = get_class($this).'_'.$this->primary_key; // eg 'page_id'
     eval("\$that = new $classname();");
     $primary_key = $this->primary_key;
     $tablename = $that->tablename;
+    if(is_null($attribute_name)) $attribute_name = $classname;
     array_push($this->has_manys,$tablename);
-    $this->$tablename = $that->find(array($corresponding_key => $this->$primary_key),'',false);
+    $this->$attribute_name = $that->find(array($corresponding_key => $this->$primary_key),'',false);
   }
   function has_one($classname,$corresponding_key=NULL,$attribute_name=NULL) {
     if(is_null($attribute_name)) $attribute_name = $classname;

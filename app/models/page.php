@@ -5,8 +5,8 @@ class page extends DatabaseObject {
   }
   function connect() {
     $this->has_many('revision');
-    $this->links = links_from($this->name);
-    $this->links_to = links_to($this->name);
+    $this->has_many('link','to_id','links_to');
+    $this->has_many('link','from_id','links_from');
   }
   // helpers...
   function body() {
@@ -14,10 +14,10 @@ class page extends DatabaseObject {
     return $this->revisions[count($this->revisions)-1]->body;
   }
   function meta() {
-    if($page->links) {
+    if($this->links_from) {
       $final = '';
-      foreach($this->links as $link) {
-        $final .= "$link->rel: $link->to_page\n";
+      foreach($this->links_from as $link) {
+        $final .= $link->rel.': '.page::name_from_id($link->to_id)."\n";
       }
       return $final;
     } else {

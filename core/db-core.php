@@ -67,7 +67,7 @@ class DatabaseTable {
     }
     return $this->db->query(stripslashes(trim($querystring)));
   }
-  function select($params='',$options) {
+  function select($params='',$options='') {
     $querystring = "SELECT * FROM $this->name ".where_clause($params)." ".sql_options($options);
     $result = $this->runquery($querystring)->fetchAll(SQLITE_ASSOC);
     if(count($result) > 0) {
