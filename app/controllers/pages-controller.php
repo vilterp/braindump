@@ -29,38 +29,41 @@ class pages_controller {
     $revision->save();
     // save links
     $metadata = explode("\n",$_POST['rev_metadata']);
-    array_pop($metadata);
     $good_links = array();
     foreach($metadata as $item) { // go through links
-      echo "---- a link! ----<br />";
-      $link = new link();
-      $link->as_of_revision = $revision->id;
-      $link->from_id = $this->page->id;
-      $split = explode(':',$item);
-      if(!page::exists(trim($split[1]))) { // if the to page doesn't exist, make it
-        $to_page = new page();
-        $to_page->name = trim($split[1]);
-        $to_page->save();
-        $to_id = $to_page->id;
-      } else { // otherwise, get its id
-        $to_id = page::id_from_name(trim($split[1])); 
-      }
-      $link->to_id = $to_id;
-      $link->rel = trim($split[0]);
-      $link->changed_since = 0;
-      if($good_link = link::exists($link->from_id,$link->rel,$link->to_id)) {
-        // if the link already exists, save its id in the array
-        array($good_links,$good_link);
-      } else {
-        // otherwise, save it
-        $link->save();
-        array_push($good_links,$link->id);
+      if(!empty($item)) {
+        $link = new link();
+        $link->as_of_revision = $revision->id;
+        $link->from_id = $this->page->id;
+        $split = explode(':',$item);
+        if(!page::exists(trim($split[1]))) { // if the to page doesn't exist, make it
+          $to_page = new page();
+          $to_page->name = trim($split[1]);
+          $to_page->save();
+          $to_id = $to_page->id;
+        } else { // otherwise, get its id
+          $to_id = page::id_from_name(trim($split[1])); 
+        }
+        $link->to_id = $to_id;
+        $link->rel = trim($split[0]);
+        $link->changed_in_revision = NULL;
+        if($good_link = link::exists($link->from_id,$link->rel,$link->to_id)) {
+          // if the link already exists, save its id in the array
+          array_push($good_links,$good_link);
+        } else {
+          // otherwise, save it
+          $link->save();
+          array_push($good_links,$link->id);
+        }
       }
     }
-    // set 'changed_since' to 1 for links not in the input (meaning they've been changed)
-    $GLOBALS['db']->links->update('changed_since = 1',
+    // keep track of this revision id for links not in the input 
+    // (meaning they've been changed in this revision)
+    if(count($good_links) > 0) {
+      $GLOBALS['db']->links->update("changed_in_revision = $revision->id",
       'from_id = '.$this->page->id.' AND id != '.implode(' AND id != ',$good_links));
-    //redirect("pages/show/".$this->page->name); // whew! finally
+    }
+    redirect("pages/show/".$this->page->name); // whew!
   }
   function delete() {
     $this->page->delete_all();

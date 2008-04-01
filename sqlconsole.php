@@ -6,7 +6,7 @@
     <h1>SQL Console</h1>
     <hr>
     <form action='' method='post'>
-      <textarea id="querybody" name="query" rows="8" cols="40"><?php echo $_POST['query'] ?></textarea><br />
+      <textarea id="querybox" name="query" rows="8" cols="40"><?php echo $_POST['query'] ?></textarea><br />
       <input type="submit" value="Run &raquo;" accesskey="r">
     </form>
     <?php

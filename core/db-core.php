@@ -109,6 +109,8 @@ class DatabaseTable {
       array_push($keys,$key);
       if(is_string($value)) {
         array_push($values,"'".sqlite_escape_string($value)."'"); // kludgy...
+      } elseif(is_null($value)) {
+        array_push($values,'NULL');
       } else {
         array_push($values,$value);
       }
@@ -124,7 +126,9 @@ class DatabaseTable {
       // key/value pairs to update
       foreach($data as $key=>$value) {
         if(is_string($value)) {
-          array_push($pairs,"$key = '$value'");
+          array_push($pairs,"$key = '".sqlite_escape_string($value)."'");
+        } elseif(is_null($value)) {
+          array_push($paris,"$key = NULL");
         } else {
           array_push($pairs,"$key = $value");
         }

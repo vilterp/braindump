@@ -17,7 +17,9 @@ class page extends DatabaseObject {
     if($this->links_from) {
       $final = '';
       foreach($this->links_from as $link) {
-        $final .= $link->rel.': '.page::name_from_id($link->to_id)."\n";
+        if(!$link->changed_in_revision) {
+          $final .= $link->rel.': '.page::name_from_id($link->to_id)."\n";
+        }
       }
       return $final;
     } else {

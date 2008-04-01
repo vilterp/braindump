@@ -5,6 +5,8 @@ class revision extends DatabaseObject {
   }
   function connect() {
     $this->has_one('page');
+    $this->has_many('link','as_of_revision','links_set');
+    $this->has_many('link','changed_in_revision','links_changed');
   }
 }
 ?>
