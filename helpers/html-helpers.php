@@ -1,7 +1,7 @@
 <?php
 // html options string from associative array
 function html_options($options='') {
-  if(is_string($options)){return $options;};
+  if(is_string($options)) return $options;
   $final = "";
   foreach($options as $key=>$value) {
     $final .= "$key=\"$value\"";

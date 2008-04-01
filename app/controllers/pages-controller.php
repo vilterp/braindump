@@ -4,14 +4,11 @@ class pages_controller {
     $this->page = new page(page::id_from_name($GLOBALS['ident']));
     if(is_null($this->page->name)) $this->page->name = $GLOBALS['ident'];
   }
-  function index() {
-    $this->all();
-    load_view('list.php');
-  }
   // views
-  function all() {
+  function index() {
     global $pages;
     $pages = $this->page->find_all(array('order by'=>'name'),false);
+    load_view('list.php');
   }
   function show() {
     $GLOBALS['page'] = $this->page;
@@ -33,7 +30,6 @@ class pages_controller {
     // save links
     $metadata = explode("\n",$_POST['rev_metadata']);
     array_pop($metadata);
-    var_dump($metadata);
     $good_links = array();
     foreach($metadata as $item) { // go through links
       echo "---- a link! ----<br />";

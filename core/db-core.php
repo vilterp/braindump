@@ -144,7 +144,7 @@ class DatabaseTable {
 
 function where_clause($params=NULL) {
   // generates an SQL WHERE clause from an associative array or string
-  if(empty($params)) {return '';};
+  if(empty($params)) return '';
   if(is_string($params)) {
     // if it's a string just return 'WHERE' + that
     return "WHERE $params";

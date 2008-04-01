@@ -9,6 +9,7 @@ define('PATH_TO_APP_HELPERS','app/helpers');
 // system paths
 define('PATH_TO_CORE','core/');
 define('PATH_TO_HELPERS','helpers/');
+define('PATH_TO_LIB','lib/');
 function include_dir($directory) {
   foreach(scandir("$directory/") as $file) {
     if(!strpos($file,".") == 0 && !is_dir($file)) {
@@ -16,14 +17,15 @@ function include_dir($directory) {
     }
   }
 }
-// get config
-include PATH_TO_CONFIG;
 // get core
 include_dir(PATH_TO_CORE);
 // for timer, etc
 do_hooks('absolute_beginning');
-// get helpers
+// get helpers, lib
 include_dir(PATH_TO_HELPERS);
+include_dir(PATH_TO_LIB);
+// get config
+include PATH_TO_CONFIG;
 // connect to database
 if(!empty($config['database'])) {
   $db = new Database($config['database'],$config['database_print_queries']);
@@ -41,11 +43,11 @@ if(!empty($_GET['format'])){
   $format = $defaults['format'];
 }
 // revert to defaults if necessary
-if(empty($controller)){$controller=$defaults['controller'];};
-if(empty($action)){$action='index';};
+if(empty($controller)) $controller=$defaults['controller'];
+if(empty($action)) $action='index';
 // this will be included from wrapper.php
 $view = PATH_TO_VIEWS."/$format/$controller/$action.php";
-if($action == 'list'){$action='all';}; // 'list' is already a php function
+if($action == 'list') $action='all'; // 'list' is already a php function
 // load, initialize the main class
 include PATH_TO_CONTROLLERS."/$controller-controller.php";
 eval("\$main_controller = new $controller"."_controller();");

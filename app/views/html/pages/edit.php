@@ -1,4 +1,8 @@
-<p><?php echo getLink('Show',"pages/show/$page->name",array('accesskey'=>'s')) ?></p>
+<?php if ($page->in_db): ?>
+  <p>
+    <?php echo getLink('Show',"pages/show/$page->name",array('accesskey'=>'s')) ?>
+  </p>
+<?php endif ?>
 <?php echo form_tag("pages/save/$page->name") ?>
   <input type="text" name="page_name" value="<?php echo $GLOBALS['ident'] ?>"> Page Name<br />
   <textarea name="rev_metadata" rows="20" cols="50"><?php echo $page->meta() ?></textarea>

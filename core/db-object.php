@@ -114,7 +114,7 @@ class DatabaseObject {
     eval("\$that = new $classname();");
     $primary_key = $this->primary_key;
     $tablename = $that->tablename;
-    if(is_null($attribute_name)) $attribute_name = $classname;
+    if(is_null($attribute_name)) $attribute_name = $tablename;
     array_push($this->has_manys,$tablename);
     $this->$attribute_name = $that->find(array($corresponding_key => $this->$primary_key),'',false);
   }
