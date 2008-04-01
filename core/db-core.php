@@ -117,16 +117,21 @@ class DatabaseTable {
     $this->runquery($querystring);
   }
   function update($data,$params='') {
-    $pairs = array();
-    // key/value pairs to update
-    foreach($data as $key=>$value) {
-      if(is_string($value)) {
-        array_push($pairs,"$key = '$value'");
-      } else {
-        array_push($pairs,"$key = $value");
+    if(is_string($data)) {
+      $the_data = $data;
+    } else {
+      $pairs = array();
+      // key/value pairs to update
+      foreach($data as $key=>$value) {
+        if(is_string($value)) {
+          array_push($pairs,"$key = '$value'");
+        } else {
+          array_push($pairs,"$key = $value");
+        }
       }
+      $the_data = implode(', ',$pairs);
     }
-    $querystring = "UPDATE $this->name SET ".implode(", ",$pairs)." ".where_clause($params);
+    $querystring = "UPDATE $this->name SET $the_data ".where_clause($params);
     $this->runquery($querystring);
   }
   function delete($params='') {

@@ -3,9 +3,9 @@
 define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');
 define('PATH_TO_MODELS','app/models');
-define('PATH_TO_APP_HELPERS','app/helpers');
-define('PATH_TO_CONTROLLERS','app/controllers');
 define('PATH_TO_VIEWS','app/views');
+define('PATH_TO_CONTROLLERS','app/controllers');
+define('PATH_TO_APP_HELPERS','app/helpers');
 // system paths
 define('PATH_TO_CORE','core/');
 define('PATH_TO_HELPERS','helpers/');
