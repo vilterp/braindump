@@ -10,7 +10,7 @@ class link extends DatabaseObject {
   }
   // helpers
   function exists($from_id,$rel,$to_id) {
-    return $GLOBALS['db']->links->selectOne('id',"from_id=$from_id AND rel='$rel' AND to_id=$to_id");
+    return $GLOBALS['db']->links->selectOne('id',"from_id=$from_id AND rel='$rel' AND to_id=$to_id AND changed_in_revision = NULL");
   }
 }
 ?>
