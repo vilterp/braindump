@@ -22,6 +22,8 @@ include_once 'diff/Renderer.php';
 include_once 'diff/inline_renderer.php';
 
 function inline_diff($text1, $text2, $nl) {
+  
+  if($text1 == $text2) return "no changes";
 
 	// create the hacked lines for each file
 	$htext1 = chunk_split($text1, 1, "\n");

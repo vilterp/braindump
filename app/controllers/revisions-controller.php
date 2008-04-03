@@ -4,6 +4,10 @@ class revisions_controller {
     $this->revision = new revision($GLOBALS['ident']);
   }
   function index() {
+    $this->all();
+    load_view('list.php');
+  }
+  function all() {
     global $revisions;
     if(!empty($GLOBALS['ident'])) { // specific page
       $revisions = $this->revision->find(
@@ -13,7 +17,6 @@ class revisions_controller {
     } else {
       $revisions = $this->revision->find_all(array('order by'=>'time DESC'));
     }
-    load_view('list.php');
   }
   function detail() {
     $GLOBALS['revision'] = $this->revision; // these are annoying
