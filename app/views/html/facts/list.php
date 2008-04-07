@@ -1,7 +1,7 @@
 <?php if ($facts): ?>
   <ul>
     <?php foreach ($facts as $fact): ?>
-      <?php if (!$fact['changed_in_revision']): ?>
+      <?php if (!$fact['changed_at_revision']): ?>
         <?php $to_page = page::name_from_id($fact['to_id']) ?>
         <?php $from_page = page::name_from_id($fact['from_id']) ?>
         <li>

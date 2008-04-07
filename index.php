@@ -1,4 +1,5 @@
 <?php
+define('BD_VERSION','0.2');
 // app paths
 define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');
@@ -27,8 +28,10 @@ include_dir(PATH_TO_LIB);
 // get config
 include PATH_TO_CONFIG;
 // connect to database
-if(!empty($config['database'])) {
-  $db = new Database($config['database'],$config['database_print_queries']);
+if(!empty($config['database_path'])) {
+  $db = new Database(
+    $config['database_path'],$config['database_print_queries'],$config['database_cache_schema']
+  );
 }
 // load application
 include_dir(PATH_TO_MODELS);

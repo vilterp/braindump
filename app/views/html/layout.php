@@ -5,8 +5,27 @@
     <?php echo load_css('braindump.css') ?>
   </head>
   <body>
-    <h1><?php echo getLink('Braindump','') ?></h1>
-    <hr>
-    <?php include($view); ?>
+    <table id="content" width="100%">
+      <tr>
+        <td colspan="2" id="header">
+          <h1><?php echo getLink('Braindump').'/'.implode('/',get_path()) ?></h1>
+        </td>
+      </tr>
+      <tr id="content">
+        <td id="main">
+          <?php include $view ?>
+        </td>
+        <td id="sidebar" >
+          <?php include 'sidebar.php' ?>
+        </td>
+      </tr>
+      <tr>
+        <td id="footer" colspan="2">
+          <small>
+            this is a <a href="http://code.google.com/p/brain-dump/" title="v<?php echo BD_VERSION ?>">braindump</a>.
+          </small>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

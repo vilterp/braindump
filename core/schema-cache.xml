@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<database><table name="pages"><column name="name"/><column name="id"/></table><table name="revisions"><column name="body"/><column name="time"/><column name="page_id"/><column name="id"/></table><table name="triples"><column name="changed_at_revision"/><column name="set_at_revision"/><column name="to_id"/><column name="rel"/><column name="from_id"/><column name="id"/></table></database>

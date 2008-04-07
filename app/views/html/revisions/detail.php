@@ -5,24 +5,29 @@
 </p>
 
 <div id="metadata_changes">
-  <strong>metadata:</strong>
-  <?php if(!$revision->links_set && !$revision->links_changed): ?>
+  <p><strong>metadata:</strong></p>
+  <?php if(!$revision->triples_set): ?>
     No changes
   <?php else: ?>
+    <?php
+    $rels_changed = array();
+    if($revision->triples_changed) {
+      foreach($revision->triples_changed as $triple) {
+        array_push($rels_changed,$triple->rel);
+      }
+    }
+    ?>
     <ul>
-      <?php if ($revision->links_changed): ?>
-        <?php foreach ($revision->links_changed as $link): ?>
+      <?php if ($revision->triples_set): ?>
+        <?php foreach ($revision->triples_set as $triple): ?>
           <li>
-            changed <strong><?php echo $link->rel ?></strong> to 
-            <strong><?php echo page::name_from_id($link->to_id) ?></strong>
-          </li>
-        <?php endforeach ?>
-      <?php endif ?>
-      <?php if ($revision->links_set): ?>
-        <?php foreach ($revision->links_set as $link): ?>
-          <li>
-            set <strong><?php echo $link->rel ?></strong> to 
-            <strong><?php echo page::name_from_id($link->to_id) ?></strong>
+            <?php if (in_array($triple->rel,$rels_changed)): ?>
+              changed <strong><?php echo $triple->rel ?></strong> to
+              <strong><?php echo page::name_from_id($triple->to_id) ?></strong>
+            <?php else: ?>
+              set <strong><?php echo $triple->rel ?></strong> to 
+              <strong><?php echo page::name_from_id($triple->to_id) ?></strong>
+            <?php endif ?>
           </li>
         <?php endforeach ?>
       <?php endif ?>
@@ -31,6 +36,6 @@
 </div>
 
 <div id="body_changes">
-  <strong>body:</strong>
+  <p><strong>body:</strong></p>
   <?php echo inline_diff($prev_revision->body,$revision->body,'\n') ?>
 </div>

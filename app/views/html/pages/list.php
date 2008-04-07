@@ -1,9 +1,7 @@
 <?php if(!$pages): ?>
   <p>No pages. <?php echo getLink('make one &raquo;','pages/edit') ?></p>
 <?php else: ?>
-  <?php echo getLink('Knowledge','knowledge') ?> | 
-  <?php echo getLink('Revisions','revisions') ?> | 
-  <?php echo getLink('New page &raquo;','pages/edit') ?>
+  <?php // TODO: trac-style custom query UI ?>
   <ul>
     <?php foreach ($pages as $page): ?>
       <li><?php echo getLink($page->name,"pages/show/$page->name") ?></li>

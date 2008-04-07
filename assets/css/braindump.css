@@ -1,7 +1,24 @@
+/* body, layout */
 body {
   font-family: 'lucida grande' arial sans-serif;
   padding: 5px;
 }
+#header {
+  border-bottom: thin gray solid;
+}
+#sidebar {
+  vertical-align: top;
+  border-left: thin gray solid;
+  width: 150px;
+}
+#main {
+  vertical-align: top;
+  padding: 5px;
+}
+#footer {
+  border-top: thin gray solid;
+}
+/* links */
 a {
   color: blue;
   text-decoration: none;
@@ -18,6 +35,7 @@ a.non_existent_page {
 a.non_existent_page:hover {
   color: purple;
 }
+/* revisions */
 .revision {
   padding: 5px;
 }
@@ -27,6 +45,7 @@ a.non_existent_page:hover {
 .revision_time {
   font-style: italic;
 }
+/* diff */
 ins {
   background-color: lightgreen;
 }

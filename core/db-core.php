@@ -1,23 +1,47 @@
 <?php
 class Database {
-  function __construct($filename,$print_queries=false) {
+  function __construct($filename,$print_queries=false,$cache_schema) {
     $this->filename = $filename;
     $this->print_queries = $print_queries;
     // get actual db
     $this->db = new SQLiteDatabase($filename);
     // get list of tables
-    $result = $this->runquery('SELECT * FROM sqlite_master')->fetchAll();
     $this->tables = array();
-    foreach($result as $table) {
-      array_push($this->tables,$table['name']);
+    if(file_exists(PATH_TO_CORE.'schema-cache.xml') && $cache_schema) {
+      $schema_cache_exists = true;
+      $this->load_schema_cache(); // load cache if it's there
+    } else { // otherwise query the database to get schema info
+      $result = $this->runquery('SELECT * FROM sqlite_master')->fetchAll();
+      foreach($result as $table) {
+        array_push($this->tables,$table['name']);
+      }
     }
     // initialize table sub-objects
     foreach($this->tables as $table) {
-      $this->$table = new DatabaseTable($this->db,$table,$print_queries);
+      $this->$table = new DatabaseTable($this->db,$table,$print_queries,$this->cache);
+    }
+    // save schema
+    if(!$schema_cache_exists && $cache_schema) {
+      $this->save_schema_cache();
     }
   }
-  function size() {
-    return round(filesize($this->filename)/1024);
+  function load_schema_cache() {
+    $this->cache = simplexml_load_file(PATH_TO_CORE.'schema-cache.xml');
+    foreach($this->cache->children() as $table) {
+      array_push($this->tables,$table['name']);
+    }
+  }
+  function save_schema_cache() {
+    $cache = new SimpleXMLElement("<database></database>");
+    foreach($this->tables as $table) {
+      $table_element = $cache->addChild('table');
+      $table_element['name'] = $table;
+      foreach($this->$table->columns as $column) {
+        $column_element = $table_element->addChild('column');
+        $column_element['name'] = $column;
+      }
+    }
+    file_put_contents(PATH_TO_CORE.'schema-cache.xml',$cache->asXML());
   }
   // actually run the queries
   function runquery($querystring) {
@@ -50,15 +74,25 @@ class Database {
   }
 }
 class DatabaseTable {
-  function __construct($handle,$name,$print_queries=false) {
+  function __construct($handle,$name,$print_queries=false,$cache) {
     $this->db = $handle;
     $this->name = $name;
     $this->print_queries = $print_queries;
     // get columns
     $this->columns = array();
-    $columns = $this->runquery("PRAGMA table_info('$name')")->fetchAll();
-    foreach($columns as $column) {
-      array_unshift($this->columns,$column['name']);
+    if(!$cache) { // query database for column info
+      $columns = $this->runquery("PRAGMA table_info('$name')")->fetchAll();
+      foreach($columns as $column) {
+        array_unshift($this->columns,$column['name']);
+      }
+    } else { // use cache for columns (too many loops!)
+      foreach($cache->children() as $table) {
+        if($table['name'] == $name) {
+          foreach($table->children() as $column) {
+            array_push($this->columns,$column['name']);
+          }
+        }
+      }
     }
   }
   function runquery($querystring) {
