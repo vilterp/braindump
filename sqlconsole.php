@@ -12,7 +12,7 @@
     <?php
     include 'app/config.php'; // what if this changes... it would be good to grab the constants from index.php
     if(!empty($_POST['query'])) {
-      $db = sqlite_open($config['database']);
+      $db = sqlite_open($config['database_path']);
       $result = sqlite_fetch_all(sqlite_query($db,$_POST['query']),SQLITE_ASSOC);
       if(count($result) > 0) {
         $keys = array_keys($result[0]); ?>

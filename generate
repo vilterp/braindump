@@ -27,8 +27,8 @@ echo "done\n";
 function scaffold_models() {
   include 'core/db-core.php';
   include 'app/config.php';
-  if(isset($config['database'])) {
-    $db = new Database($config['database']);
+  if(isset($config['database_path'])) {
+    $db = new Database($config['database_path']);
     foreach($db->tables as $table_name) {
       $singular = singular($table_name);
       $path = "app/models/$singular.php";

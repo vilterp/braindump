@@ -1,4 +1,4 @@
-<?php // should these be constants?
+<?php // should these be constants? YAML?
 $config['database_path'] = 'database.sqlite';
 $config['database_print_queries'] = false;
 $config['database_cache_schema'] = true;

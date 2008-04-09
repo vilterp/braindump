@@ -1,6 +1,9 @@
 <?php
+// FIXME: path to schema cache file should be a parameter somehow...
+// it would be good to keep this file usable on its own...
+// TODO: mysql? multiple database drivers?
 class Database {
-  function __construct($filename,$print_queries=false,$cache_schema) {
+  function __construct($filename,$print_queries=false,$cache_schema=false) {
     $this->filename = $filename;
     $this->print_queries = $print_queries;
     // get actual db
@@ -142,7 +145,7 @@ class DatabaseTable {
     foreach($data as $key=>$value) {
       array_push($keys,$key);
       if(is_string($value)) {
-        array_push($values,"'".sqlite_escape_string($value)."'"); // kludgy...
+        array_push($values,"'".sqlite_escape_string($value)."'"); // a little kludgy...
       } elseif(is_null($value)) {
         array_push($values,'NULL');
       } else {
@@ -180,14 +183,13 @@ class DatabaseTable {
 
 // functions - Database class depends on these
 
+// generates an SQL WHERE clause from an associative array or string
 function where_clause($params=NULL) {
-  // generates an SQL WHERE clause from an associative array or string
   if(empty($params)) return '';
   if(is_string($params)) {
-    // if it's a string just return 'WHERE' + that
     return "WHERE $params";
   } else {
-    // otherwise, make an SQL string out of the key/value pairs
+    // if it's an array, make an SQL string out of the key/value pairs
     $pairs = array();
     foreach($params as $key=>$value) {
       if(is_string($value)) {

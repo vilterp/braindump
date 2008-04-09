@@ -10,15 +10,18 @@ function html_options($options='') {
 }
 // <select> element from array of items
 function select_tag($items,$name,$selected=NULL,$options='') {
-  echo "<select name='$name' ".html_options($options).">\n";
+  $final = '';
+  $final .= "<select name='$name' ".html_options($options).">\n";
   foreach($items as $item) {
     if($item == $selected) {
-      echo "<option value='$item' selected>$item</option>\n";
+      $final .= "<option value='$item' selected>$item</option>\n";
     } else {
-      echo "<option value='$item'>$item</option>\n";
+      $final .= "<option value='$item'>$item</option>\n";
     }
   }
-  echo "</select>\n";
+  $final .= "</select>\n";
+  return $final;
+  // TODO: blank item if $selected == null
 }
 function link_tag($url,$text,$options='') {
   return "<a href='$url' ".html_options($options).">$text</a>";
