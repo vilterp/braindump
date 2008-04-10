@@ -16,7 +16,7 @@ class Database {
       // otherwise query the database to get schema info
       $this->load_schema();
       // save loaded info in caching turned on
-      if($cache_schema) $this->save_schema();
+      if($cache_schema) $this->save_schema_cache();
     }
     $this->tables = array_keys($this->schema);
   }

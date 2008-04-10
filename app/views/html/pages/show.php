@@ -1,6 +1,5 @@
 <p id="page_controls">
-  <?php echo getLink('Edit',"pages/edit/$page->name",array('accesskey'=>'e')) ?> | 
-  <?php echo getLink('Revisions',"revisions/list/$page->name") ?>
+  <?php echo getLink('Edit',"pages/edit/$page->name",array('accesskey'=>'e')) ?>
 </p>
 <?php if($page->links_from): ?>
   <div id="page_metadata">
@@ -16,7 +15,7 @@
 <?php endif ?>
 <?php if($page->in_db): ?>
   <div id="page_body">
-    <?php echo do_filters('page_body',$page->body()) ?>
+    <?php echo do_filters('page_body',$page->body) ?>
   </div>
 <?php endif ?>
 <?php if($page->links_to): ?>

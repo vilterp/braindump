@@ -24,21 +24,15 @@ class pages_controller {
     $GLOBALS['db']->print_queries = true;
     // save page
     $this->page->name = $_POST['page_name'];
+    $this->page->body = $_POST['page_body'];
     $this->page->save();
-    // save new revision
-    $revision = new revision();
-    $revision->page_id = $this->page->id; // hmm...
-    $revision->time = time();
-    $revision->body = $_POST['rev_body'];
-    $revision->save();
     // save triples
     // TODO: abstract in triple API helper...
-    $metadata = explode("\n",$_POST['rev_metadata']);
+    $metadata = explode("\n",$_POST['page_metadata']);
     $triples_in_input = array();
     foreach($metadata as $item) { // go through links
       if(!empty($item)) {
         $triple = new triple();
-        $triple->set_at_revision = $revision->id;
         $triple->from_id = $this->page->id;
         $split = explode(':',$item);
         if(!page::exists(trim($split[1]))) { // if the to page doesn't exist, make it
@@ -51,12 +45,8 @@ class pages_controller {
         }
         $triple->to_id = $to_id;
         $triple->rel = trim($split[0]);
-        $triple->changed_at_revision = NULL;
-        if($existing = triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
-          // if the link already exists, save its id in the array
-          array_push($triples_in_input,$existing);
-        } else {
-          // otherwise, save it
+        if(!triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
+          // save the triple if it doesn't already exist
           $triple->save();
           array_push($triples_in_input,$triple->id);
         }

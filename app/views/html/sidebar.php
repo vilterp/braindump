@@ -4,6 +4,5 @@
 <ul>
   <li><?php echo getLink('New page &raquo;','pages/edit') ?></li>
   <li><?php echo getLink('Pages','pages') ?></li>
-  <li><?php echo getLink('Revisions','revisions') ?></li>
   <li><?php echo getLink('Facts','facts') ?></li>
 </ul>

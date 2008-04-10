@@ -1,7 +1,6 @@
 <?php
 class page extends DatabaseObject {
   function connect() {
-    $this->has_many('revision');
     $this->has_many('triple','to_id','links_to');
     $this->has_many('triple','from_id','links_from');
   }
