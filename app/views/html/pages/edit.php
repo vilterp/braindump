@@ -9,4 +9,4 @@
   <textarea name="rev_body" rows="20" cols="50"><?php echo $page->body() ?></textarea><br />
   <input type="submit" value="Save" accesskey="s">
 </form>
-<?php echo getLink('Delete This Page','pages/delete/'.$page->name) ?>
+<small><?php echo getLink('Delete This Page','pages/delete/'.$page->name) ?></small>

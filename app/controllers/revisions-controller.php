@@ -4,10 +4,6 @@ class revisions_controller {
     $this->revision = new revision($GLOBALS['ident']);
   }
   function index() {
-    $this->all();
-    load_view('list.php');
-  }
-  function all() {
     global $revisions;
     if(!empty($GLOBALS['ident'])) { // specific page
       $revisions = $this->revision->find(

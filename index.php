@@ -1,7 +1,7 @@
 <?php
 define('BD_VERSION','0.2');
 // app paths
-define('PATH_TO_CONFIG','app/config.php');
+define('PATH_TO_CONFIG','app/config.yaml');
 define('PATH_TO_ROUTES','app/routes.php');
 define('PATH_TO_MODELS','app/models');
 define('PATH_TO_VIEWS','app/views');
@@ -13,7 +13,8 @@ define('PATH_TO_HELPERS','helpers/');
 define('PATH_TO_LIB','lib/');
 function include_dir($directory) {
   foreach(scandir("$directory/") as $file) {
-    if(!strpos($file,".") == 0 && !is_dir($file)) {
+    // make sure it's not a hidden file, folder, or non-php file
+    if(!strpos($file,".") == 0 && !is_dir($file) && strpos($file,'.php')) {
       require_once "$directory/$file";
     }
   }
@@ -26,11 +27,13 @@ do_hooks('absolute_beginning');
 include_dir(PATH_TO_HELPERS);
 include_dir(PATH_TO_LIB);
 // get config
-include PATH_TO_CONFIG;
+$config = Spyc::YAMLload(PATH_TO_CONFIG);
 // connect to database
-if(!empty($config['database_path'])) {
+if(!empty($config['database']['path'])) {
   $db = new Database(
-    $config['database_path'],$config['database_print_queries'],$config['database_cache_schema']
+    $config['database']['path'],
+    $config['database']['print_queries'],
+    $config['database']['cache_schema']
   );
 }
 // load application

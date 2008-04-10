@@ -9,7 +9,6 @@ class pages_controller {
     // TODO: semantic custom query goodness
     global $pages;
     $pages = $this->page->find_all(array('order by'=>'name'),false);
-    load_view('list.php');
   }
   function show() {
     $GLOBALS['page'] = $this->page;
@@ -18,15 +17,11 @@ class pages_controller {
     $GLOBALS['page'] = $this->page;
   }
   function redirect() { // for the goto box
-    $name = $_GET['name'];
-    if(page::exists($name)) {
-      redirect("pages/show/$name");
-    } else {
-      redirect("pages/edit/$name");
-    }
+    page::exists($_GET['name']) ? redirect("pages/show/$name") : redirect("pages/edit/$name");
   }
   // action
   function save() {
+    $GLOBALS['db']->print_queries = true;
     // save page
     $this->page->name = $_POST['page_name'];
     $this->page->save();
@@ -70,15 +65,15 @@ class pages_controller {
     // keep track of this revision id for triples not in the input 
     // (meaning they've been changed in this revision)
     if(count($triples_in_input) > 0) {
-      $GLOBALS['db']->triples->update("changed_at_revision = $revision->id",
+      $GLOBALS['db']->update('triples',"changed_at_revision = $revision->id",
       'from_id = '.$this->page->id.' AND changed_at_revision = NULL 
       AND id != '.implode(' AND id != ',$triples_in_input));
     }
-    redirect("pages/show/".$this->page->name); // whew!
+    //redirect('pages/show/'.$this->page->name); // whew!
   }
   function delete() {
     $this->page->delete_all();
-    redirect("pages/show/".$this->page->name);
+    redirect('pages');
   }
 }
 ?>

@@ -1,10 +1,11 @@
 <?php
 class DatabaseObject {
-  function __construct($tablename,$primary_key='id',$primary_value=NULL) {
-    $this->tablename = $tablename;
+  function __construct($primary_value=NULL,$tablename=NULL,$primary_key='id') {
+    $tablename ? $this->tablename = $tablename : $this->tablename = pluralize(get_class($this));
     $this->primary_key = $primary_key; // for relationships, auto-incrementing
-    $this->columns = $GLOBALS['db']->$tablename->columns;
-    $this->has_manys = array();
+    $this->columns = $GLOBALS['db']->schema[$this->tablename];
+    $this->has_many = array();
+    $this->has_one = array();
     // fill with values from db
     if(!is_null($primary_value)) { // if created with a param
       $data = $GLOBALS['db']->selectRow($this->tablename,array($this->primary_key=>$primary_value));
@@ -58,16 +59,18 @@ class DatabaseObject {
     }
   }
   function delete_all() {
-    foreach($this->has_manys as $has_many) {
-      foreach($this->$has_many as $item) {
-        $item->delete();
+    foreach($this->has_many as $has_many=>$attribute) {
+      if($this->$attribute) {
+        foreach($this->$attribute as $item) {
+          $item->delete();
+        }
       }
     }
     $this->delete();
   }
   /** app helpers **/
   function exchange($from_key,$to_key,$value) { // ugghhh
-    $item = $GLOBALS['db']->selectOne(plural(get_class($this)),$to_key,array($from_key=>$value));
+    $item = $GLOBALS['db']->selectOne(pluralize(get_class($this)),$to_key,array($from_key=>$value));
     if(!$item) {
       return NULL;
     } else {
@@ -109,20 +112,22 @@ class DatabaseObject {
     }
   }
   /** domain logic **/
-  function has_many($classname,$corresponding_key=NULL,$attribute_name=NULL) {
+  function has_many($class_name,$corresponding_key=NULL,$attribute_name=NULL) {
     if(is_null($corresponding_key)) $corresponding_key = get_class($this).'_'.$this->primary_key; // eg 'page_id'
-    eval("\$that = new $classname();");
+    eval("\$that = new $class_name();");
     $primary_key = $this->primary_key;
     $tablename = $that->tablename;
     if(is_null($attribute_name)) $attribute_name = $tablename;
-    array_push($this->has_manys,$tablename);
+    $this->has_many[$class_name] = $attribute_name;
     $this->$attribute_name = $that->find(array($corresponding_key => $this->$primary_key),'',false);
   }
-  function has_one($classname,$corresponding_key=NULL,$attribute_name=NULL) {
-    if(is_null($attribute_name)) $attribute_name = $classname;
-    eval("\$that = new $classname();");
-    if(is_null($corresponding_key)) $corresponding_key = $classname.'_'.$that->primary_key;
+  function has_one($class_name,$corresponding_key=NULL,$attribute_name=NULL) {
+    if(is_null($attribute_name)) $attribute_name = $class_name;
+    $this->has_one[$class_name] = $attribute_name;
+    eval("\$that = new $class_name();");
+    if(is_null($corresponding_key)) $corresponding_key = $class_name.'_'.$that->primary_key;
     $this->$attribute_name = $that->find_one(array($that->primary_key => $this->$corresponding_key),'',false);
   }
+  // TODO: belongs_to?
 }
 ?>

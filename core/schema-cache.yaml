@@ -1,0 +1,16 @@
+---
+pages: 
+  - name
+  - id
+revisions: 
+  - body
+  - time
+  - page_id
+  - id
+triples: 
+  - changed_at_revision
+  - set_at_revision
+  - to_id
+  - rel
+  - from_id
+  - id

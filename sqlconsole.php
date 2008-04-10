@@ -10,9 +10,10 @@
       <input type="submit" value="Run &raquo;" accesskey="r">
     </form>
     <?php
-    include 'app/config.php'; // what if this changes... it would be good to grab the constants from index.php
+    include 'lib/spyc.php';
+    $config = Spyc::YAMLLoad('app/config.yaml');
     if(!empty($_POST['query'])) {
-      $db = sqlite_open($config['database_path']);
+      $db = sqlite_open($config['database']['path']);
       $result = sqlite_fetch_all(sqlite_query($db,$_POST['query']),SQLITE_ASSOC);
       if(count($result) > 0) {
         $keys = array_keys($result[0]); ?>
