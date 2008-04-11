@@ -2,7 +2,9 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>&laquo; braindump &raquo;</title>
-    <?php echo load_css('braindump.css') ?>
+    <?php load_css('braindump') ?>
+    <?php load_js('jquery') ?>
+    <?php include('app/helpers/in-place-edit.php') ?>
   </head>
   <body>
     <table id="content" width="100%">

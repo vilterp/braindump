@@ -13,6 +13,11 @@ class pages_controller {
   function show() {
     $GLOBALS['page'] = $this->page;
   }
+  function just_body() {
+    no_layout();
+    content_type('text/plain');
+    echo $this->page->body;
+  }
   function edit() {
     $GLOBALS['page'] = $this->page;
   }
@@ -53,6 +58,12 @@ class pages_controller {
       }
     }
     redirect('pages/show/'.$this->page->name); // whew!
+  }
+  function save_body() {
+    no_layout();
+    $this->page->body = $_POST['value'];
+    $this->page->save();
+    echo do_filters('page_body',$this->page->body);
   }
   function delete() {
     $this->page->delete_all();

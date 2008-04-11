@@ -15,7 +15,11 @@
 <?php endif ?>
 <?php if($page->in_db): ?>
   <div id="page_body">
-    <?php echo do_filters('page_body',$page->body) ?>
+    <?php if ($page->body): ?>
+      <?php echo do_filters('page_body',$page->body) ?>
+    <?php else: ?>
+      <p><em>double click to add a description</em></p>
+    <?php endif ?>
   </div>
 <?php endif ?>
 <?php if($page->links_to): ?>

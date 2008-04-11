@@ -35,20 +35,7 @@ a.non_existent_page {
 a.non_existent_page:hover {
   color: purple;
 }
-/* revisions */
-.revision {
-  padding: 5px;
-}
-.revision_name {
-  font-weight: bold;
-}
-.revision_time {
-  font-style: italic;
-}
-/* diff */
-ins {
-  background-color: lightgreen;
-}
-del {
-  background-color: pink;
+/* show page */
+#page_body textarea {
+  font-size: inherit;
 }

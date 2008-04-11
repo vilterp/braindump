@@ -53,13 +53,14 @@ if(empty($controller)) $controller=$defaults['controller'];
 if(empty($action)) $action='index';
 // this will be included from wrapper.php
 $view = PATH_TO_VIEWS."/$format/$controller/$action.php";
+$layout = PATH_TO_VIEWS."/$format/layout.php";
 if($action == 'list') $action='all'; // 'list' is already a php function
 // load, initialize the main class
 include PATH_TO_CONTROLLERS."/$controller-controller.php";
 eval("\$main_controller = new $controller"."_controller();");
 eval("\$main_controller -> $action();");
 // get the show on the road
-include PATH_TO_VIEWS."/$format/layout.php";
+if($layout) include $layout;
 // finish up
 do_hooks('absolute_end');
 ?>
