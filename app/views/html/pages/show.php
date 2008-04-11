@@ -29,4 +29,19 @@
       <?php endif ?>
     <?php endforeach ?>
   </div>
+  <div id="types">
+    <ul>
+      <?php $types = $page->get_types_by_links_to() ?>
+      <?php foreach($types as $type): ?>
+        <li><?php echo $type ?>
+          <?php $attributes = page::get_attributes_for_type($type) ?>
+          <ul>
+            <?php foreach ($attributes as $attribute): ?>
+              <li><?php echo $attribute ?></li>
+            <?php endforeach ?>
+          </ul>
+        </li>
+      <?php endforeach ?>
+    </ul>
+  </div>
 <?php endif ?>

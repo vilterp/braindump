@@ -17,7 +17,8 @@ class pages_controller {
     $GLOBALS['page'] = $this->page;
   }
   function redirect() { // for the goto box
-    page::exists($_GET['name']) ? redirect("pages/show/$name") : redirect("pages/edit/$name");
+    $name = $_GET['name'];
+    page::exists($name) ? redirect("pages/show/$name") : redirect("pages/edit/$name");
   }
   // action
   function save() {
@@ -48,18 +49,10 @@ class pages_controller {
         if(!triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
           // save the triple if it doesn't already exist
           $triple->save();
-          array_push($triples_in_input,$triple->id);
         }
       }
     }
-    // keep track of this revision id for triples not in the input 
-    // (meaning they've been changed in this revision)
-    if(count($triples_in_input) > 0) {
-      $GLOBALS['db']->update('triples',"changed_at_revision = $revision->id",
-      'from_id = '.$this->page->id.' AND changed_at_revision = NULL 
-      AND id != '.implode(' AND id != ',$triples_in_input));
-    }
-    //redirect('pages/show/'.$this->page->name); // whew!
+    redirect('pages/show/'.$this->page->name); // whew!
   }
   function delete() {
     $this->page->delete_all();

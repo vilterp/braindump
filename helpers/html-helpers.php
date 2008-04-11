@@ -52,4 +52,12 @@ function rss_link($url,$title) {
 function opensearch_link($url,$title) {
   return "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"$title\" href=\"".getURL($url)."\" />";
 }
+function ul_tag($items) {
+  $final = "<ul>\n";
+  foreach($items as $item) {
+    $final .= "<li>$item</li>\n";
+  }
+  $final .= "</ul>\n";
+  return $final;
+}
 ?>
