@@ -8,7 +8,7 @@ class DatabaseObject {
     $this->has_one = array();
     // fill with values from db
     if(!is_null($primary_value)) { // if created with a param
-      $data = $GLOBALS['db']->selectRow($this->tablename,array($this->primary_key=>$primary_value));
+      $data = $GLOBALS['db']->select_row($this->tablename,array($this->primary_key=>$primary_value));
       if($data) { // record exists in db
         $this->fill($data);
         $this->in_db = true;
@@ -37,7 +37,7 @@ class DatabaseObject {
   function save() {
     if(!$this->in_db) {
       // no record exists of this in the db
-      $highkey = $GLOBALS['db']->selectOne($this->tablename,$this->primary_key,'',"ORDER BY $this->primary_key DESC");
+      $highkey = $GLOBALS['db']->select_one($this->tablename,$this->primary_key,'',"ORDER BY $this->primary_key DESC");
       $primary_key = $this->primary_key;
       if($highkey == false && $highkey != 0) {
         echo 'no record in db';
@@ -70,7 +70,7 @@ class DatabaseObject {
   }
   /** app helpers **/
   function exchange($from_key,$to_key,$value) { // ugghhh
-    $item = $GLOBALS['db']->selectOne(pluralize(get_class($this)),$to_key,array($from_key=>$value));
+    $item = $GLOBALS['db']->select_one(pluralize(get_class($this)),$to_key,array($from_key=>$value));
     if(!$item) {
       return NULL;
     } else {

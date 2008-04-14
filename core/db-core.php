@@ -25,10 +25,10 @@ class Database {
   
   function load_schema() {
     // get tables
-    $tables_result = $this->runquery('SELECT * FROM sqlite_master')->fetchAll();
+    $tables_result = $this->run_query('SELECT * FROM sqlite_master')->fetchAll();
     foreach($tables_result as $table) {
       // get columns
-      $columns_result = $this->runquery("PRAGMA table_info($table[name])")->fetchAll();
+      $columns_result = $this->run_query("PRAGMA table_info($table[name])")->fetchAll();
       $this->schema[$table['name']] = array();
       foreach($columns_result as $column) {
         array_push($this->schema[$table['name']],$column['name']);
@@ -46,7 +46,7 @@ class Database {
   /* SQL generation & querying */
   
   // everything goes through here eventually
-  function runquery($querystring) {
+  function run_query($querystring) {
     if($this->print_queries) {
       echo $querystring."<br />\n";
     }
@@ -55,7 +55,7 @@ class Database {
   
   function select($tablename,$params='',$options='') {
     $querystring = "SELECT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->runquery($querystring)->fetchAll(SQLITE_ASSOC);
+    $result = $this->run_query($querystring)->fetchAll(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;
     } else {
@@ -63,14 +63,15 @@ class Database {
     }
   }
   // select one row
-  function selectRow($tablename,$params='',$options='') {
+  function select_row($tablename,$params='',$options='') {
     $querystring = "SELECT DISTINCT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->runquery($querystring)->fetch(SQLITE_ASSOC);
+    return $this->run_query($querystring)->fetch(SQLITE_ASSOC);
   }
   // select specified columns
-  function selectColumns($tablename,$columns,$options='') {
+  function select_columns($tablename,$columns,$options='') {
+    if(is_string($columns)) $columns = array($columns);
     $querystring = "SELECT ".implode(', ',$columns)." FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->runquery($querystring)->fetch(SQLITE_ASSOC);
+    return $this->run_query($querystring)->fetch(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;
     } else {
@@ -78,9 +79,9 @@ class Database {
     }
   }
   // select one cell
-  function selectOne($tablename,$column,$params='',$options='') {
+  function select_one($tablename,$column,$params='',$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->runquery($querystring)->fetchSingle(SQLITE_ASSOC);
+    $result = $this->run_query($querystring)->fetchSingle(SQLITE_ASSOC);
     if(!$result) {
       return NULL;
     } else {
@@ -102,7 +103,7 @@ class Database {
       }
     }
     $querystring = "INSERT INTO $tablename (".implode(", ",$keys).") VALUES (".implode(", ",$values).")";
-    $this->runquery($querystring);
+    $this->run_query($querystring);
   }
   function update($tablename,$data,$params='') {
     if(is_string($data)) {
@@ -122,11 +123,11 @@ class Database {
       $the_data = implode(', ',$pairs);
     }
     $querystring = "UPDATE $tablename SET $the_data ".$this->where_clause($params);
-    $this->runquery($querystring);
+    $this->run_query($querystring);
   }
   function delete($tablename,$params='') {
     $querystring = "DELETE FROM $tablename ".$this->where_clause($params);
-    $this->runquery($querystring);
+    $this->run_query($querystring);
   }
   
   /* utility functions */

@@ -48,7 +48,7 @@ class page extends DatabaseObject {
     }
   }
   function exists($page_name) {
-    return $GLOBALS['db']->selectRow('pages',array('name'=>$page_name));
+    return $GLOBALS['db']->select_row('pages',array('name'=>$page_name));
   }
   function name_from_id($id) {
     if(empty($id)) return NULL;
@@ -59,7 +59,7 @@ class page extends DatabaseObject {
       }
       return $ids;
     }
-    return $GLOBALS['db']->selectOne('pages','name',array('id'=>$id));    
+    return $GLOBALS['db']->select_one('pages','name',array('id'=>$id));    
   }
   function id_from_name($name) {
     if(empty($name)) return NULL;
@@ -70,7 +70,7 @@ class page extends DatabaseObject {
       }
       return $names;
     } else {
-      return $GLOBALS['db']->selectOne('pages','id',array('name'=>$name));
+      return $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
     }
   }
 }
