@@ -10,8 +10,7 @@
       <input type="submit" value="Run &raquo;" accesskey="r">
     </form>
     <?php
-    include 'lib/spyc.php';
-    $config = Spyc::YAMLLoad('app/config.yaml');
+    include 'app/config.php';
     if(!empty($_POST['query'])) {
       $db = sqlite_open($config['database']['path']);
       $result = sqlite_fetch_all(sqlite_query($db,$_POST['query']),SQLITE_ASSOC);

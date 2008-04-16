@@ -11,7 +11,7 @@
         cancel: 'cancel',
         tooltip: 'double click to edit',
         event: 'dblclick',
-        rows: 5,
+        rows: 20,
         cols: 60
       })
     });
