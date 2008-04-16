@@ -111,6 +111,9 @@ class DatabaseObject {
       return NULL;
     }
   }
+  function find_by($attribute,$value,$options='',$keep_going=true) {
+    return $this->find(array($attribute=>$value),$options,$keep_going);
+  }
   /** domain logic **/
   function has_many($class_name,$corresponding_key=NULL,$attribute_name=NULL) {
     if(is_null($corresponding_key)) $corresponding_key = get_class($this).'_'.$this->primary_key; // eg 'page_id'

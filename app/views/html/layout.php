@@ -15,10 +15,10 @@
       </tr>
       <tr id="content">
         <td id="main">
-          <?php include $view ?>
+          <?php if(file_exists($view)) include $view ?>
         </td>
         <td id="sidebar" >
-          <?php include 'sidebar.php' ?>
+          <?php load_partial('sidebar') ?>
         </td>
       </tr>
       <tr>

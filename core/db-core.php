@@ -8,7 +8,7 @@ class Database {
     // get actual db
     $this->db = new SQLiteDatabase($filename);
     // get schema information
-    if(file_exists(PATH_TO_CORE.'schema-cache.yaml') && $cache_schema) {
+    if(file_exists(PATH_TO_SCHEMA_CACHE) && $cache_schema) {
       // load cache if it's there
       $schema_cache_exists = true;
       $this->load_schema_cache();
@@ -36,11 +36,11 @@ class Database {
     }
   }
   function load_schema_cache() {
-    $this->schema = Spyc::YAMLLoad(PATH_TO_CORE.'schema-cache.yaml');
+    $this->schema = (array) unserialize(file_get_contents(PATH_TO_SCHEMA_CACHE));
     $this->tables = array_keys($this->schema);
   }
   function save_schema_cache() {
-    file_put_contents(PATH_TO_CORE.'schema-cache.yaml',Spyc::YAMLDump($this->schema));
+    file_put_contents(PATH_TO_SCHEMA_CACHE,serialize($this->schema));
   }
   
   /* SQL generation & querying */

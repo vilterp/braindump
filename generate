@@ -39,9 +39,6 @@ function scaffold_models() {
         $singular = singular($table_name);
         file_put_contents($path,"<?php
 class $singular extends DatabaseObject {
-  function __construct(\$id=NULL) {
-    parent::__construct('$table_name','id',\$id);
-  }
   function connect() {
 
   }

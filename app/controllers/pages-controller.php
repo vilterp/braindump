@@ -7,19 +7,17 @@ class pages_controller {
   // views
   function index() {
     // TODO: semantic custom query goodness
-    global $pages;
-    $pages = $this->page->find_all(array('order by'=>'name'),false);
+    $GLOBALS['pages'] = $this->page->find_all(array('order by'=>'name'),false);
   }
   function show() {
-    $GLOBALS['page'] = $this->page;
+    set_var('page',$this->page);
   }
   function just_body() {
     no_layout();
-    content_type('text/plain');
     echo $this->page->body;
   }
   function edit() {
-    $GLOBALS['page'] = $this->page;
+    set_var('page',$this->page);
   }
   function redirect() { // for the goto box
     $name = $_GET['name'];
@@ -35,7 +33,7 @@ class pages_controller {
     // save triples
     // TODO: abstract in triple API helper...
     $metadata = explode("\n",$_POST['page_metadata']);
-    $triples_in_input = array();
+    $existing_triples = array();
     foreach($metadata as $item) { // go through links
       if(!empty($item)) {
         $triple = new triple();
@@ -51,12 +49,19 @@ class pages_controller {
         }
         $triple->to_id = $to_id;
         $triple->rel = trim($split[0]);
-        if(!triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
+        if($existing_triple = 
+          triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
+          array_push($existing_triples,$existing_triple);
+        } else {
           // save the triple if it doesn't already exist
           $triple->save();
+          array_push($existing_triples,$triple->id);
         }
       }
     }
+    if($existing_triples) // delete triples not in input
+      $GLOBALS['db']->delete('triples',"from_id = ".$this->page->id." AND id != ".
+        implode("AND id != ",$existing_triples));
     redirect('pages/show/'.$this->page->name); // whew!
   }
   function save_body() {

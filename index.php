@@ -1,7 +1,7 @@
 <?php
 define('BD_VERSION','0.2');
 // app paths
-define('PATH_TO_CONFIG','app/config.yaml');
+define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');
 define('PATH_TO_MODELS','app/models');
 define('PATH_TO_VIEWS','app/views');
@@ -9,6 +9,7 @@ define('PATH_TO_CONTROLLERS','app/controllers');
 define('PATH_TO_APP_HELPERS','app/helpers');
 // system paths
 define('PATH_TO_CORE','core/');
+define('PATH_TO_SCHEMA_CACHE','core/schema-cache.txt');
 define('PATH_TO_HELPERS','helpers/');
 define('PATH_TO_LIB','lib/');
 function include_dir($directory) {
@@ -27,7 +28,7 @@ do_hooks('absolute_beginning');
 include_dir(PATH_TO_HELPERS);
 include_dir(PATH_TO_LIB);
 // get config
-$config = Spyc::YAMLload(PATH_TO_CONFIG);
+include PATH_TO_CONFIG;
 // connect to database
 if(!empty($config['database']['path'])) {
   $db = new Database(
