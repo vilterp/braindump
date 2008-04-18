@@ -39,6 +39,10 @@ class RSSFeed {
       echo $final;
     }
   }
+  function dump($attributes,$items) {
+    $feed = new RSSFeed($attributes,$items);
+    return $feed->generate();
+  }
 }
 class RSSItem {
   function __construct($attributes=array()) {

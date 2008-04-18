@@ -33,8 +33,8 @@ class pages_controller {
   }
   function save_meta() {
     no_layout();
-    $GLOBALS['db']->print_queries = true;
-    $this->page->save_meta(Spyc::YAMLLoad($_POST['value']),$this->page->id);
+    // $GLOBALS['db']->print_queries = true;
+    $this->page->save_meta(parse_meta($_POST['value']),$this->page->id);
     print_meta($this->page->links_from);
   }
   

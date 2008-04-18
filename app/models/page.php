@@ -36,19 +36,19 @@ class page extends DatabaseObject {
   // saving helpers
   function save_meta($input,$page_id) {
     $existing_triples = array();
-    foreach($input as $rel=>$value) { // go through links
+    foreach($input as $item) { // go through links
       $triple = new triple();
       $triple->from_id = $page_id;
-      if(!page::exists($value)) { // if the to page doesn't exist, make it
+      if(!page::exists($item['value'])) { // if the to page doesn't exist, make it
         $to_page = new page();
-        $to_page->name = trim($value);
+        $to_page->name = trim($item['value']);
         $to_page->save();
         $to_id = $to_page->id;
       } else { // otherwise, get its id
-        $to_id = page::id_from_name($value); 
+        $to_id = page::id_from_name($item['value']); 
       }
       $triple->to_id = $to_id;
-      $triple->rel = trim($rel);
+      $triple->rel = trim($item['key']);
       if($existing_triple = 
         triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
         array_push($existing_triples,$existing_triple);
@@ -61,13 +61,17 @@ class page extends DatabaseObject {
     if($existing_triples) // delete triples not in input
       $GLOBALS['db']->delete('triples',"from_id = ".$page_id." AND id != ".
         implode(" AND id != ",$existing_triples));
+    // reload newly created links into the page object
+    $this->connect();
   }
   // helpers...
   function meta() {
     if($this->links_from) {
       $final = '';
-      foreach($this->links_from as $link) {
-        $final .= $link->rel.': '.page::name_from_id($link->to_id)."\n";
+      for($i=0; $i<count($this->links_from); $i++) {
+        $link = $this->links_from[$i];
+        $final .= $link->rel.': '.page::name_from_id($link->to_id);
+        if($i+1 < count($this->links_from)) $final .= "\n";
       }
       return $final;
     } else {
