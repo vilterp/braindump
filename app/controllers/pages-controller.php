@@ -13,7 +13,7 @@ class pages_controller {
     $GLOBALS['pages'] = $this->page->find_all(array('order by'=>'name'),false);
   }
   function show() {
-    set_var('page',$this->page);
+    pass_var('page',$this->page);
   }
   
   // for AJAX in place edit

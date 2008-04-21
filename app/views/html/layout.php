@@ -15,7 +15,7 @@
       </tr>
       <tr id="content">
         <td id="main">
-          <?php if(file_exists($view)) include $view ?>
+          <?php if(file_exists($runtime['view'])) include $runtime['view'] ?>
         </td>
         <td id="sidebar" >
           <?php load_partial('sidebar') ?>

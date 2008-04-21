@@ -41,27 +41,23 @@ if(!empty($config['database']['path'])) {
 include_dir(PATH_TO_MODELS);
 include_dir(PATH_TO_APP_HELPERS);
 // decide which controller, action, ident
-$runtime['url'] = parse_request($config);
+$runtime['url'] = parse_request($_SERVER['REQUEST_URI']);
 include PATH_TO_ROUTES;
 // decide which format
-if(!empty($_GET['format'])){
-  $format = $_GET['format'];
-} else {
-  $format = $defaults['format'];
-}
+$runtime['format'] = parse_format(parse_request($_SERVER['REQUEST_URI'],false));
 // revert to defaults if necessary
 if(empty($runtime['controller'])) $runtime['controller']=$defaults['controller'];
 if(empty($runtime['action'])) $runtime['action']='index';
 // this will be included from wrapper.php
-$view = PATH_TO_VIEWS."/$format/$runtime[controller]/$runtime[action].php";
-$layout = PATH_TO_VIEWS."/$format/layout.php";
+$runtime['view'] = PATH_TO_VIEWS."/$runtime[format]/$runtime[controller]/$runtime[action].php";
+$runtime['layout'] = PATH_TO_VIEWS."/$runtime[format]/layout.php";
 if($runtime['action'] == 'list') $runtime['action']='all'; // 'list' is already a php function
 // load, initialize the main class
 include PATH_TO_CONTROLLERS."/$runtime[controller]-controller.php";
 eval("\$main_controller = new $runtime[controller]"."_controller();");
 eval("\$main_controller -> $runtime[action]();");
 // get the show on the road
-if($layout) include $layout;
+if($runtime['layout']) include $runtime['layout'];
 // finish up
 do_hooks('absolute_end');
 ?>
