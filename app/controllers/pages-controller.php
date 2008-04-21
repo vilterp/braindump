@@ -1,8 +1,9 @@
 <?php
 class pages_controller {
   function __construct() {
-    $this->page = new page(page::id_from_name($GLOBALS['ident']));
-    if(is_null($this->page->name)) $this->page->name = $GLOBALS['ident'];
+    global $runtime;
+    $this->page = new page(page::id_from_name($runtime['ident']));
+    if(is_null($this->page->name)) $this->page->name = $runtime['ident'];
   }
   
   // main views

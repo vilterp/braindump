@@ -1,9 +1,9 @@
 <?php
-// take $url, define $class, $action, $ident by end of file
+// take $runtime['url'], define $class, $runtime['action'], $runtime['ident'] by end of file
 
-$controller = $url[0];
-$action = $url[1];
-$ident = $url[2];
+$runtime['controller'] = $runtime['url'][0];
+$runtime['action'] = $runtime['url'][1];
+$runtime['ident'] = $runtime['url'][2];
 // default: maps to index.php/class/action/ident
 
 $defaults['controller'] = 'pages';

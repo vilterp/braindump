@@ -1,9 +1,8 @@
 <?php
 function load_view($path) {
-  global $format;
-  global $controller;
+  global $runtime;
   if(!strpos($path,'.php')) $path .= '.php';
-  $GLOBALS['view'] = PATH_TO_VIEWS."/$format/$controller/$path";
+  $GLOBALS['view'] = PATH_TO_VIEWS."/$format/$runtime[controller]/$path";
 }
 function no_layout() {
   $GLOBALS['layout'] = false;

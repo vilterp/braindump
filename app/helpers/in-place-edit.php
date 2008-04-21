@@ -1,4 +1,4 @@
-<?php if ($action == 'show'): ?>
+<?php if ($runtime['action'] == 'show'): ?>
   <?php load_js('jquery.jeditable') ?>
   <?php //load_js('jquery.autogrow') ?>
   <?php //load_js('jquery.jeditable.autogrow') ?>

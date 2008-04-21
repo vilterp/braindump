@@ -29,13 +29,12 @@ a:hover {
 a:active {
   color: orange;
 }
-a.non_existent_page {
-  color: red;
-}
-a.non_existent_page:hover {
-  color: purple;
-}
 /* show page */
 #page_body textarea {
   font-size: inherit;
+  font-family: inherit;
+}
+#page_metadata textarea {
+  font-size: inherit;
+  font-family: inherit;
 }
