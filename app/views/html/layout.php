@@ -7,6 +7,7 @@
     <?php include('app/helpers/in-place-edit.php') ?>
   </head>
   <body>
+    <!-- TODO: layout with <div>s, css -->
     <table id="content" width="100%">
       <tr>
         <td colspan="2" id="header">

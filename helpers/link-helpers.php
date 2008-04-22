@@ -1,4 +1,5 @@
 <?php
+// FIXME: underscore?
 function getLink($text,$url='',$options='') {
   return "<a href='".getURL($url)."' ".html_options($options).">$text</a>";
 }

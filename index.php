@@ -1,5 +1,5 @@
 <?php
-define('BD_VERSION','0.2');
+define('BD_VERSION','0.2')
 // app paths
 define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');
@@ -53,6 +53,7 @@ if(empty($runtime['action'])) $runtime['action']='index';
 // this will be included from wrapper.php
 $runtime['view'] = PATH_TO_VIEWS."/$runtime[format]/$runtime[controller]/$runtime[action].php";
 $runtime['layout'] = PATH_TO_VIEWS."/$runtime[format]/layout.php";
+// FIXME: this next line is ugly...
 if($runtime['action'] == 'list') $runtime['action']='all'; // 'list' is already a php function
 // load, initialize the main class
 include PATH_TO_CONTROLLERS."/$runtime[controller]-controller.php";

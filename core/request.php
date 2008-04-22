@@ -29,6 +29,9 @@ function parse_request($input_url,$strip_extensions=true) {
   }
   return $url;
 }
+// get the format from the file extension of the last item
+// eg. users/bob.yaml
+// very RESTful
 function parse_format($url) {
   global $defaults;
   $backwards = array_reverse($url);
