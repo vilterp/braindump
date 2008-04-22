@@ -6,6 +6,7 @@ $config = array(
     'print_queries' => false
   ),
   'base_url' => 'http://mac-mini.local/~petevilter/svn/braindump/trunk/',
-  'enable_mod_rewrite' => false
+  'enable_mod_rewrite' => false,
+  'error_reporting' => E_WARNING
 );
 ?>

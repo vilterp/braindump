@@ -29,6 +29,8 @@ include_dir(PATH_TO_HELPERS);
 include_dir(PATH_TO_LIB);
 // get config
 include PATH_TO_CONFIG;
+// set error reporting (defined in config)
+error_reporting($config['error_reporting']);
 // connect to database
 if(!empty($config['database']['path'])) {
   $db = new Database(
