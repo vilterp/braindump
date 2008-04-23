@@ -1,6 +1,7 @@
 <?php
+// FIXME: this class is now dependant on factory(). too bad, kinda wanted to keep it independant
 class DatabaseObject {
-  function __construct($primary_value=NULL,$tablename=NULL,$primary_key='id');
+  function __construct($primary_value=NULL,$tablename=NULL,$primary_key='id') {
     $this->primary_value = $primary_value;
     $this->primary_key = $primary_key;
     is_null($tablename) ? 
@@ -20,7 +21,7 @@ class DatabaseObject {
   // load data from database into object
   function load($primary_value) {
     if(is_array($primary_value)) {
-      $this->data = $primary_value
+      $this->data = $primary_value;
     } else {
       $this->data = $GLOBALS['db']->select($this->tablename,array($this->primary_key => $primary_value));
     }
@@ -48,7 +49,7 @@ class DatabaseObject {
     $this->dirty[] = $attr; // keep track of changed (dirty) attributes
     $this->data[$attr] = $value;
   }
-  function __get($attr,$value) {
+  function __get($attr) {
     // if it's a field loaded from the db
     if(array_key_exists($attr,$this->data)) {
       return $this->data[$attr];
@@ -67,7 +68,7 @@ class DatabaseObject {
     // enables methods like "find_by_[attribute]([value],[options])"
     if(strpos($name,'find_by_') == 0) {
       $attr = substr($name,7);
-      return $this->find(array($attr=>args[0]),args[1]);
+      return $this->find(array($attr=>$args[0]),$args[1]);
     }
   }
   
@@ -76,8 +77,8 @@ class DatabaseObject {
     $items = array();
     foreach($result as $row) {
       $this_class = get_class($this);
-      $item = new $this_class();
-      $item->load(row);
+      $item = factory($this_class);
+      $item->load($row);
       $items[] = $item;
     }
     return $items;
@@ -102,7 +103,7 @@ class DatabaseObject {
   }
   function load_has_one($attr,$values) {
     list($classname,$corresponding_key) = $values;
-    $that = new $classname();
+    $that = factory($classname);
     $result = $that->find_one(array($that->primary_key=>$corresponding_key));
     $this->$attr = $result;
     return $result;
@@ -120,7 +121,7 @@ class DatabaseObject {
   }
   function load_belongs_to($attr,$values) {
     list($classname,$corresponding_key) = $values;
-    $that = new $classname();
+    $that = factory($classname);
     $result = $that->find_one(array($corresponding_key=>$this->primary_value));
     $this->$attr = $result;
     return $result;
@@ -138,7 +139,7 @@ class DatabaseObject {
   }
   function load_has_many($attr,$values) {
     list($classname,$corresponding_key) = $values;
-    $that = new $classname();
+    $that = factory($classname);
     $result = $that->find(array($corresponding_key=>$this->primary_value));
     $this->$attr = $result;
     return $result;
@@ -162,7 +163,8 @@ class DatabaseObject {
     $intermediate = $GLOBALS['db']->select($tablename,array($this_key=>$this->primary_value));
     $result = array();
     foreach($intermediate as $item) {
-      $that = new $classname($item[$that_key]);
+      $that = factory($classname);
+      $that->load($item[$that_key]);
       $result[] = $that;
     }
     $this->$attr = $result;
