@@ -1,3 +1,5 @@
 <?php
-$post = new Post(1);
+$post = new Post(0);
+$post->name = "Hello, World!";
+$post->save();
 ?>

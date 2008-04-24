@@ -1,5 +1,5 @@
 <?php
-class Comment extends DatabaseObject {
+class comment extends DatabaseObject {
   function connect() {
     $this->belongs_to('post');
   }
