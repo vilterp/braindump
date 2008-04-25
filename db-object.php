@@ -1,5 +1,6 @@
 <?php
 // FIXME: does it need the columns list?
+// TODO: create()
 class DatabaseObject {
   
   var $tablename;
@@ -55,7 +56,25 @@ class DatabaseObject {
     $GLOBALS['db']->delete($this->tablename,array($this->primary_key=>$this->primary_value));
   }
   function delete_all() {
-    // TODO: delete_all...
+    if($this->has_many) {
+      foreach($this->has_many as $attr=>$values) {
+        if($this->$attr) {
+          foreach($this->$attr as $item) {
+            $item->delete();
+          }
+        }
+      }
+    }
+    if($this->has_many_through) {
+      foreach($this->has_many_through as $attribute=>$value) {
+        foreach($GLOBALS['db']->select(
+          $value['tablename'],array($value['this_key']=>$this->primary_value)) as $item) {
+            var_dump($item);
+            $GLOBALS['db']->delete($value['tablename'],$item);
+          }
+      }
+    }
+    $this->delete();
   }
   
   function __set($attr,$value) {
@@ -87,7 +106,7 @@ class DatabaseObject {
     }
   }
 
-  function find($params='',$options='') {
+  function find($params='',$options='',$parent_classname=NULL) {
     $result = $GLOBALS['db']->select($this->tablename,$params,$options);
     $items = array();
     if(!$result) {
@@ -141,9 +160,8 @@ class DatabaseObject {
   function load_has_many($attr,$values) {
     eval("\$that = new $values[classname]();");
     $result = $that->find(array($values['corresponding_key']=>$this->primary_value));
-    $iterator = new DatabaseObjectIterator($result);
-    $this->$attr = $iterator;
-    return $iterator;
+    $this->$attr = $result;
+    return $result;
   }
 
   function has_many_through($classname,$tablename=NULL,$this_key=NULL,$that_key=NULL,$attribute=NULL) {
