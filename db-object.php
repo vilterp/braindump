@@ -1,13 +1,26 @@
 <?php
+// FIXME: does it need the columns list?
 class DatabaseObject {
+  
+  var $tablename;
+  var $columns;
+  var $primary_key;
+  var $primary_value;
+  var $in_db;
+  var $dirty;
+  var $has_one;
+  var $belongs_to;
+  var $has_many;
+  var $has_many_through;
+  
   function __construct($primary_value=NULL,$tablename=NULL,$primary_key='id') {
     is_null($tablename) ? 
       $this->tablename = pluralize(get_class($this)) : 
       $this->tablename = $tablename;
     // schema information
     $this->columns = $GLOBALS['db']->schema[$this->tablename];
-    $this->primary_value = $primary_value;
     $this->primary_key = $primary_key;
+    $this->primary_value = $primary_value;
     // for future use
     $this->in_db = false;
     $this->dirty = array();
@@ -23,6 +36,7 @@ class DatabaseObject {
   function load($primary_value) {
     if(is_array($primary_value)) {
       $this->data = $primary_value;
+      $this->primary_value = $this->data[$this->primary_key];
     } else {
       $this->data = $GLOBALS['db']->select_row($this->tablename,array($this->primary_key => $primary_value));
     }
@@ -37,13 +51,19 @@ class DatabaseObject {
       $GLOBALS['db']->update($this->tablename,$data,array($this->primary_key=>$this->primary_value));
     } else { // otherwise, insert a new record
       // find the highest primary key & increment it
-      $highkey = $GLOBALS['db']->select_column($this->tablename,$this->primary_key);
+      $highkey = $GLOBALS['db']->select_columns($this->tablename,$this->primary_key);
       if(!$highkey) $highkey = 0;
       $primary_key = $this->primary_key;
-      $this->$primary_key = $highkey+1;
+      $this->$primary_key = ((int)$highkey)+1;
       // stick it in the db
-      $GLOBALS['db']->insert($this->tablename,$data);
+      $GLOBALS['db']->insert($this->tablename,$this->data);
     }
+  }
+  function delete() {
+    $GLOBALS['db']->delete($this->tablename,array($this->primary_key=>$this->primary_value));
+  }
+  function delete_all() {
+    // TODO: delete_all...
   }
   
   function __set($attr,$value) {
@@ -54,7 +74,6 @@ class DatabaseObject {
       $this->$attr = $value;
     }
   }
-  /*
   function __get($attr) {
     // if it's a field loaded from the db
     if(array_key_exists($attr,$this->data)) {
@@ -77,14 +96,13 @@ class DatabaseObject {
       return $this->find(array($attr=>$args[0]),$args[1]);
     }
   }
-  */
 
   function find($params='',$options='') {
     $result = $GLOBALS['db']->select($this->tablename,$params,$options);
     $items = array();
     foreach($result as $row) {
       $this_class = get_class($this);
-      eval("\$item = new $this_class()");
+      eval("\$item = new $this_class();");
       $item->load($row);
       $items[] = $item;
     }
@@ -109,9 +127,9 @@ class DatabaseObject {
     );
   }
   function load_has_one($attr,$values) {
-    list($classname,$corresponding_key) = $values;
-    eval("\$that = new $classname()");
-    $result = $that->find_one(array($that->primary_key=>$corresponding_key));
+    eval("\$that = new $values[classname]();");
+    $corresponding_key = $values['corresponding_key'];
+    $result = $that->find_one(array($that->primary_key=>$this->$corresponding_key));
     $this->$attr = $result;
     return $result;
   }
@@ -127,9 +145,8 @@ class DatabaseObject {
     );
   }
   function load_belongs_to($attr,$values) {
-    list($classname,$corresponding_key) = $values;
-    eval("\$that =  new $classname()");
-    $result = $that->find_one(array($corresponding_key=>$this->primary_value));
+    eval("\$that =  new $values[classname]();");
+    $result = $that->find_one(array($values['corresponding_key']=>$this->primary_value));
     $this->$attr = $result;
     return $result;
   }
@@ -145,9 +162,8 @@ class DatabaseObject {
     );
   }
   function load_has_many($attr,$values) {
-    list($classname,$corresponding_key) = $values;
-    eval("\$that = new $classname()");
-    $result = $that->find(array($corresponding_key=>$this->primary_value));
+    eval("\$that = new $values[classname]();");
+    $result = $that->find(array($values['corresponding_key']=>$this->primary_value));
     $this->$attr = $result;
     return $result;
   }
@@ -167,12 +183,14 @@ class DatabaseObject {
     );
   }
   function load_has_many_through($attr,$values) {
-    list($classname,$tablename,$this_key,$that_key,$attribute) = $values;
-    $intermediate = $GLOBALS['db']->select($tablename,array($this_key=>$this->primary_value));
+    $intermediate = $GLOBALS['db']->select(
+      $values['tablename'],
+      array($values['this_key']=>$this->primary_value)
+    );
     $result = array();
     foreach($intermediate as $item) {
-      eval("\$that = new $classname()");
-      $that->load($item[$that_key]);
+      eval("\$that = new $values[classname]();");
+      $that->load($item[$values['that_key']]);
       $result[] = $that;
     }
     $this->$attr = $result;
