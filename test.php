@@ -1,3 +1,4 @@
 <?php
-$post = new Post(1);
+$post = new post(2);
+$post->delete();
 ?>
