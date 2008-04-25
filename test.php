@@ -1,4 +1,6 @@
 <?php
-$post = new post(2);
-$post->delete();
+$post = new post(1);
+foreach($post->comments as $comment) {
+  var_dump($comment);
+}
 ?>

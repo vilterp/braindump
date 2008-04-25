@@ -141,8 +141,9 @@ class DatabaseObject {
   function load_has_many($attr,$values) {
     eval("\$that = new $values[classname]();");
     $result = $that->find(array($values['corresponding_key']=>$this->primary_value));
-    $this->$attr = $result;
-    return $result;
+    $iterator = new DatabaseObjectIterator($result);
+    $this->$attr = $iterator;
+    return $iterator;
   }
 
   function has_many_through($classname,$tablename=NULL,$this_key=NULL,$that_key=NULL,$attribute=NULL) {
