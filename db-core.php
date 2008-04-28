@@ -43,6 +43,12 @@ class Database {
     file_put_contents(PATH_TO_SCHEMA_CACHE,serialize($this->schema));
   }
   
+  function get_high_key($tablename,$column) {
+    $highkey = $GLOBALS['db']->select_columns($tablename,$column);
+    if(!$highkey) $highkey = 0;
+    return $highkey;
+  }
+  
   /* SQL generation & querying */
   
   // everything goes through here eventually
