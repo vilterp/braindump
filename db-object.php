@@ -24,6 +24,11 @@ class DatabaseObject {
     if(!is_null($primary_value)) $this->load($primary_value);
     if(method_exists($this,'connect')) $this->connect();
   }
+  function __destruct() {
+    if($this->autosave) {
+      $this->save();
+    }
+  }
   // load data from database into object
   function load($primary_value) {
     if(is_array($primary_value)) {
@@ -129,8 +134,9 @@ class DatabaseObject {
     return $this->find('',$options);
   }
   
-  function add($attr,$item) {
+  function add($attr) {
     $association = $this->associations[$attr];
+    eval("\$item = new $association[classname]();");
     switch($association['type']) {
       case "belongs_to":
         $corresponding_key = $association['corresponding_key'];
@@ -144,10 +150,12 @@ class DatabaseObject {
         $data = array(
           $association['this_key'] => $this->primary_value,
           // FIXME: do this without guessing...?
-          $association['that_key'] => $GLOBALS['db']->get_high_key($item->tablename,$item->primary_key)
+          $association['that_key'] => $GLOBALS['db']->get_high_key($item->tablename,$item->primary_key)+1
         );
-        $GLOBALS['db']->insert($item->tablename,$data);
+        // FIXME: this shouldn't be automatic...
+        $GLOBALS['db']->insert($association['tablename'],$data);
     }
+    return $item;
   }
     
   function belongs_to($classname,$corresponding_key=NULL,$attribute=NULL) {

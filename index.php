@@ -12,4 +12,5 @@ define('PATH_TO_SCHEMA_CACHE','schema-cache.txt');
 $db = new Database('database.sqlite',true,true);
 
 include 'test.php';
+
 ?>
