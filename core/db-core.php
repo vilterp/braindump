@@ -43,6 +43,12 @@ class Database {
     file_put_contents(PATH_TO_SCHEMA_CACHE,serialize($this->schema));
   }
   
+  function get_high_key($tablename,$column='id') {
+    $highkey = $GLOBALS['db']->select_one($tablename,$column,'',array('order by'=>"$column DESC"));
+    if(!$highkey) $highkey = 0;
+    return $highkey;
+  }
+  
   /* SQL generation & querying */
   
   // everything goes through here eventually
@@ -153,6 +159,7 @@ class Database {
   }
   function sql_options($options='') {
     if(is_string($options)) return $options;
+    if(is_null($options)) return '';
     $final = '';
     foreach($options as $key=>$value) {
       $final .= strtoupper($key).' '.$value.' ';

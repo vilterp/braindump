@@ -1,8 +1,9 @@
 <?php
 class triple extends DatabaseObject {
   function connect() {
-    $this->has_one('page','to_id','to_page');
-    $this->has_one('page','from_id','from_page');
+    $this->belongs_to('page','subject_id');
+    $this->belongs_to('page','predicate_id');
+    $this->belongs_to('page','object_id');
   }
   // helpers (urgh these are annoying)
   function exists($from_id,$rel,$to_id) {

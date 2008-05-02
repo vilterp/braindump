@@ -1,8 +1,8 @@
 <?php
 class page extends DatabaseObject {
   function connect() {
-    $this->has_many('triple','to_id','links_to');
-    $this->has_many('triple','from_id','links_from');
+    $this->has_many('triple','subject_id','links_out');
+    $this->has_many('triple','object_id','links_in');
   }
   // money functions
   function get_attribute($attribute) {

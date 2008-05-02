@@ -2,7 +2,7 @@
 class pages_controller {
   function __construct() {
     global $runtime;
-    $this->page = new page(page::id_from_name($runtime['ident']));
+    $this->page = factory('page')->find_one_by_name($runtime['ident']);
     if(is_null($this->page->name)) $this->page->name = $runtime['ident'];
   }
   

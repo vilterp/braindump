@@ -1,6 +1,6 @@
 <div id="page_metadata">
-  <?php if($page->links_from): ?>
-    <?php print_meta($page->links_from) ?>
+  <?php if($page->links_out): ?>
+    <?php print_meta($page->links_out) ?>
   <?php else: ?>
     <p><em>double click to add metadata</em></p>
   <?php endif ?>
@@ -12,9 +12,9 @@
       <p><em>double click to add a description</em></p>
     <?php endif ?>
   </div>
-<?php if($page->links_to): ?>
+<?php if($page->links_in): ?>
   <div id="page_links_to">
-    <?php foreach ($page->links_to as $link): ?>
+    <?php foreach ($page->links_in as $link): ?>
       <?php echo $link->rel ?> of 
       <?php $from_page = page::name_from_id($link->from_id) ?>
       <?php echo getLink($from_page,"pages/show/$from_page") ?>

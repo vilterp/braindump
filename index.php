@@ -1,5 +1,5 @@
 <?php
-define('BD_VERSION','0.2')
+define('BD_VERSION','0.2');
 // app paths
 define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');
@@ -20,6 +20,7 @@ function include_dir($directory) {
     }
   }
 }
+function factory($classname) {return eval("return new $classname();");};
 // get core
 include_dir(PATH_TO_CORE);
 // for timer, etc
