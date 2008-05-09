@@ -34,32 +34,24 @@ class page extends DatabaseObject {
     return $answers;
   }
   // saving helpers
-  function save_meta($input,$page_id) {
+  function save_meta($input) {
     $existing_triples = array();
     foreach($input as $item) { // go through links
       $triple = new triple();
-      $triple->from_id = $page_id;
-      if(!page::exists($item['value'])) { // if the to page doesn't exist, make it
-        $to_page = new page();
-        $to_page->name = trim($item['value']);
-        $to_page->save();
-        $to_id = $to_page->id;
-      } else { // otherwise, get its id
-        $to_id = page::id_from_name($item['value']); 
-      }
-      $triple->to_id = $to_id;
-      $triple->rel = trim($item['key']);
+      $triple->subject_id = (int) $this->id;
+      $triple->object_id = page::create_if_doesnt_exist($item['value']);
+      $triple->predicate_id = page::create_if_doesnt_exist($item['key']);
       if($existing_triple = 
-        triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
+        triple::exists($triple->subject_id,$triple->predicate_id,$triple->object_id)) {
         array_push($existing_triples,$existing_triple);
       } else {
         // save the triple if it doesn't already exist
-        $triple->save();
+        //$triple->save();
         array_push($existing_triples,$triple->id);
       }
     }
     if($existing_triples) // delete triples not in input
-      $GLOBALS['db']->delete('triples',"from_id = ".$page_id." AND id != ".
+      $GLOBALS['db']->delete('triples',"subject_id = ".$page_id." AND id != ".
         implode(" AND id != ",$existing_triples));
     // reload newly created links into the page object
     $this->connect();
@@ -79,7 +71,17 @@ class page extends DatabaseObject {
     }
   }
   function exists($page_name) {
-    return $GLOBALS['db']->select_row('pages',array('name'=>$page_name));
+    return (int) $GLOBALS['db']->select_row('pages',array('name'=>$page_name));
+  }
+  function create_if_doesnt_exist($page_name) {
+    if($id = page::exists($page_name)) {
+      return $id;
+    } else {
+      $new_page = new Page();
+      $new_page->name = $page_name;
+      $new_page->save();
+      return $new_page->id;
+    }
   }
   function name_from_id($id) {
     if(empty($id)) return NULL;
@@ -101,7 +103,7 @@ class page extends DatabaseObject {
       }
       return $names;
     } else {
-      return $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
+      return (int) $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
     }
   }
 }

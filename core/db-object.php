@@ -104,15 +104,19 @@ class DatabaseObject {
     }
   }
   function __call($name,$args) {
-    // enables methods like "find_by_[attribute]([value],[options])"
-    if(strpos($name,'find_one_by_') !== false) {
-      $attr = substr($name,12);
-      return $this->find_one(array($attr=>$args[0]),$args[1]);
-    } elseif(strpos($name,'find_by_') !== false) {
-      $attr = substr($name,8);
-      return $this->find(array($attr=>$args[0]),$args[1]);
+    if(!is_null($args[0])) {
+      // enables methods like "find_by_[attribute]([value],[options])"
+      if(strpos($name,'find_one_by_') !== false) {
+        $attr = substr($name,12);
+        return $this->find_one(array($attr=>$args[0]),$args[1]);
+      } elseif(strpos($name,'find_by_') !== false) {
+        $attr = substr($name,8);
+        return $this->find(array($attr=>$args[0]),$args[1]);
+      } else {
+        throw new ErrorException("$name: no method by that name, pablo."); // FIXME: what's the right way to report errors...?
+      }
     } else {
-      die("$name: no method by that name, pablo."); // FIXME: what's the right way to report errors...?
+      return $this;
     }
   }
 
