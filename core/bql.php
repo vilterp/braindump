@@ -1,7 +1,8 @@
 <?php
+// TODO: wrap these in functions
+// FIXME: quoting..
 class BQL {
   function query($querystring) {
-    echo $querystring."<br />";
     global $db;
     $query = BQL::split_but_not_in_quotes(trim($querystring));
     switch ($query[0]) { // first word of query
@@ -36,7 +37,7 @@ class BQL {
         if(!triple::exists($data['subject_id'],$data['predicate_id'],$data['object_id'])) {
           $db->insert('triples',$data);
         }
-        return $object;
+        return true;
         break;
         
       case 'list':
@@ -64,6 +65,7 @@ class BQL {
         // unset [subject]
         $db->delete('triples',array(
           'subject_id' => page::id_from_name(self::resolve_quoted($query[1]))));
+        return true;
     }
   }
   // if a string has quotes around it, strip the quotes
