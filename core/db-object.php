@@ -44,6 +44,9 @@ class DatabaseObject {
       }
     }
   }
+  function reload() {
+    $this->load($this->primary_value);
+  }
   function save() {
     $data = array();
     foreach($this->dirty as $attr) {
@@ -55,8 +58,10 @@ class DatabaseObject {
       // find the highest primary key & increment it
       $highkey = $GLOBALS['db']->get_high_key($this->tablename,$this->primary_key);
       $this->data[$this->primary_key] = ((int)$highkey)+1;
+      $this->primary_value = $this->data[$this->primary_key];
       // stick it in the db
       $GLOBALS['db']->insert($this->tablename,$this->data);
+      $this->in_db = true;
     }
   }
   function delete() {
@@ -93,14 +98,12 @@ class DatabaseObject {
     }
   }
   function __get($attr) {
-    if($this->in_db) {
-      // if it's a field loaded from the db
-      if(!is_null($this->data) && array_key_exists($attr,$this->data)) {
-        return $this->data[$attr];
-      // if it's an associated object or list of objects
-      } elseif(array_key_exists($attr,$this->associations)) {
-        return eval("return \$this->load_".$this->associations[$attr]['type']."(\$attr,\$this->associations[\$attr]);");
-      }
+    // if it's a field loaded from the db
+    if(!is_null($this->data) && array_key_exists($attr,$this->data)) {
+      return $this->data[$attr];
+    // if it's an associated object or list of objects
+    } elseif(array_key_exists($attr,$this->associations) && $this->in_db) {
+      return eval("return \$this->load_".$this->associations[$attr]['type']."(\$attr,\$this->associations[\$attr]);");
     }
   }
   function __call($name,$args) {

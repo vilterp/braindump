@@ -1,9 +1,9 @@
 <div id="page_metadata">
   <?php if($page->links_out): ?>
     <?php foreach($page->links_out as $link): ?>
-      <span class="link_rel"><?php echo $link->predicate->name ?>:</span> 
+      <span class="link_rel"><?php echo $link->predicate ?>:</span> 
       <span class="link_value">
-        <?php echo getLink($link->object->name,"pages/show/".$link->object->name) ?>
+        <?php echo $link->object->getLink() ?>
       </span>
       <br />
     <?php endforeach ?>
@@ -22,23 +22,8 @@
   <div id="page_links_in">
     <?php foreach ($page->links_in as $link): ?>
       <?php echo $link->predicate->name ?> of 
-      <?php echo getLink($link->subject->name,"pages/show/".$link->object->name) ?>
+      <?php echo $link->subject->getLink() ?>
       <br />
     <?php endforeach ?>
-  </div>
-  <div id="types">
-    <ul>
-      <?php $types = $page->get_types_by_links_to() ?>
-      <?php foreach($types as $type): ?>
-        <li><?php echo $type ?>
-          <?php $attributes = page::get_attributes_for_type($type) ?>
-          <ul>
-            <?php foreach ($attributes as $attribute): ?>
-              <li><?php echo $attribute ?></li>
-            <?php endforeach ?>
-          </ul>
-        </li>
-      <?php endforeach ?>
-    </ul>
   </div>
 <?php endif ?>

@@ -4,6 +4,12 @@ class page extends DatabaseObject {
     $this->has_many('triple','subject_id','links_out');
     $this->has_many('triple','object_id','links_in');
   }
+  function __toString() {
+    return $this->name;
+  }
+  function getLink() { // => <a href='pages/show/[name]'>[name]</a>
+    return getLink($this->name,"pages/show/$this->name");
+  }
   // money functions
   function get_attribute($attribute) {
     $triple = new triple();
@@ -35,43 +41,41 @@ class page extends DatabaseObject {
   }
   // saving helpers
   function save_meta($input) {
-    $existing_triples = array();
-    foreach($input as $item) { // go through links
-      $triple = new triple();
-      $triple->subject_id = (int) $this->id;
-      $triple->object_id = page::create_if_doesnt_exist($item['value']);
-      $triple->predicate_id = page::create_if_doesnt_exist($item['key']);
-      if($existing_triple = 
-        triple::exists($triple->subject_id,$triple->predicate_id,$triple->object_id)) {
-        array_push($existing_triples,$existing_triple);
-      } else {
-        // save the triple if it doesn't already exist
-        //$triple->save();
-        array_push($existing_triples,$triple->id);
-      }
+    BQL::query("unset '$this'");
+    foreach($input as $item) {
+      BQL::query("set '$item[key]' of '$this' to '$item[value]'");
     }
-    if($existing_triples) // delete triples not in input
-      $GLOBALS['db']->delete('triples',"subject_id = ".$page_id." AND id != ".
-        implode(" AND id != ",$existing_triples));
-    // reload newly created links into the page object
-    $this->connect();
   }
   // helpers...
-  function meta() {
-    if($this->links_from) {
-      $final = '';
-      for($i=0; $i<count($this->links_from); $i++) {
-        $link = $this->links_from[$i];
-        $final .= $link->rel.': '.page::name_from_id($link->to_id);
-        if($i+1 < count($this->links_from)) $final .= "\n";
+  function print_meta($withlinks=false) {
+    if($this->links_out) {
+      foreach($this->links_out as $link) {
+        if($withlinks) {
+          echo "$link->predicate: ".$link->object->getLink()."<br />\n";
+        } else {
+          echo "$link->predicate: $link->object\n";
+        }
       }
-      return $final;
-    } else {
-      return NULL;
     }
   }
+  function parse_meta($input) {
+    $pairs = array();
+    foreach(explode("\n",$input) as $line) {
+      if(!empty($line)) {
+        $pair = explode(':',$line);
+        array_push($pairs,
+          array(
+            'key' => trim($pair[0]),
+            'value' => trim($pair[1])
+          )
+        );
+      }
+    }
+    return $pairs;
+  }
   function exists($page_name) {
-    return (int) $GLOBALS['db']->select_row('pages',array('name'=>$page_name));
+    $id = $GLOBALS['db']->select_one('pages','id',array('name'=>$page_name));
+    if($id) return (int) $id; else return false;
   }
   function create_if_doesnt_exist($page_name) {
     if($id = page::exists($page_name)) {
@@ -80,7 +84,7 @@ class page extends DatabaseObject {
       $new_page = new Page();
       $new_page->name = $page_name;
       $new_page->save();
-      return $new_page->id;
+      return (int) $new_page->id;
     }
   }
   function name_from_id($id) {

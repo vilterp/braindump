@@ -3,7 +3,10 @@ class pages_controller {
   function __construct() {
     global $runtime;
     $this->page = factory('page')->find_one_by_name($runtime['ident']);
-    if(is_null($this->page->name)) $this->page->name = $runtime['ident'];
+    if(is_null($this->page->name)) {
+      $this->page = new Page();
+      $this->page->name = $runtime['ident'];
+    }
   }
   
   // main views
@@ -28,32 +31,30 @@ class pages_controller {
     $this->page->save();
     echo do_filters('page_body',$this->page->body);
   }
-  function just_meta() {
+  function just_meta() { // loaded into edit box
     no_layout();
-    echo $this->page->meta();
+    $this->page->print_meta();
   }
   function save_meta() {
     no_layout();
-    $GLOBALS['db']->print_queries = true;
-    $this->page->save_meta(parse_meta($_POST['value']));
-    print_meta($this->page->links_from);
-  }
-  
-  // for search bar
-  
-  function redirect() { // for the goto box
-    redirect("pages/show/".$_GET['name']);
+    $this->page->save_meta(page::parse_meta($_POST['value']));
+    $this->page->print_meta(true);
   }
   
   function delete() {
     $this->page->delete_all();
     redirect('pages');
   }
+  // delete the entire db. useful sometimes.
   function delete_everything() {
     global $db;
     $db->delete('pages');
     $db->delete('triples');
     redirect('pages');
+  }
+  
+  function redirect() { // for the goto box
+    redirect("pages/show/".$_GET['name']);
   }
 }
 ?>

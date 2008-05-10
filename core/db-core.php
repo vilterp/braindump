@@ -57,6 +57,7 @@ class Database {
       echo $querystring."<br />\n";
     }
     return $this->db->query(stripslashes(trim($querystring)));
+    debug_print_backtrace();
   }
   
   function select($tablename,$params='',$options='') {
@@ -74,9 +75,8 @@ class Database {
     return $this->run_query($querystring)->fetch(SQLITE_ASSOC);
   }
   // select specified columns
-  function select_columns($tablename,$columns,$options='') {
-    if(is_string($columns)) $columns = array($columns);
-    $querystring = "SELECT ".implode(', ',$columns)." FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
+  function select_column($tablename,$column,$params,$options='') {
+    $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
     return $this->run_query($querystring)->fetch(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;

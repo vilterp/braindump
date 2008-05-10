@@ -12,4 +12,23 @@ function pluralize($string) {
 function singularize($string) {
   return substr($string,0,strlen($string)-1);
 }
+// 'apples, oranges, and milk' => array('apples','oranges','milk')
+function english_to_array($sentence) {
+  $final = array();
+  $and_split = explode(' and ',$sentence);
+  foreach(explode(',',$and_split[0]) as $item) {
+    if(!empty($item)) $final[] = trim($item);
+  }
+  if($and_split[1]) $final[] = $and_split[1];
+  return $final;
+}
+// array('apples','oranges','milk') => 'apples, oranges, and milk'
+function array_to_english($array) {
+  $final = "";
+  for($i=0;$i<count($array)-1;$i++) {
+    $final .= $array[$i].', ';
+  }
+  $final .= ' and '.$array[count($array)-1];
+  return $final;
+}
 ?>

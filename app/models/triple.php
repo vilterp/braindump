@@ -7,11 +7,11 @@ class triple extends DatabaseObject {
   }
   // helpers (urgh these are annoying)
   function exists($subject_id,$predicate_id,$object_id) {
-    return $GLOBALS['db']->select_one(
+    $answer = $GLOBALS['db']->select(
       'triples',
-      'id',
-      "subject_id=$subject_id AND predicate_id='$predicate_id' AND object_id=$object_id"
+      "subject_id=$subject_id AND predicate_id=$predicate_id AND object_id=$object_id"
     );
+    if($answer) return true; else return false;
   }
 }
 ?>

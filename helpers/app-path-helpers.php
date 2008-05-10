@@ -2,7 +2,7 @@
 // views use this to make a header
 // like pages/show/bla
 // with each as a link
-function get_path() {
+function get_app_path() {
   global $runtime;
   $path = array();
   array_push($path,getLink($runtime['controller'],$runtime['controller']));

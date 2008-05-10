@@ -1,7 +1,5 @@
 <?php if ($runtime['action'] == 'show'): ?>
   <?php load_js('jquery.jeditable') ?>
-  <?php //load_js('jquery.autogrow') ?>
-  <?php //load_js('jquery.jeditable.autogrow') ?>
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
       $('#page_metadata').editable("<?php echo getURL('pages/save_meta/'.$page->name) ?>", {
