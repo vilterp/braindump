@@ -3,8 +3,9 @@
 // it would be good to keep this file usable on its own...
 // TODO: mysql? multiple database drivers?
 class Database {
-  function __construct($filename,$print_queries=false,$cache_schema=false) {
-    $this->print_queries = $print_queries;
+  function __construct($filename,$log_queries=false,$cache_schema=false) {
+    $this->log_queries= $log_queries;
+    if($this->log_queries) $this->write_to_log("\n".$_SERVER['REQUEST_URI']."\n");
     // get actual db
     $this->db = new SQLiteDatabase($filename);
     // get schema information
@@ -49,15 +50,20 @@ class Database {
     return $highkey;
   }
   
+  function write_to_log($query) {
+    $log = fopen(PATH_TO_QUERY_LOG,'a');
+    fwrite($log,$query."\n");
+    fclose($log);
+  }
+  
   /* SQL generation & querying */
   
   // everything goes through here eventually
   function run_query($querystring) {
-    if($this->print_queries) {
-      echo $querystring."<br />\n";
+    if($this->log_queries) {
+      $this->write_to_log($querystring);
     }
     return $this->db->query(stripslashes(trim($querystring)));
-    debug_print_backtrace();
   }
   
   function select($tablename,$params='',$options='') {

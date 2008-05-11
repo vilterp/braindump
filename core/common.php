@@ -10,6 +10,7 @@ define('PATH_TO_APP_HELPERS','app/helpers/');
 // system paths
 define('PATH_TO_CORE','core/');
 define('PATH_TO_SCHEMA_CACHE','core/schema-cache.txt');
+define('PATH_TO_QUERY_LOG','core/query-log.txt');
 define('PATH_TO_HELPERS','helpers/');
 define('PATH_TO_LIB','lib/');
 function include_dir($directory) {
@@ -36,7 +37,7 @@ error_reporting($config['error_reporting']);
 if(!empty($config['database']['path'])) {
   $db = new Database(
     $config['database']['path'],
-    $config['database']['print_queries'],
+    $config['database']['log_queries'],
     $config['database']['cache_schema']
   );
 }
