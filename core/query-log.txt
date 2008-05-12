@@ -1,0 +1,153 @@
+
+/~petevilter/svn/braindump/trunk/index.php/pages/show/braindump
+
+SELECT * FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = '2' 
+SELECT * FROM pages WHERE id = '4' 
+SELECT * FROM pages WHERE id = '5' 
+SELECT * FROM pages WHERE id = '6' 
+SELECT * FROM pages WHERE id = '7' 
+SELECT * FROM pages WHERE id = '1' 
+SELECT * FROM pages WHERE id = '3' 
+SELECT * FROM triples WHERE object_id = '2' 
+
+/~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 1 AND subject_id = 2 
+SELECT name FROM pages WHERE id = 3 
+
+/~petevilter/svn/braindump/trunk/
+
+
+/~petevilter/svn/braindump/trunk/
+
+
+/~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 1 AND subject_id = 2 
+SELECT name FROM pages WHERE id = 3 
+
+/~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'hair color' 
+SELECT id FROM pages  ORDER BY id DESC
+INSERT INTO pages (name, id) VALUES ('hair color', 23)
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT id FROM pages WHERE name = 'brown' 
+SELECT id FROM pages  ORDER BY id DESC
+INSERT INTO pages (name, id) VALUES ('brown', 24)
+SELECT * FROM triples WHERE subject_id=3 AND predicate_id=23 AND object_id=24 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (23, 3, 24)
+
+/~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'hair color' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT object_id FROM triples WHERE predicate_id = 23 AND subject_id = 3 
+SELECT name FROM pages WHERE id = 24 
+
+/~petevilter/svn/braindump/trunk/xmlrpc.php
+
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 1 AND subject_id = 2 
+SELECT name FROM pages WHERE id = 3 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name =  
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name =  
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+DELETE FROM triples WHERE predicate_id = 1 AND subject_id = 2
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 1 AND subject_id = 2 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id=2 AND predicate_id=1 AND object_id=3 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (1, 2, 3)
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 1 AND subject_id = 2 
+SELECT name FROM pages WHERE id = 3 
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 2 AND subject_id =  
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 2 AND subject_id =  
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = 1 
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = 1 
+
+GET /~petevilter/svn/braindump/trunk/
+
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = 1 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT object_id FROM triples WHERE predicate_id = 1 AND subject_id = 2 
+SELECT name FROM pages WHERE id = 3 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = 1 

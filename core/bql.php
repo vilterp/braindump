@@ -2,79 +2,87 @@
 // TODO: wrap these in functions
 // FIXME: quoting..
 class BQL {
-  function query($querystring) {
-    global $db;
-    $query = BQL::split_but_not_in_quotes(trim($querystring));
-    switch ($query[0]) { // first word of query
+  function query($query) {
+    $querysplit = explode(' ',$query);
+    switch($querysplit[0]) {
       case 'get':
-        // get [predicate] of [subject]
-        $params = array(
-          'predicate_id' => page::id_from_name(self::resolve_quoted($query[1])),
-          // [2] of
-          'subject_id' => page::id_from_name(self::resolve_quoted($query[3]))
-        );
-        $answer = (int) $db->select_one('triples','object_id',$params);
-        if(!$answer) {
-          return false;
-        } else {
-          return page::name_from_id($answer);
-        }
+        $params = split("(get | of )",$query);
+        return self::_get($params[1],$params[2]);
         break;
-        
+      
       case 'set':
-        // set [predicate] of [subject] to [object]
-        $predicate = self::resolve_quoted($query[1]);
-        // [2] of
-        $subject = self::resolve_quoted($query[3]);
-        // [4] to
-        $object = self::resolve_quoted($query[5]);
-        $data = array(
-          'predicate_id' => page::create_if_doesnt_exist($predicate),
-          'subject_id' => page::create_if_doesnt_exist($subject),
-          'object_id' => page::create_if_doesnt_exist($object),
-        );
-        // if this triple isn't already in the db, insert it
-        if(!triple::exists($data['subject_id'],$data['predicate_id'],$data['object_id'])) {
-          $db->insert('triples',$data);
-        }
-        return true;
+        $params = split("(set | of | to )",$query);
+        return self::_set($params[1],$params[2],$params[3]);
         break;
         
       case 'list':
-        // list where [predicate] is [object], [predicate] is [object], ...
-        $conditions_string = substr($querystring,11);
-        $conditions = array();
-        foreach(english_to_array($conditions_string) as $condition_string) {
-          $condition = explode(' ',$condition_string);
-          $pred_condition = 'predicate_id = '.page::id_from_name(self::resolve_quoted($condition[0]));
-          // [1] is
-          $obj_condition = 'object_id = '.page::id_from_name(self::resolve_quoted($condition[2]));
-          $conditions[] = "($pred_condition AND $obj_condition)";
-        }
-        $matches = $db->select_column('triples','subject_id',implode(' OR ',$conditions));
-        if($matches) {
-          $answers = array();
-          foreach($matches as $match) {
-            $answers[] = page::name_from_id($match['subject_id']);
-          }
-          return $answers;
-        }
+        return self::_list(substr($query,11));
         break;
       
       case 'unset':
-        // unset [subject]
-        $db->delete('triples',array(
-          'subject_id' => page::id_from_name(self::resolve_quoted($query[1]))));
-        return true;
+        $params = split("(unset | of )",$query);
+        return self::_unset($params[1],$params[2]);
+        break;
     }
   }
-  // if a string has quotes around it, strip the quotes
-  function resolve_quoted($string) {
-    if(strpos($string,"'") == 0 && strrpos($string,"'") == strlen($string)-1) {
-      return substr($string,1,strlen($string)-2);
-    } else {
-      return $string;
+  function _get($predicate,$subject) {
+    if(is_null($subject)) { // get .
+      $params = "subject_id = ".page::id_from_name($predicate);
+      $answer = $GLOBALS['db']->select('triples',$params);
+      $answer ? return $answer : return false;
+    } else { // get . of .
+      $params = array(
+        'predicate_id' => page::id_from_name($predicate),
+        'subject_id' => page::id_from_name($subject)
+      );
+      $answer = (int) $GLOBALS['db']->select_one('triples','object_id',$params);
+      $answer ? return page::name_from_id($answer) : return false;
     }
+  }
+  function _set($predicate,$subject,$object) {
+    $data = array(
+      'predicate_id' => page::create_if_doesnt_exist($predicate),
+      'subject_id' => page::create_if_doesnt_exist($subject),
+      'object_id' => page::create_if_doesnt_exist($object),
+    );
+    // if this triple isn't already in the db, insert it
+    if(triple::exists($data['subject_id'],$data['predicate_id'])) {
+      $GLOBALS['db']->update('triples',$data,array(
+        'subject_id' => $data['subject_id'],
+        'predicate_id' => $data['predicate_id']
+      ));
+    } else {
+      $GLOBALS['db']->insert('triples',$data);
+    }
+    return true;
+  }
+  function _list($condition_string) {
+    // FIXME: this is really broken...
+    $conditions = array();
+    foreach(english_to_array($conditions_string) as $condition_string) {
+      $condition = explode(' ',$condition_string);
+      $pred_condition = 'predicate_id = '.page::id_from_name(self::resolve_quoted($condition[0]));
+      // [1] is
+      $obj_condition = 'object_id = '.page::id_from_name(self::resolve_quoted($condition[2]));
+      $conditions[] = "($pred_condition AND $obj_condition)";
+    }
+    $matches = $GLOBALS['db']->select_column('triples','subject_id',implode(' OR ',$conditions));
+    if($matches) {
+      $answers = array();
+      foreach($matches as $match) {
+        $answers[] = page::name_from_id($match['subject_id']);
+      }
+      return $answers;
+    } else {
+      return false;
+    }
+  }
+  function _unset($predicate,$subject) {
+    $GLOBALS['db']->delete('triples',array(
+      'predicate_id' => page::id_from_name($predicate),
+      'subject_id' => page::id_from_name($subject)
+    ));
+    return true;
   }
   function split_but_not_in_quotes($string) {
     $quote_split = explode("'",$string);

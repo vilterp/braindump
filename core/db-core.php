@@ -2,10 +2,12 @@
 // FIXME: path to schema cache file should be a parameter somehow...
 // it would be good to keep this file usable on its own...
 // TODO: mysql? multiple database drivers?
+// FIXME: use ternary (?) operator for return values
 class Database {
   function __construct($filename,$log_queries=false,$cache_schema=false) {
     $this->log_queries= $log_queries;
-    if($this->log_queries) $this->write_to_log("\n".$_SERVER['REQUEST_URI']."\n");
+    if($this->log_queries) 
+      $this->write_to_log("\n".$_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI']."\n");
     // get actual db
     $this->db = new SQLiteDatabase($filename);
     // get schema information
