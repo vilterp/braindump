@@ -1,15 +1,17 @@
 <?php
-// FIXME: path to schema cache file should be a parameter somehow...
-// it would be good to keep this file usable on its own...
-// TODO: mysql? multiple database drivers?
 // FIXME: use ternary (?) operator for return values
+// FIXME: split query generation code into another file?
 class Database {
-  function __construct($filename,$log_queries=false,$cache_schema=false) {
+  function __construct($driver,$info,$log_queries=false,$cache_schema=false) {
+    // load, initialize driver
+    include "drivers/$driver.php";
+    eval("\$this->driver = new $driver"."_Driver();");
+    // actually connect
+    $this->driver->connect($info);
+    // query logging
     $this->log_queries= $log_queries;
     if($this->log_queries) 
       $this->write_to_log("\n".$_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI']."\n");
-    // get actual db
-    $this->db = new SQLiteDatabase($filename);
     // get schema information
     if(file_exists(PATH_TO_SCHEMA_CACHE) && $cache_schema) {
       // load cache if it's there
@@ -27,15 +29,9 @@ class Database {
   /* schema caching/loading */
   
   function load_schema() {
-    // get tables
-    $tables_result = $this->run_query('SELECT * FROM sqlite_master')->fetchAll();
-    foreach($tables_result as $table) {
-      // get columns
-      $columns_result = $this->run_query("PRAGMA table_info($table[name])")->fetchAll();
-      $this->schema[$table['name']] = array();
-      foreach($columns_result as $column) {
-        array_push($this->schema[$table['name']],$column['name']);
-      }
+    $tables = $driver->get_tables();
+    foreach($tables as $table) {
+      $this->schema[$table] = $this->driver->get_columns($table);
     }
   }
   function load_schema_cache() {
@@ -65,7 +61,7 @@ class Database {
     if($this->log_queries) {
       $this->write_to_log($querystring);
     }
-    return $this->db->query(stripslashes(trim($querystring)));
+    return $this->driver->query(stripslashes(trim($querystring)));
   }
   
   function select($tablename,$params='',$options='') {

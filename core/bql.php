@@ -29,14 +29,14 @@ class BQL {
     if(is_null($subject)) { // get .
       $params = "subject_id = ".page::id_from_name($predicate);
       $answer = $GLOBALS['db']->select('triples',$params);
-      $answer ? return $answer : return false;
+      if($answer) {return $answer;} else {return false;};
     } else { // get . of .
       $params = array(
         'predicate_id' => page::id_from_name($predicate),
         'subject_id' => page::id_from_name($subject)
       );
       $answer = (int) $GLOBALS['db']->select_one('triples','object_id',$params);
-      $answer ? return page::name_from_id($answer) : return false;
+      if($answer){return page::name_from_id($answer);} else {return false;}
     }
   }
   function _set($predicate,$subject,$object) {
