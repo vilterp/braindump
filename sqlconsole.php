@@ -10,10 +10,9 @@
       <input type="submit" value="Run &raquo;" accesskey="r">
     </form>
     <?php
-    include 'app/config.php';
+    include 'core/common.php';
     if(!empty($_POST['query'])) {
-      $db = sqlite_open($config['database']['path']);
-      $result = sqlite_fetch_all(sqlite_query($db,$_POST['query']),SQLITE_ASSOC);
+      $result = $db->query($_POST['query'],'all');
       if(count($result) > 0) {
         $keys = array_keys($result[0]); ?>
         <table border='1'>

@@ -57,16 +57,16 @@ class Database {
   /* SQL generation & querying */
   
   // everything goes through here eventually
-  function query($querystring) {
+  function query($querystring,$fetch_mode='fetch') {
     if($this->log_queries) {
       $this->write_to_log($querystring);
     }
-    return $this->driver->query(stripslashes(trim($querystring)));
+    return $this->driver->query(stripslashes(trim($querystring)),$fetch_mode);
   }
   
   function select($tablename,$params='',$options='') {
     $querystring = "SELECT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->query($querystring)->fetchAll(SQLITE_ASSOC);
+    $result = $this->query($querystring,'all');
     if(count($result) > 0) {
       return $result;
     } else {
@@ -76,14 +76,18 @@ class Database {
   // select one row
   function select_row($tablename,$params='',$options='') {
     $querystring = "SELECT DISTINCT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->query($querystring)->fetch(SQLITE_ASSOC);
+    return $this->query($querystring);
   }
   // select specified columns
   function select_column($tablename,$column,$params,$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->query($querystring)->fetch(SQLITE_ASSOC);
+    $result = $this->query($querystring,'all');
     if(count($result) > 0) {
-      return $result;
+      $rows = array();
+      foreach($result as $row) {
+        $rows[] = $row[$column];
+      }
+      return $rows;
     } else {
       return false;
     }
@@ -91,11 +95,11 @@ class Database {
   // select one cell
   function select_one($tablename,$column,$params='',$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->query($querystring)->fetchSingle(SQLITE_ASSOC);
+    $result = $this->query($querystring);
     if(!$result) {
       return NULL;
     } else {
-      return $result;
+      return $result[$column];
     }
   }
   function insert($tablename,$data) {
@@ -139,9 +143,9 @@ class Database {
     $querystring = "DELETE FROM $tablename ".$this->where_clause($params);
     $this->query($querystring);
   }
-  
+
   /* utility functions */
-  
+
   // generates an SQL WHERE clause from an associative array or string
   function where_clause($params=NULL) {
     if(empty($params)) return '';

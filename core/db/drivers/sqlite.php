@@ -1,11 +1,24 @@
 <?php
 // TODO: regiser for REXEXP?
-class SQLite_Driver implements DatabaseDriver {
+// FIXME: don't know why 'implements DatabaseDriver' screws it up...
+class SQLite_Driver {
   function connect($info) {
+    // using PDO cuz it does SQLite 3
     $this->handle = new PDO("sqlite:".ROOT.$info['path']);
   }
-  function query($query) {
-    return $this->handle->query($query);
+  function query($query,$fetch_mode) {
+    $result = $this->handle->query($query);
+    if($result) {
+      if($fetch_mode == 'fetch') {
+        return $result->fetch(PDO::FETCH_ASSOC);
+      } elseif($fetch_mode == 'all') {
+        return $result->fetchAll(PDO::FETCH_ASSOC);
+      } elseif($fetch_mode == 'column') {
+        return $result->fetchColumn(PDO::FETCH_ASSOC);
+      } elseif($fetch_mode == 'object') {
+        return $result->fetchObject(PDO::FETCH_ASSOC);
+      } 
+    }
   }
   function get_tables() {
     return $this->handle->query('SELECT * FROM sqlite_master')->fetch(PDO::FETCH_ASSOC);

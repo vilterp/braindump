@@ -1,8 +1,8 @@
 <?php
 interface DatabaseDriver {
-  function connect($info);
-  function query($query);
-  function get_tables();
-  function get_columns($table);
+  public function connect($info);
+  public function query($query);
+  public function get_tables();
+  public function get_columns($table);
 }
 ?>

@@ -35,8 +35,6 @@ if(!empty($config['database'])) {
     $config['database']['cache_schema']
   );
 }
-debug_dump($db->query('create table pages (id numeric, name text)'));
-debug_dump($db->query('create table triples (subject_id numeric, predicate_id numeric, object_id numeric)'));
 // load application
 include_dir(PATH_TO_MODELS);
 include_dir(PATH_TO_APP_HELPERS);

@@ -28,8 +28,17 @@ class BQL {
   function _get($predicate,$subject) {
     if(is_null($subject)) { // get .
       $params = "subject_id = ".page::id_from_name($predicate);
-      $answer = $GLOBALS['db']->select('triples',$params);
-      if($answer) {return $answer;} else {return false;};
+      $result = $GLOBALS['db']->select('triples',$params);
+      if($result) {
+        $answer = array();
+        foreach($result as $triple) {
+          $answer[page::name_from_id($triple['predicate_id'])] = 
+            page::name_from_id($triple['object_id']);
+        }
+        return $answer;
+      } else {
+        return false;
+      };
     } else { // get . of .
       $params = array(
         'predicate_id' => page::id_from_name($predicate),
@@ -56,21 +65,21 @@ class BQL {
     }
     return true;
   }
-  function _list($condition_string) {
+  function _list($conditions_string) {
     // FIXME: this is really broken...
     $conditions = array();
-    foreach(english_to_array($conditions_string) as $condition_string) {
-      $condition = explode(' ',$condition_string);
-      $pred_condition = 'predicate_id = '.page::id_from_name(self::resolve_quoted($condition[0]));
-      // [1] is
-      $obj_condition = 'object_id = '.page::id_from_name(self::resolve_quoted($condition[2]));
-      $conditions[] = "($pred_condition AND $obj_condition)";
+    foreach(preg_split("/( and | or )/",$conditions_string) as $condition_string) {
+      $condition = explode(' is ',$condition_string);
+      $predicate_id = page::id_from_name($condition[0]);
+      $object_id = page::id_from_name($condition[1]);
+      $conditions[] = "(predicate_id=$predicate_id AND object_id=$object_id)";
     }
-    $matches = $GLOBALS['db']->select_column('triples','subject_id',implode(' OR ',$conditions));
+    // TODO: actually pay attention to 'and' and 'or' operators...
+    $matches = $GLOBALS['db']->select_column('triples','subject_id',implode(' AND ',$conditions));
     if($matches) {
       $answers = array();
       foreach($matches as $match) {
-        $answers[] = page::name_from_id($match['subject_id']);
+        $answers[] = page::name_from_id($match);
       }
       return $answers;
     } else {

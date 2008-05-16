@@ -1,15 +1,12 @@
 <?php
 class pages_controller {
   function __construct() {
-    /*
     global $runtime;
     $this->page = factory('page')->find_one_by_name($runtime['ident']);
     if(is_null($this->page->name)) {
       $this->page = new Page();
       $this->page->name = $runtime['ident'];
     }
-    */
-    echo BQL::query('get braindump');
   }
   
   // main views
