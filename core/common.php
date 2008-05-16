@@ -8,6 +8,7 @@ define('PATH_TO_VIEWS','app/views/');
 define('PATH_TO_CONTROLLERS','app/controllers/');
 define('PATH_TO_APP_HELPERS','app/helpers/');
 // system paths
+define('ROOT',realpath(dirname(__FILE__)."/../").'/');
 define('PATH_TO_CORE','core/');
 define('PATH_TO_SCHEMA_CACHE','core/db/logs/schema-cache.txt');
 define('PATH_TO_QUERY_LOG','core/db/logs/query-log.txt');
@@ -34,6 +35,8 @@ if(!empty($config['database'])) {
     $config['database']['cache_schema']
   );
 }
+debug_dump($db->query('create table pages (id numeric, name text)'));
+debug_dump($db->query('create table triples (subject_id numeric, predicate_id numeric, object_id numeric)'));
 // load application
 include_dir(PATH_TO_MODELS);
 include_dir(PATH_TO_APP_HELPERS);

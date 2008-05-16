@@ -2,11 +2,11 @@
 database: 
   driver: SQLite
   info: 
-    path: database.sqlite
+    path: database.sqlite3
   cache_schema: true
   log_queries: true
 base_url: >
   http://mac-mini.local/~petevilter/svn/braindump/trunk/
 enable_mod_rewrite: false
 # 2 = E_WARNING
-error_reporting: 2
+error_reporting: 4

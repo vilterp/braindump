@@ -57,7 +57,7 @@ class Database {
   /* SQL generation & querying */
   
   // everything goes through here eventually
-  function run_query($querystring) {
+  function query($querystring) {
     if($this->log_queries) {
       $this->write_to_log($querystring);
     }
@@ -66,7 +66,7 @@ class Database {
   
   function select($tablename,$params='',$options='') {
     $querystring = "SELECT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->run_query($querystring)->fetchAll(SQLITE_ASSOC);
+    $result = $this->query($querystring)->fetchAll(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;
     } else {
@@ -76,12 +76,12 @@ class Database {
   // select one row
   function select_row($tablename,$params='',$options='') {
     $querystring = "SELECT DISTINCT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->run_query($querystring)->fetch(SQLITE_ASSOC);
+    return $this->query($querystring)->fetch(SQLITE_ASSOC);
   }
   // select specified columns
   function select_column($tablename,$column,$params,$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->run_query($querystring)->fetch(SQLITE_ASSOC);
+    return $this->query($querystring)->fetch(SQLITE_ASSOC);
     if(count($result) > 0) {
       return $result;
     } else {
@@ -91,7 +91,7 @@ class Database {
   // select one cell
   function select_one($tablename,$column,$params='',$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->run_query($querystring)->fetchSingle(SQLITE_ASSOC);
+    $result = $this->query($querystring)->fetchSingle(SQLITE_ASSOC);
     if(!$result) {
       return NULL;
     } else {
@@ -113,7 +113,7 @@ class Database {
       }
     }
     $querystring = "INSERT INTO $tablename (".implode(", ",$keys).") VALUES (".implode(", ",$values).")";
-    $this->run_query($querystring);
+    $this->query($querystring);
   }
   function update($tablename,$data,$params='') {
     if(is_string($data)) {
@@ -133,11 +133,11 @@ class Database {
       $the_data = implode(', ',$pairs);
     }
     $querystring = "UPDATE $tablename SET $the_data ".$this->where_clause($params);
-    $this->run_query($querystring);
+    $this->query($querystring);
   }
   function delete($tablename,$params='') {
     $querystring = "DELETE FROM $tablename ".$this->where_clause($params);
-    $this->run_query($querystring);
+    $this->query($querystring);
   }
   
   /* utility functions */

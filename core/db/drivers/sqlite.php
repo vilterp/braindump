@@ -1,8 +1,8 @@
 <?php
+// TODO: regiser for REXEXP?
 class SQLite_Driver implements DatabaseDriver {
   function connect($info) {
-    $this->handle = new PDO("sqlite:$info[path]");
-    return $this->handle;
+    $this->handle = new PDO("sqlite:".ROOT.$info['path']);
   }
   function query($query) {
     return $this->handle->query($query);
