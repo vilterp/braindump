@@ -3,6 +3,7 @@
 // FIXME: quoting..
 class BQL {
   function query($query) {
+    Database::write_to_log($query);
     $querysplit = explode(' ',$query);
     switch($querysplit[0]) {
       case 'get':
@@ -92,9 +93,9 @@ class BQL {
   function _unset($predicate,$subject) {
     if(is_null($subject)) { // unset .
       $GLOBALS['db']->delete('triples',array(
-        'subject_id' => page::id_from_id($predicate)
+        'subject_id' => page::id_from_name($predicate)
       ));
-  } else { // unset . of .
+    } else { // unset . of .
       $GLOBALS['db']->delete('triples',array(
         'predicate_id' => page::id_from_name($predicate),
         'subject_id' => page::id_from_name($subject)

@@ -12,8 +12,8 @@ function factory($classname) {
   return eval("return new $classname();");
 }
 function debug_dump($var) {
-  echo "<pre>";
+  echo "<pre>\n";
   var_dump($var);
-  echo "</pre>";
+  echo "</pre>\n";
 }
 ?>

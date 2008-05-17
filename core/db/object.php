@@ -11,6 +11,7 @@ class DatabaseObject {
   var $data = array();
   var $dirty = array();
   var $associations = array();
+  var $autosave = false;
   
   function __construct($primary_value=NULL,$tablename=NULL,$primary_key='id') {
     is_null($tablename) ? 
@@ -98,12 +99,10 @@ class DatabaseObject {
     }
   }
   function __get($attr) {
-    // if it's a field loaded from the db
-    if(!is_null($this->data) && array_key_exists($attr,$this->data)) {
-      return $this->data[$attr];
-    // if it's an associated object or list of objects
-    } elseif(array_key_exists($attr,$this->associations) && $this->in_db) {
+    if(array_key_exists($attr,$this->associations) && $this->in_db) {
       return eval("return \$this->load_".$this->associations[$attr]['type']."(\$attr,\$this->associations[\$attr]);");
+    } else {
+      return $this->data[$attr];
     }
   }
   function __call($name,$args) {

@@ -8,5 +8,4 @@ database:
 base_url: >
   http://mac-mini.local/~petevilter/svn/braindump/trunk/
 enable_mod_rewrite: false
-# 2 = E_WARNING
-error_reporting: 2
+# error_reporting: 2
