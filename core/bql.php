@@ -87,10 +87,16 @@ class BQL {
     }
   }
   function _unset($predicate,$subject) {
-    $GLOBALS['db']->delete('triples',array(
-      'predicate_id' => page::id_from_name($predicate),
-      'subject_id' => page::id_from_name($subject)
-    ));
+    if(is_null($subject)) { // unset .
+      $GLOBALS['db']->delete('triples',array(
+        'subject_id' => page::id_from_id($predicate)
+      ));
+  } else { // unset . of .
+      $GLOBALS['db']->delete('triples',array(
+        'predicate_id' => page::id_from_name($predicate),
+        'subject_id' => page::id_from_name($subject)
+      ));
+    }
     return true;
   }
   function split_but_not_in_quotes($string) {

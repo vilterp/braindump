@@ -10,6 +10,9 @@ class page extends DatabaseObject {
   function getLink() { // => <a href='pages/show/[name]'>[name]</a>
     return getLink($this->name,"pages/show/$this->name");
   }
+  static function link($name) {
+    return getLink($name,"pages/show/$name");
+  }
   // money functions
   function get_attribute($attribute) {
     $triple = new triple();
@@ -41,19 +44,20 @@ class page extends DatabaseObject {
   }
   // saving helpers
   function save_meta($input) {
-    BQL::query("unset '$this'");
-    foreach($input as $item) {
-      BQL::query("set '$item[key]' of '$this' to '$item[value]'");
+    BQL::query("unset $this");
+    foreach($input as $key=>$value) {
+      BQL::query("set $key of $this to $value");
     }
   }
   // helpers...
   function print_meta($withlinks=false) {
-    if($this->links_out) {
-      foreach($this->links_out as $link) {
+    $links = BQL::query("get $this");
+    if($links) {
+      foreach($links as $predicate=>$object) {
         if($withlinks) {
-          echo "$link->predicate: ".$link->object->getLink()."<br />\n";
+          echo "$predicate: ".page::link($object)."<br />";
         } else {
-          echo "$link->predicate: $link->object\n";
+          echo "$predicate: $object\n";
         }
       }
     }
@@ -63,12 +67,7 @@ class page extends DatabaseObject {
     foreach(explode("\n",$input) as $line) {
       if(!empty($line)) {
         $pair = explode(':',$line);
-        array_push($pairs,
-          array(
-            'key' => trim($pair[0]),
-            'value' => trim($pair[1])
-          )
-        );
+        $pairs[trim($pair[0])] = trim($pair[1]);
       }
     }
     return $pairs;
