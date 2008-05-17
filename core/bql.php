@@ -66,24 +66,27 @@ class BQL {
     return true;
   }
   function _list($conditions_string) {
-    // FIXME: this is really broken...
-    $conditions = array();
-    foreach(preg_split("/( and | or )/",$conditions_string) as $condition_string) {
-      $condition = explode(' is ',$condition_string);
-      $predicate_id = page::id_from_name($condition[0]);
-      $object_id = page::id_from_name($condition[1]);
-      $conditions[] = "(predicate_id=$predicate_id AND object_id=$object_id)";
-    }
-    // TODO: actually pay attention to 'and' and 'or' operators...
-    $matches = $GLOBALS['db']->select_column('triples','subject_id',implode(' AND ',$conditions));
-    if($matches) {
-      $answers = array();
-      foreach($matches as $match) {
-        $answers[] = page::name_from_id($match);
-      }
-      return $answers;
+    if(empty($conditions_string)) {
+      return $GLOBALS['db']->select_column('pages','name','',array('order by'=>'name'));
     } else {
-      return false;
+      $conditions = array();
+      foreach(preg_split("/( and | or )/",$conditions_string) as $condition_string) {
+        $condition = explode(' is ',$condition_string);
+        $predicate_id = page::id_from_name($condition[0]);
+        $object_id = page::id_from_name($condition[1]);
+        $conditions[] = "(predicate_id=$predicate_id AND object_id=$object_id)";
+      }
+      // TODO: actually pay attention to 'and' and 'or' operators...
+      $matches = $GLOBALS['db']->select_column('triples','subject_id',implode(' AND ',$conditions));
+      if($matches) {
+        $answers = array();
+        foreach($matches as $match) {
+          $answers[] = page::name_from_id($match);
+        }
+        return $answers;
+      } else {
+        return false;
+      }
     }
   }
   function _unset($predicate,$subject) {
