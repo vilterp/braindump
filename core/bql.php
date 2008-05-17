@@ -99,23 +99,5 @@ class BQL {
     }
     return true;
   }
-  function split_but_not_in_quotes($string) {
-    $quote_split = explode("'",$string);
-    $in_quotes = false;
-    $final = array();
-    for($i=0; $i<count($quote_split); $i++) {
-      if($in_quotes) {
-        $final[] = $quote_split[$i];
-        $in_quotes = false;
-      } else {
-        $split = explode(' ',$quote_split[$i]);
-        foreach($split as $item) {
-          if(!empty($item)) $final[] = $item;
-        }
-        $in_quotes = true;
-      }
-    }
-    return $final;
-  }
 }
 ?>
