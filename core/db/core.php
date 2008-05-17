@@ -2,44 +2,21 @@
 // FIXME: use ternary (?) operator for return values
 // FIXME: split query generation code into another file?
 class Database {
-  function __construct($driver,$info,$log_queries=false,$cache_schema=false) {
-    // load, initialize driver
-    include "drivers/$driver.php";
-    eval("\$this->driver = new $driver"."_Driver();");
-    // actually connect
-    $this->driver->connect($info);
+  function __construct($connection_string,$log_queries=false,$cache_schema=false) {
+    // connect
+    if(preg_match('|mysql\://([^:]+):?([^@]*)@([^/]+)/(.+)|',$connection_string,$match)) {
+      // mysql://user:passowrd@localhost/dbname
+      $this->handle = new PDO("mysql:host=$match[3];dbname=$match[4]",$match[1],$match[2]);
+    } elseif(preg_match('|sqlite\://(.+)|',$connection_string,$match)) {
+      // sqlite://relative/path/to/db
+      $this->handle = new PDO('sqlite:'.ROOT.$match[1]);
+    } else {
+      $this->handle = new PDO($connection_string);
+    }
     // query logging
     $this->log_queries= $log_queries;
     if($this->log_queries) 
       $this->write_to_log("\n".$_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI']."\n");
-    // get schema information
-    if(file_exists(PATH_TO_SCHEMA_CACHE) && $cache_schema) {
-      // load cache if it's there
-      $schema_cache_exists = true;
-      $this->load_schema_cache();
-    } else {
-      // otherwise query the database to get schema info
-      $this->load_schema();
-      // save loaded info in caching turned on
-      if($cache_schema) $this->save_schema_cache();
-    }
-    $this->tables = array_keys($this->schema);
-  }
-  
-  /* schema caching/loading */
-  
-  function load_schema() {
-    $tables = $driver->get_tables();
-    foreach($tables as $table) {
-      $this->schema[$table] = $this->driver->get_columns($table);
-    }
-  }
-  function load_schema_cache() {
-    $this->schema = (array) unserialize(file_get_contents(PATH_TO_SCHEMA_CACHE));
-    $this->tables = array_keys($this->schema);
-  }
-  function save_schema_cache() {
-    file_put_contents(PATH_TO_SCHEMA_CACHE,serialize($this->schema));
   }
   
   function get_high_key($tablename,$column='id') {
@@ -57,16 +34,18 @@ class Database {
   /* SQL generation & querying */
   
   // everything goes through here eventually
-  function query($querystring,$fetch_mode='fetch') {
+  function query($querystring) {
     if($this->log_queries) {
       $this->write_to_log($querystring);
     }
-    return $this->driver->query(stripslashes(trim($querystring)),$fetch_mode);
+    $result = $this->handle->query(stripslashes(trim($querystring)));
+    if($result) $result->setFetchMode(PDO::FETCH_ASSOC);
+    return $result;
   }
   
   function select($tablename,$params='',$options='') {
     $querystring = "SELECT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->query($querystring,'all');
+    $result = $this->query($querystring)->fetchAll();
     if(count($result) > 0) {
       return $result;
     } else {
@@ -76,12 +55,12 @@ class Database {
   // select one row
   function select_row($tablename,$params='',$options='') {
     $querystring = "SELECT DISTINCT * FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    return $this->query($querystring);
+    return $this->query($querystring)->fetch();
   }
   // select specified columns
   function select_column($tablename,$column,$params,$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->query($querystring,'all');
+    $result = $this->query($querystring)->fetchAll();
     if(count($result) > 0) {
       $rows = array();
       foreach($result as $row) {
@@ -95,7 +74,7 @@ class Database {
   // select one cell
   function select_one($tablename,$column,$params='',$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
-    $result = $this->query($querystring);
+    $result = $this->query($querystring)->fetch();
     if(!$result) {
       return NULL;
     } else {
@@ -108,13 +87,7 @@ class Database {
     // split $data into $keys, $values
     foreach($data as $key=>$value) {
       array_push($keys,$key);
-      if(is_string($value)) {
-        array_push($values,"'".sqlite_escape_string($value)."'"); // a little kludgy...
-      } elseif(is_null($value)) {
-        array_push($values,'NULL');
-      } else {
-        array_push($values,$value);
-      }
+      array_push($values,$this->handle->quote($value));
     }
     $querystring = "INSERT INTO $tablename (".implode(", ",$keys).") VALUES (".implode(", ",$values).")";
     $this->query($querystring);
@@ -127,7 +100,7 @@ class Database {
       // key/value pairs to update
       foreach($data as $key=>$value) {
         if(is_string($value)) {
-          array_push($pairs,"$key = '".sqlite_escape_string($value)."'");
+          array_push($pairs,"$key = '".$this->handle->quote($value)."'");
         } elseif(is_null($value)) {
           array_push($paris,"$key = NULL");
         } else {

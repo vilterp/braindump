@@ -1,22 +1,15 @@
 <?php
 class pages_controller {
-  function __construct() {
-    global $runtime;
-    $this->page = factory('page')->find_one_by_name($runtime['ident']);
-    if(is_null($this->page->name)) {
-      $this->page = new Page();
-      $this->page->name = $runtime['ident'];
-    }
-  }
   
   // main views
   
   function index() {
     // TODO: semantic custom query goodness
-    $GLOBALS['pages'] = $this->page->find_all(array('order by'=>'name'),false);
+    pass_var('pages',BQL::query('list'));
   }
   function show() {
-    pass_var('page',$this->page);
+    global $runtime;
+    pass_var('page',BQL::query("get $runtime[ident]"));
   }
   
   // for AJAX in place edit
@@ -33,16 +26,18 @@ class pages_controller {
   }
   function just_meta() { // loaded into edit box
     no_layout();
-    $this->page->print_meta();
+    global $runtime;
+    print_meta(BQL::query("get $runtime[ident]"));
   }
   function save_meta() {
     no_layout();
-    $this->page->save_meta(page::parse_meta($_POST['value']));
-    $this->page->print_meta(true);
+    global $runtime;
+    save_meta($runtime['ident'],parse_meta($_POST['value']));
+    print_meta(BQL::query("get $runtime[ident]"),true);
   }
   
   function delete() {
-    $this->page->delete_all();
+    BQL::query("unset $runtime[ident]");
     redirect('pages');
   }
   // delete the entire db. useful sometimes.

@@ -4,7 +4,7 @@
   <?php // TODO: trac-style custom query UI ?>
   <ul>
     <?php foreach ($pages as $page): ?>
-      <li><?php echo getLink($page->name,"pages/show/$page->name") ?></li>
+      <li><?php echo pagelink($page) ?></li>
     <?php endforeach ?>
   </ul>
 <?php endif ?>

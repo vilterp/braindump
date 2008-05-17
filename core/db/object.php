@@ -1,10 +1,8 @@
 <?php
-// FIXME: does it need the columns list?
 // TODO: override tablename, primary_key w/ 'var' declarations at beginning of class
 class DatabaseObject {
   
   var $tablename;
-  var $columns;
   var $primary_key;
   var $primary_value;
   var $in_db = false;
@@ -18,7 +16,6 @@ class DatabaseObject {
       $this->tablename = pluralize(get_class($this)) : 
       $this->tablename = $tablename;
     // schema information
-    $this->columns = $GLOBALS['db']->schema[$this->tablename];
     $this->primary_key = $primary_key;
     $this->primary_value = $primary_value;
     // load & register associations
@@ -91,12 +88,8 @@ class DatabaseObject {
   }
   
   function __set($attr,$value) {
-    if(!is_null($this->columns) && in_array($attr,$this->columns)) { // if it's a column name
-      $this->dirty[] = $attr; // keep track of changed (dirty) attributes
-      $this->data[$attr] = $value;
-    } else {
-      $this->$attr = $value;
-    }
+    $this->dirty[] = $attr; // keep track of changed (dirty) attributes
+    $this->data[$attr] = $value;
   }
   function __get($attr) {
     if(array_key_exists($attr,$this->associations) && $this->in_db) {

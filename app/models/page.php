@@ -13,65 +13,7 @@ class page extends DatabaseObject {
   static function link($name) {
     return getLink($name,"pages/show/$name");
   }
-  // money functions
-  function get_attribute($attribute) {
-    $triple = new triple();
-    $page = $triple->find_one(array('from_id'=>$this->id,'rel'=>$attribute))->to_id;
-    return $this->name_from_id($page);
-  }
-  function get_type() {
-    return $this->get_attribute('type');
-  }
-  function get_types_by_links_to() {
-    $types = array();
-    foreach($this->links_to as $link) {
-      $link_page = new page(page::id_from_name($link->rel));
-      if($link_page->in_db) array_push($types,$link_page->get_attribute('to type'));
-    }
-    return $types;
-  }
-  function get_attributes_for_type($type) {
-    $triple = new triple();
-    $pages = $triple->find(array(
-      'from_id' => page::id_from_name($type),
-      'rel' => 'attribute'
-    ));
-    $answers = array();
-    foreach($pages as $triple) {
-      array_push($answers,page::name_from_id($triple->to_id));
-    }
-    return $answers;
-  }
-  // saving helpers
-  function save_meta($input) {
-    BQL::query("unset $this");
-    foreach($input as $key=>$value) {
-      BQL::query("set $key of $this to $value");
-    }
-  }
-  // helpers...
-  function print_meta($withlinks=false) {
-    $links = BQL::query("get $this");
-    if($links) {
-      foreach($links as $predicate=>$object) {
-        if($withlinks) {
-          echo "$predicate: ".page::link($object)."<br />";
-        } else {
-          echo "$predicate: $object\n";
-        }
-      }
-    }
-  }
-  function parse_meta($input) {
-    $pairs = array();
-    foreach(explode("\n",$input) as $line) {
-      if(!empty($line)) {
-        $pair = explode(':',$line);
-        $pairs[trim($pair[0])] = trim($pair[1]);
-      }
-    }
-    return $pairs;
-  }
+  // helpers
   function exists($page_name) {
     $id = $GLOBALS['db']->select_one('pages','id',array('name'=>$page_name));
     if($id) return (int) $id; else return false;

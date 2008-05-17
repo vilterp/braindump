@@ -29,8 +29,7 @@ error_reporting($config['error_reporting']);
 // connect to database
 if(!empty($config['database'])) {
   $db = new Database(
-    $config['database']['driver'],
-    $config['database']['info'],
+    $config['database']['connection_string'],
     $config['database']['log_queries'],
     $config['database']['cache_schema']
   );

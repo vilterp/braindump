@@ -91,6 +91,7 @@ class BQL {
     }
   }
   function _unset($predicate,$subject) {
+    // FIXME: should unset delete the record in the pages table as well?
     if(is_null($subject)) { // unset .
       $GLOBALS['db']->delete('triples',array(
         'subject_id' => page::id_from_name($predicate)

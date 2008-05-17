@@ -12,7 +12,7 @@
     <?php
     include 'core/common.php';
     if(!empty($_POST['query'])) {
-      $result = $db->query($_POST['query'],'all');
+      $result = $db->query($_POST['query'])->fetchAll();
       if(count($result) > 0) {
         $keys = array_keys($result[0]); ?>
         <table border='1'>

@@ -1,11 +1,10 @@
 ---
 database: 
-  driver: SQLite
-  info: 
-    path: database.sqlite3
+  connection_string: mysql://root:penguin8@mac-mini.local/braindump
+  #sqlite://database.sqlite3
   cache_schema: true
   log_queries: true
 base_url: >
   http://mac-mini.local/~petevilter/svn/braindump/trunk/
 enable_mod_rewrite: false
-# error_reporting: 2
+error_reporting: 2
