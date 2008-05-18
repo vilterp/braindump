@@ -11,10 +11,9 @@ class page {
     if($id = page::exists($page_name)) {
       return $id;
     } else {
-      $new_page = new Page();
-      $new_page->name = $page_name;
-      $new_page->save();
-      return (int) $new_page->id;
+      global $db;
+      $db->insert('pages',array('name'=>$page_name));
+      return (int) $db->select_one('pages','id',array('name'=>$page_name));
     }
   }
   function name_from_id($id) {

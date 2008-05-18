@@ -84,13 +84,7 @@ class Database {
       $pairs = array();
       // key/value pairs to update
       foreach($data as $key=>$value) {
-        if(is_string($value)) {
-          array_push($pairs,"$key = '".$this->handle->quote($value)."'");
-        } elseif(is_null($value)) {
-          array_push($paris,"$key = NULL");
-        } else {
-          array_push($pairs,"$key = $value");
-        }
+        array_push($pairs,"$key = ".$this->handle->quote($value));
       }
       $the_data = implode(', ',$pairs);
     }

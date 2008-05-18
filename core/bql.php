@@ -1,10 +1,12 @@
 <?php
-// FIXME: quoting..
+// FIXME: something like 'knights of columbus' woudl break setting and getting
+// FIXME: error reporting on parse errors instead of putting in the wrong thing or doing nothing...
+// FIXME: keep better track of datatypes
 class BQL {
   function query($query) {
-    write_to_log($query);
+    if($GLOBALS['config']['keep_log']) write_to_log($query);
     $querysplit = explode(' ',$query);
-    switch($querysplit[0]) {
+    switch($querysplit[0]) { // first word
       case 'get':
         $params = split("(get | of )",$query);
         return self::_get($params[1],$params[2]);
@@ -23,6 +25,17 @@ class BQL {
         $params = split("(unset | of )",$query);
         return self::_unset($params[1],$params[2]);
         break;
+        
+      case 'backlinks':
+        return self::_backlinks(substr($query,13));
+        
+      case 'describe':
+        $split = split("(describe | as )",$query);
+        if(is_null($split[2])) {
+          return self::_get_description($split[1]);
+        } else {
+          return self::_set_description($split[1],$split[2]);
+        }
     }
   }
   function _get($predicate,$subject) {
@@ -52,7 +65,7 @@ class BQL {
     $data = array(
       'predicate_id' => page::create_if_doesnt_exist($predicate),
       'subject_id' => page::create_if_doesnt_exist($subject),
-      'object_id' => page::create_if_doesnt_exist($object),
+      'object_id' => page::create_if_doesnt_exist($object)
     );
     // if this triple isn't already in the db, insert it
     if(triple::exists($data['subject_id'],$data['predicate_id'])) {
@@ -102,6 +115,38 @@ class BQL {
       ));
     }
     return true;
+  }
+  function _backlinks($name) {
+    // backlinks to .
+    $matches = $GLOBALS['db']->select('triples',array(
+      'object_id' => page::id_from_name($name)
+    ));
+    $answers = array();
+    foreach($matches as $match) {
+      $predicate = page::name_from_id($match['predicate_id']);
+      $subject = page::name_from_id($match['subject_id']);
+      if(isset($answers[$predicate])) {
+        if(is_array($answers[$predicate])) {
+          $answers[$predicate][] = $subject;
+        } else {
+          $answers[$predicate] = array($answers[$predicate]);
+          $answers[$predicate][] = $subject;
+        }
+      } else {
+        $answers[$predicate] = $subject;
+      }
+    }
+    return $answers;
+  }
+  function _get_description($name) {
+    return $GLOBALS['db']->select_column('pages','description',array('name'=>$name));
+  }
+  function _set_description($name,$description) {
+    // FIXME: the DB field should be called 'description', not 'body'
+    return $GLOBALS['db']->update('pages',
+      array('description'=>$description),
+      array('name'=>$name)
+    );
   }
 }
 ?>

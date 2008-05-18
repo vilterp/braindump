@@ -104,3 +104,433 @@ SELECT id FROM pages WHERE name = 'braindump'
 SELECT * FROM triples WHERE subject_id = 2 
 SELECT name FROM pages WHERE id = '1' 
 SELECT name FROM pages WHERE id = '3' 
+
+GET /~petevilter/svn/braindump/trunk/
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/braindump
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/just_meta/braindump?id=page_metadata
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+
+POST /~petevilter/svn/braindump/trunk/index.php/pages/save_meta/braindump
+
+unset braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+DELETE FROM triples WHERE subject_id = 2
+set creator of braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id=2 AND predicate_id=1 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('1', '2', '3')
+set language of braindump to php
+SELECT id FROM pages WHERE name = 'language' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/braindump
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+SELECT body FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump
+SELECT body FROM pages WHERE name = 'braindump' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = ''the coolest project ever'' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump as the coolest project ever
+UPDATE pages SET body = 'the coolest project ever' WHERE name = 'braindump'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+describe braindump
+SELECT body FROM pages WHERE name = 'braindump' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT * FROM triples WHERE object_id =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT * FROM triples WHERE object_id =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT * FROM triples WHERE object_id =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set creator of bql console to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set creator of bql console to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+get bql console
+SELECT id FROM pages WHERE name = 'bql console' 
+SELECT * FROM triples WHERE subject_id = 0 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set creator of bql console to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set creator of bql console to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+SELECT id FROM pages WHERE name = 'braindump' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+SELECT id FROM pages WHERE name = 'pedro' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+SELECT id FROM pages WHERE name = 'bql console' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+SELECT id FROM pages WHERE name = 'bql console' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+SELECT id FROM pages WHERE name = 'bql console' 
+INSERT INTO pages (name) VALUES ('bql console')
+SELECT Array FROM pages  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+SELECT id FROM pages WHERE name = 'bql console' 
+INSERT INTO pages (name) VALUES ('bql console')
+SELECT id FROM pages WHERE name = 'bql console' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+list
+SELECT name FROM pages  ORDER BY name
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set creator of bql console to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+INSERT INTO pages (name) VALUES ('creator')
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console' 
+SELECT id FROM pages WHERE name = 'pedro' 
+INSERT INTO pages (name) VALUES ('pedro')
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id=1 AND predicate_id=2 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('2', '1', '3')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get bql console
+SELECT id FROM pages WHERE name = 'bql console' 
+SELECT * FROM triples WHERE subject_id = 1 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '3' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id = 3 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+list where creator is pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT subject_id FROM triples WHERE (predicate_id=2 AND object_id=3) 
+SELECT name FROM pages WHERE id = '1' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set creator of braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+INSERT INTO pages (name) VALUES ('braindump')
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id=4 AND predicate_id=2 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('2', '4', '3')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 4 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '3' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+list where creator is pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT subject_id FROM triples WHERE (predicate_id=2 AND object_id=3) 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '4' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set creator of log writer to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'log writer' 
+INSERT INTO pages (name) VALUES ('log writer')
+SELECT id FROM pages WHERE name = 'log writer' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id=5 AND predicate_id=2 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('2', '5', '3')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '5' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+backlinks to pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE object_id = 3 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '5' 
