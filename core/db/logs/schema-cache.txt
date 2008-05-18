@@ -1,1 +1,0 @@
-a:2:{s:5:"pages";a:3:{i:0;s:4:"body";i:1;s:2:"id";i:2;s:4:"name";}s:7:"triples";a:3:{i:0;s:10:"subject_id";i:1;s:12:"predicate_id";i:2;s:9:"object_id";}}

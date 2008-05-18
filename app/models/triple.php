@@ -1,5 +1,5 @@
 <?php
-class triple extends DatabaseObject {
+class triple {
   function connect() {
     $this->belongs_to('page','subject_id','subject');
     $this->belongs_to('page','predicate_id','predicate');

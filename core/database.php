@@ -2,21 +2,9 @@
 // FIXME: use ternary (?) operator for return values
 // FIXME: split query generation code into another file?
 class Database {
-  function __construct($connection_string,$log_queries=false) {
+  function __construct($connection_info) {
     // connect
-    if(preg_match('|mysql\://([^:]+):?([^@]*)@([^/]+)/(.+)|',$connection_string,$match)) {
-      // mysql://user:passowrd@localhost/dbname
-      $this->handle = new PDO("mysql:host=$match[3];dbname=$match[4]",$match[1],$match[2]);
-    } elseif(preg_match('|sqlite\://(.+)|',$connection_string,$match)) {
-      // sqlite://relative/path/to/db
-      $this->handle = new PDO('sqlite:'.ROOT.$match[1]);
-    } else {
-      $this->handle = new PDO($connection_string);
-    }
-    // query logging
-    $this->log_queries= $log_queries;
-    if($this->log_queries) 
-      $this->write_to_log("\n".$_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI']."\n");
+    $this->handle = new PDO('sqlite:'.ROOT.$connection_info);
   }
   
   function get_high_key($tablename,$column='id') {
@@ -25,19 +13,16 @@ class Database {
     return $highkey;
   }
   
-  function write_to_log($query) {
-    $log = fopen(PATH_TO_QUERY_LOG,'a');
-    fwrite($log,$query."\n");
-    fclose($log);
-  }
-  
   /* SQL generation & querying */
   
   // everything goes through here eventually
   function query($querystring) {
-    if($this->log_queries) {
-      $this->write_to_log($querystring);
+    // log the query
+    global $config;
+    if($config['keep_log']) {
+      write_to_log($querystring);
     }
+    // run the query
     $result = $this->handle->query(stripslashes(trim($querystring)));
     if($result) $result->setFetchMode(PDO::FETCH_ASSOC);
     return $result;

@@ -1,9 +1,8 @@
 <?php
-// TODO: wrap these in functions
 // FIXME: quoting..
 class BQL {
   function query($query) {
-    Database::write_to_log($query);
+    write_to_log($query);
     $querysplit = explode(' ',$query);
     switch($querysplit[0]) {
       case 'get':

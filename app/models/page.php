@@ -1,5 +1,5 @@
 <?php
-class page extends DatabaseObject {
+class page {
   function connect() {
     $this->has_many('triple','subject_id','links_out');
     $this->has_many('triple','object_id','links_in');

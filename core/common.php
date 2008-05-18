@@ -11,7 +11,7 @@ define('PATH_TO_APP_HELPERS','app/helpers/');
 define('ROOT',realpath(dirname(__FILE__)."/../").'/');
 define('PATH_TO_CORE','core/');
 define('PATH_TO_SCHEMA_CACHE','core/db/logs/schema-cache.txt');
-define('PATH_TO_QUERY_LOG','core/db/logs/query-log.txt');
+define('PATH_TO_LOG','core/log.txt');
 define('PATH_TO_HELPERS','helpers/');
 define('PATH_TO_LIB','lib/');
 include 'core/utils.php';
@@ -24,14 +24,14 @@ include_dir(PATH_TO_HELPERS);
 include_dir(PATH_TO_LIB);
 // get config
 $config = Spyc::YAMLLoad(PATH_TO_CONFIG);
+// log the request
+if($config['keep_log'])
+  write_to_log("\n".$_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI']."\n");
 // set error reporting (defined in config)
-error_reporting($config['error_reporting']);
+if($config['error_reporting']) error_reporting($config['error_reporting']);
 // connect to database
 if(!empty($config['database'])) {
-  $db = new Database(
-    $config['database']['connection_string'],
-    $config['database']['log_queries']
-  );
+  $db = new Database($config['database']);
 }
 // load application
 include_dir(PATH_TO_MODELS);

@@ -16,4 +16,9 @@ function debug_dump($var) {
   var_dump($var);
   echo "</pre>\n";
 }
+function write_to_log($message) {
+  $log = fopen(PATH_TO_LOG,'a');
+  fwrite($log,$message."\n");
+  fclose($log);
+}
 ?>
