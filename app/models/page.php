@@ -1,18 +1,7 @@
 <?php
+// this and the triple class are pretty much just collections of static 
+// functions now...
 class page {
-  function connect() {
-    $this->has_many('triple','subject_id','links_out');
-    $this->has_many('triple','object_id','links_in');
-  }
-  function __toString() {
-    return $this->name;
-  }
-  function getLink() { // => <a href='pages/show/[name]'>[name]</a>
-    return getLink($this->name,"pages/show/$this->name");
-  }
-  static function link($name) {
-    return getLink($name,"pages/show/$name");
-  }
   // helpers
   function exists($page_name) {
     $id = $GLOBALS['db']->select_one('pages','id',array('name'=>$page_name));

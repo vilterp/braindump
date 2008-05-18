@@ -1,7 +1,7 @@
 <?php
 class facts_controller {
   function index() {
-    $GLOBALS['facts'] = factory('triple')->find_all();
+    pass_var('facts',$GLOBALS['db']->select('triples'));
   }
 }
 ?>

@@ -1,0 +1,106 @@
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/gender
+
+get gender
+SELECT id FROM pages WHERE name = 'gender' 
+SELECT * FROM triples WHERE subject_id = 4 
+
+GET /~petevilter/svn/braindump/trunk/index.php/
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/gender
+
+get gender
+SELECT id FROM pages WHERE name = 'gender' 
+SELECT * FROM triples WHERE subject_id = 4 
+
+GET /~petevilter/svn/braindump/trunk/index.php/facts
+
+SELECT * FROM triples  
+
+GET /~petevilter/svn/braindump/trunk/index.php/facts
+
+SELECT * FROM triples  
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/facts
+
+SELECT * FROM triples  
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '5' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '3' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/pedro
+
+get pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id = 3 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/just_meta/pedro?id=page_metadata
+
+get pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id = 3 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+
+GET /%7Epetevilter/svn/braindump/trunk/index.php/pages/show/male
+
+get male
+SELECT id FROM pages WHERE name = 'male' 
+SELECT * FROM triples WHERE subject_id = 5 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/braindump
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/just_meta/braindump?id=page_metadata
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+
+POST /~petevilter/svn/braindump/trunk/index.php/pages/save_meta/braindump
+
+unset braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+DELETE FROM triples WHERE subject_id = 2
+set creator of braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id=2 AND predicate_id=1 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('1', '2', '3')
+set language of braindump to php
+SELECT id FROM pages WHERE name = 'language' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/braindump
+
+get braindump
+SELECT id FROM pages WHERE name = 'braindump' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 

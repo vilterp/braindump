@@ -2,9 +2,10 @@
   <ul>
     <?php foreach ($facts as $fact): ?>
       <li>
-        <?php echo $fact->object->getLink() ?> is the 
-        <?php echo $fact->predicate->getLink() ?> of 
-        <?php echo $fact->subject->getLink() ?>
+        <?php // FIXME: too verbose... ?>
+        <?php echo pagelink(page::name_from_id($fact['object_id'])) ?> is the 
+        <?php echo pagelink(page::name_from_id($fact['predicate_id'])) ?> of 
+        <?php echo pagelink(page::name_from_id($fact['subject_id'])) ?>
       </li>
     <?php endforeach ?>
   </ul>

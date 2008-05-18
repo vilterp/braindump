@@ -1,5 +1,4 @@
 <?php
-// FIXME: should this be in helpers/ ?
 function include_dir($directory) {
   foreach(scandir("$directory/") as $file) {
     // make sure it's not a hidden file, folder, or non-php file
@@ -17,6 +16,7 @@ function debug_dump($var) {
   echo "</pre>\n";
 }
 function write_to_log($message) {
+  // TODO: print stack trace when something goes wrong
   $log = fopen(PATH_TO_LOG,'a');
   fwrite($log,$message."\n");
   fclose($log);
