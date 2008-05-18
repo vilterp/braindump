@@ -30,8 +30,7 @@ error_reporting($config['error_reporting']);
 if(!empty($config['database'])) {
   $db = new Database(
     $config['database']['connection_string'],
-    $config['database']['log_queries'],
-    $config['database']['cache_schema']
+    $config['database']['log_queries']
   );
 }
 // load application

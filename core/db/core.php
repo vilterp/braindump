@@ -2,7 +2,7 @@
 // FIXME: use ternary (?) operator for return values
 // FIXME: split query generation code into another file?
 class Database {
-  function __construct($connection_string,$log_queries=false,$cache_schema=false) {
+  function __construct($connection_string,$log_queries=false) {
     // connect
     if(preg_match('|mysql\://([^:]+):?([^@]*)@([^/]+)/(.+)|',$connection_string,$match)) {
       // mysql://user:passowrd@localhost/dbname

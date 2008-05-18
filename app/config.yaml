@@ -1,8 +1,7 @@
 ---
 database: 
-  connection_string: mysql://root:penguin8@mac-mini.local/braindump
-  #sqlite://database.sqlite3
-  cache_schema: true
+  #connection_string: mysql://root:penguin8@mac-mini.local/braindump
+  connection_string: sqlite://database.sqlite3
   log_queries: true
 base_url: >
   http://mac-mini.local/~petevilter/svn/braindump/trunk/
