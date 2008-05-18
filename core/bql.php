@@ -2,6 +2,7 @@
 // FIXME: something like 'knights of columbus' woudl break setting and getting
 // FIXME: error reporting on parse errors instead of putting in the wrong thing or doing nothing...
 // FIXME: keep better track of datatypes
+// FIXME: why am i using split and preg_split? what's the difference?
 class BQL {
   function query($query) {
     if($GLOBALS['config']['keep_log']) write_to_log($query);
@@ -122,24 +123,33 @@ class BQL {
       'object_id' => page::id_from_name($name)
     ));
     $answers = array();
-    foreach($matches as $match) {
-      $predicate = page::name_from_id($match['predicate_id']);
-      $subject = page::name_from_id($match['subject_id']);
-      if(isset($answers[$predicate])) {
-        if(is_array($answers[$predicate])) {
-          $answers[$predicate][] = $subject;
+    if($matches) {
+      foreach($matches as $match) {
+        $predicate = page::name_from_id($match['predicate_id']);
+        $subject = page::name_from_id($match['subject_id']);
+        if(isset($answers[$predicate])) {
+          if(is_array($answers[$predicate])) {
+            $answers[$predicate][] = $subject;
+          } else {
+            $answers[$predicate] = array($answers[$predicate]);
+            $answers[$predicate][] = $subject;
+          }
         } else {
-          $answers[$predicate] = array($answers[$predicate]);
-          $answers[$predicate][] = $subject;
+          $answers[$predicate] = $subject;
         }
-      } else {
-        $answers[$predicate] = $subject;
       }
+      return $answers;
+    } else {
+      return false;
     }
-    return $answers;
   }
   function _get_description($name) {
-    return $GLOBALS['db']->select_column('pages','description',array('name'=>$name));
+    $result = $GLOBALS['db']->select_one('pages','description',array('name'=>$name));
+    if($result) {
+      return $result;
+    } else {
+      return false;
+    }
   }
   function _set_description($name,$description) {
     // FIXME: the DB field should be called 'description', not 'body'
@@ -147,6 +157,7 @@ class BQL {
       array('description'=>$description),
       array('name'=>$name)
     );
+    return true;
   }
 }
 ?>

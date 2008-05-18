@@ -9,26 +9,33 @@ class pages_controller {
   }
   function show() {
     global $runtime;
-    pass_var('page',BQL::query("get $runtime[ident]"));
+    // FIXME: this runs id_from_name several times - inefficient
+    $page->links_out = BQL::query("get $runtime[ident]");
+    $page->links_in = BQL::query("backlinks to $runtime[ident]");
+    $page->description = BQL::query("describe $runtime[ident]");
+    pass_var('page',$page);
   }
   
   // for AJAX in place edit
   
   function just_body() {
     no_layout();
-    echo $this->page->body;
+    global $runtime;
+    echo BQL::query("describe $runtime[ident]");
   }
+  // FIXME: it shouldn't use $_POST['value'] - something more descriptive
   function save_body() {
     no_layout();
-    $this->page->body = $_POST['value'];
-    $this->page->save();
-    echo do_filters('page_body',$this->page->body);
+    global $runtime;
+    BQL::query("describe $runtime[ident] as ".$_POST['value']);
+    echo do_filters('page_body',$_POST['value']);
   }
   function just_meta() { // loaded into edit box
     no_layout();
     global $runtime;
     print_meta(BQL::query("get $runtime[ident]"));
   }
+  // FIXME: is it necessary to re-get the page here?
   function save_meta() {
     no_layout();
     global $runtime;

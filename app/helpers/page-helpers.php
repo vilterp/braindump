@@ -10,6 +10,21 @@ function print_meta($input,$withlinks=false) {
     }
   }
 }
+function print_backlinks($input) {
+  if($input) {
+    foreach($input as $predicate=>$subject) {
+      if(is_array($subject)) {
+        $items = array();
+        foreach($subject as $item) {
+          $items[] = pagelink($item);
+        }
+        echo "$predicate of ".array_to_english($items)."<br />";
+      } else {
+        echo "$predicate of ".pagelink($subject)."<br />";
+      }
+    }
+  }
+}
 function parse_meta($input) {
   $pairs = array();
   foreach(explode("\n",$input) as $line) {

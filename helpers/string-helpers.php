@@ -107,6 +107,7 @@ function english_to_array($sentence) {
 }
 // array('apples','oranges','milk') => 'apples, oranges, and milk'
 function array_to_english($array) {
+  if(count($array) == 2) return "$array[0] and $array[1]";
   $final = "";
   for($i=0;$i<count($array)-1;$i++) {
     $final .= $array[$i].', ';
