@@ -1,5 +1,5 @@
 <?php
-// FIXME: something like 'knights of columbus' woudl break setting and getting
+// FIXME: something like 'knights of columbus' would break setting and getting
 // FIXME: error reporting on parse errors instead of putting in the wrong thing or doing nothing...
 // FIXME: keep better track of datatypes
 // FIXME: why am i using split and preg_split? what's the difference?
@@ -15,7 +15,8 @@ class BQL {
       
       case 'set':
         $params = split("(set | of | to )",$query);
-        return self::_set($params[1],$params[2],$params[3]);
+        $objects = english_to_array($params[3]);
+        return self::_set($params[1],$params[2],$objects);
         break;
         
       case 'list':
@@ -37,47 +38,39 @@ class BQL {
         } else {
           return self::_set_description($split[1],$split[2]);
         }
+        
+      case 'rename':
+        $split = split("(rename | to )",$query);
+        return self::_rename($split[1],$split[2]);
     }
   }
   function _get($predicate,$subject) {
-    if(is_null($subject)) { // get .
-      $params = "subject_id = ".page::id_from_name($predicate);
-      $result = $GLOBALS['db']->select('triples',$params);
-      if($result) {
-        $answer = array();
-        foreach($result as $triple) {
-          $answer[page::name_from_id($triple['predicate_id'])] = 
-            page::name_from_id($triple['object_id']);
-        }
-        return $answer;
-      } else {
-        return false;
-      };
-    } else { // get . of .
-      $params = array(
-        'predicate_id' => page::id_from_name($predicate),
-        'subject_id' => page::id_from_name($subject)
-      );
-      $answer = (int) $GLOBALS['db']->select_one('triples','object_id',$params);
-      if($answer){return page::name_from_id($answer);} else {return false;}
+    $subject_id = page::id_from_name($subject);
+    if(is_singular($predicate)) { // eg. get color of apple
+      $result = $GLOBALS['db']->select_column('triples','object_id',array(
+        'subject_id' => $subject_id,
+        'predicate_id' => page::id_from_name($predicate)
+      ));
+      if($result){return page::name_from_id($result);}else{return false;};
+    } else { // eg. get parents of fidel castro
+      $result = $GLOBALS['db']->select_column('triples','object_id',array(
+        'subject_id' => $subject_id,
+        'predicate_id' => page::id_from_name(singularize($predicate)) // parent
+      ));
+      $answers = array();
+      foreach($result as $answer)
+        $answers[] = page::name_from_id($answer);
+      return $answers;
     }
   }
   function _set($predicate,$subject,$object) {
-    $data = array(
-      'predicate_id' => page::create_if_doesnt_exist($predicate),
-      'subject_id' => page::create_if_doesnt_exist($subject),
-      'object_id' => page::create_if_doesnt_exist($object)
-    );
-    // if this triple isn't already in the db, insert it
-    if(triple::exists($data['subject_id'],$data['predicate_id'])) {
-      $GLOBALS['db']->update('triples',$data,array(
-        'subject_id' => $data['subject_id'],
-        'predicate_id' => $data['predicate_id']
-      ));
+    if(is_array($object)) {
+      foreach($object as $item)
+        triple::set(singularize($predicate),$subject,$item,false);
+      return true;
     } else {
-      $GLOBALS['db']->insert('triples',$data);
+      return triple::set($predicate,$subject,$object);
     }
-    return true;
   }
   function _list($conditions_string) {
     if(empty($conditions_string)) {
@@ -153,10 +146,14 @@ class BQL {
   }
   function _set_description($name,$description) {
     // FIXME: the DB field should be called 'description', not 'body'
-    return $GLOBALS['db']->update('pages',
+    $GLOBALS['db']->update('pages',
       array('description'=>$description),
       array('name'=>$name)
     );
+    return true;
+  }
+  function _rename($old_name,$new_name) {
+    $GLOBALS['db']->update('pages',array('name'=>$new_name),array('name'=>$old_name));
     return true;
   }
 }

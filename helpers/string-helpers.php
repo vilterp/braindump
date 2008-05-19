@@ -95,6 +95,12 @@ function pluralize($str){
 			return preg_replace($match,$replace,$str);
 	return $str;
 }
+function is_singular($word) {
+  return singularize($word) == $word;
+}
+function is_plural($word) {
+  return pluralize($word) == $word;
+}
 // 'apples, oranges, and milk' => array('apples','oranges','milk')
 function english_to_array($sentence) {
   $final = array();

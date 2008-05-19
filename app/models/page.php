@@ -8,7 +8,7 @@ class page {
     if($id) return (int) $id; else return false;
   }
   function create_if_doesnt_exist($page_name) {
-    if($id = page::exists($page_name)) {
+    if($id = self::exists($page_name)) {
       return $id;
     } else {
       global $db;
@@ -21,7 +21,7 @@ class page {
     if(is_array($id)) {
       $ids = array();
       foreach($id as $page) {
-        array_push($ids,page::name_from_id($page));
+        array_push($ids,self::name_from_id($page));
       }
       return $ids;
     }
@@ -32,7 +32,7 @@ class page {
     if(is_array($name)) {
       $names = array();
       foreach($name as $page) {
-        array_push($names,page::id_from_name($page));
+        array_push($names,self::id_from_name($page));
       }
       return $names;
     } else {
