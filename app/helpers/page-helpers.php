@@ -3,9 +3,17 @@ function print_meta($input,$withlinks=false) {
   if($input) {
     foreach($input as $predicate => $object) {
       if($withlinks) {
-        echo "$predicate: ".pagelink($object)."<br />";
+        if(is_array($object)) {
+          echo "$predicate: ".linked_page_list($object)."<br />";
+        } else {
+          echo "$predicate: ".pagelink($object)."<br />";
+        }
       } else {
-        echo "$predicate: $object\n";
+        if(is_array($object)) {
+          echo "$predicate: ".array_to_english($object);
+        } else {
+          echo "$predicate: $object\n";
+        }
       }
     }
   }
@@ -14,11 +22,7 @@ function print_backlinks($input) {
   if($input) {
     foreach($input as $predicate=>$subject) {
       if(is_array($subject)) {
-        $items = array();
-        foreach($subject as $item) {
-          $items[] = pagelink($item);
-        }
-        echo "$predicate of ".array_to_english($items)."<br />";
+        echo "$predicate of ".linked_page_list($subject)."<br />";
       } else {
         echo "$predicate of ".pagelink($subject)."<br />";
       }
@@ -40,6 +44,13 @@ function save_meta($name,$input) {
   foreach($input as $key=>$value) {
     BQL::query("set $key of $name to $value");
   }
+}
+function linked_page_list($pages) {
+  $links = array();
+  foreach($pages as $page) {
+    $links[] = pagelink($page);
+  }
+  return array_to_english($links);
 }
 function pagelink($name) {
   return getLink($name,"pages/show/$name");

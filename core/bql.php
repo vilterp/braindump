@@ -45,22 +45,44 @@ class BQL {
     }
   }
   function _get($predicate,$subject) {
-    $subject_id = page::id_from_name($subject);
-    if(is_singular($predicate)) { // eg. get color of apple
-      $result = $GLOBALS['db']->select_column('triples','object_id',array(
-        'subject_id' => $subject_id,
-        'predicate_id' => page::id_from_name($predicate)
-      ));
-      if($result){return page::name_from_id($result);}else{return false;};
-    } else { // eg. get parents of fidel castro
-      $result = $GLOBALS['db']->select_column('triples','object_id',array(
-        'subject_id' => $subject_id,
-        'predicate_id' => page::id_from_name(singularize($predicate)) // parent
-      ));
-      $answers = array();
-      foreach($result as $answer)
-        $answers[] = page::name_from_id($answer);
-      return $answers;
+    global $db;
+    if(is_null($subject)) { // get .
+      $subject_id = page::id_from_name($predicate);
+      $result = $db->select('triples',array('subject_id'=>$subject_id));
+      if($result) {
+        $answers = array();
+        foreach($result as $answer) {
+          $predicate = page::name_from_id($answer['predicate_id']);
+          $object = page::name_from_id($answer['object_id']);
+          $answers[$predicate] = self::set_or_add($answers[$predicate],$object);
+        }
+        foreach($answers as $predicate=>$object) {
+          if(is_array($object)) {
+            $answers[pluralize($predicate)] = $answers[$predicate];
+            unset($answers[$predicate]);
+          }
+        }
+        return $answers;
+      }
+    } else { // get . of .
+      $subject_id = page::id_from_name($subject);
+      if(is_singular($predicate)) { // eg. get color of apple
+        $result = $db->select_column('triples','object_id',array(
+          'subject_id' => $subject_id,
+          'predicate_id' => page::id_from_name($predicate)
+        ));
+        if($result){return page::name_from_id($result[0]);}else{return false;};
+      } else { // eg. get parents of fidel castro
+        $result = $db->select_column('triples','object_id',array(
+          'subject_id' => $subject_id,
+          'predicate_id' => page::id_from_name(singularize($predicate)) // parent
+        ));
+        $answers = array();
+        if($result)
+          foreach($result as $answer)
+            $answers[] = page::name_from_id($answer);
+        return $answers;
+      }
     }
   }
   function _set($predicate,$subject,$object) {
@@ -103,6 +125,7 @@ class BQL {
         'subject_id' => page::id_from_name($predicate)
       ));
     } else { // unset . of .
+      if(is_plural($predicate)) $predicate = singularize($predicate);
       $GLOBALS['db']->delete('triples',array(
         'predicate_id' => page::id_from_name($predicate),
         'subject_id' => page::id_from_name($subject)
@@ -120,16 +143,7 @@ class BQL {
       foreach($matches as $match) {
         $predicate = page::name_from_id($match['predicate_id']);
         $subject = page::name_from_id($match['subject_id']);
-        if(isset($answers[$predicate])) {
-          if(is_array($answers[$predicate])) {
-            $answers[$predicate][] = $subject;
-          } else {
-            $answers[$predicate] = array($answers[$predicate]);
-            $answers[$predicate][] = $subject;
-          }
-        } else {
-          $answers[$predicate] = $subject;
-        }
+        $answers[$predicate] = self::set_or_add($answers[$predicate],$subject);
       }
       return $answers;
     } else {
@@ -155,6 +169,20 @@ class BQL {
   function _rename($old_name,$new_name) {
     $GLOBALS['db']->update('pages',array('name'=>$new_name),array('name'=>$old_name));
     return true;
+  }
+  function set_or_add($array,$var) {
+    if(isset($array)) {
+      if(is_array($array)) {
+        $array[] = $var;
+        return $array;
+      } else {
+        $array = array($array);
+        $array[] = $var;
+        return $array;
+      }
+    } else {
+      return $var;
+    }
   }
 }
 ?>

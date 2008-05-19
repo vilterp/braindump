@@ -6,6 +6,6 @@ function bql_query($querystring) {
 }
 
 $server = new IXR_Server(array(
-  'braindump.query' => 'bql_query'
+  'bql.query' => 'bql_query'
 ));
 ?>
