@@ -363,3 +363,207 @@ SELECT id FROM pages WHERE name = 'Vehicle'
 SELECT * FROM triples WHERE subject_id = 21 
 SELECT name FROM pages WHERE id = '20' 
 SELECT name FROM pages WHERE id = '22' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set type of skills to word
+SELECT id FROM pages WHERE name = 'type' 
+SELECT id FROM pages WHERE name = 'skills' 
+INSERT INTO pages (name) VALUES ('skills')
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT id FROM pages WHERE name = 'word' 
+INSERT INTO pages (name) VALUES ('word')
+SELECT id FROM pages WHERE name = 'word' 
+SELECT * FROM triples WHERE subject_id = 23 AND predicate_id = 7 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (7, 23, 24)
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get skills
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT * FROM triples WHERE subject_id = 23 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '24' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set uses of skills to this and that
+SELECT id FROM pages WHERE name = 'use' 
+INSERT INTO pages (name) VALUES ('use')
+SELECT id FROM pages WHERE name = 'use' 
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT id FROM pages WHERE name = 'this' 
+INSERT INTO pages (name) VALUES ('this')
+SELECT id FROM pages WHERE name = 'this' 
+SELECT * FROM triples WHERE subject_id = 23 AND predicate_id = 25 AND object_id = 26 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (25, 23, 26)
+SELECT id FROM pages WHERE name = 'use' 
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT id FROM pages WHERE name = 'that' 
+INSERT INTO pages (name) VALUES ('that')
+SELECT id FROM pages WHERE name = 'that' 
+SELECT * FROM triples WHERE subject_id = 23 AND predicate_id = 25 AND object_id = 27 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (25, 23, 27)
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get skills
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT * FROM triples WHERE subject_id = 23 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '27' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set uses of skills to this, that, and the other thing
+SELECT id FROM pages WHERE name = 'use' 
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT id FROM pages WHERE name = 'this' 
+SELECT * FROM triples WHERE subject_id = 23 AND predicate_id = 25 AND object_id = 26 
+UPDATE triples SET 25, 23, 26 WHERE subject_id = 23 AND predicate_id = 25
+SELECT id FROM pages WHERE name = 'use' 
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT id FROM pages WHERE name = 'that' 
+SELECT * FROM triples WHERE subject_id = 23 AND predicate_id = 25 AND object_id = 27 
+UPDATE triples SET 25, 23, 27 WHERE subject_id = 23 AND predicate_id = 25
+SELECT id FROM pages WHERE name = 'use' 
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT id FROM pages WHERE name = 'the other thing' 
+INSERT INTO pages (name) VALUES ('the other thing')
+SELECT id FROM pages WHERE name = 'the other thing' 
+SELECT * FROM triples WHERE subject_id = 23 AND predicate_id = 25 AND object_id = 28 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (25, 23, 28)
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get skills
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT * FROM triples WHERE subject_id = 23 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '28' 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP skill(s|z)
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP skills
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP skills
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP 'skills'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP '/skills/'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP '/skills/'
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP '/skill(s|z)/'
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set alias of skillz to skills
+SELECT id FROM pages WHERE name = 'alias' 
+INSERT INTO pages (name) VALUES ('alias')
+SELECT id FROM pages WHERE name = 'alias' 
+SELECT id FROM pages WHERE name = 'skillz' 
+INSERT INTO pages (name) VALUES ('skillz')
+SELECT id FROM pages WHERE name = 'skillz' 
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT * FROM triples WHERE subject_id = 30 AND predicate_id = 29 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES (29, 30, 23)
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+select * from pages where name REGEXP '/skill(s|z)/'
+
+GET /~petevilter/svn/braindump/trunk/
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/skills
+
+get skills
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT * FROM triples WHERE subject_id = 23 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '28' 
+backlinks to skills
+SELECT id FROM pages WHERE name = 'skills' 
+SELECT * FROM triples WHERE object_id = 23 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '30' 
+describe skills
+SELECT description FROM pages WHERE name = 'skills' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/skillz
+
+get skillz
+SELECT id FROM pages WHERE name = 'skillz' 
+SELECT * FROM triples WHERE subject_id = 30 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '23' 
+backlinks to skillz
+SELECT id FROM pages WHERE name = 'skillz' 
+SELECT * FROM triples WHERE object_id = 30 
+describe skillz
+SELECT description FROM pages WHERE name = 'skillz' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/the%20other%20thing
+
+get the other thing
+SELECT id FROM pages WHERE name = 'the other thing' 
+SELECT * FROM triples WHERE subject_id = 28 
+backlinks to the other thing
+SELECT id FROM pages WHERE name = 'the other thing' 
+SELECT * FROM triples WHERE object_id = 28 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '23' 
+describe the other thing
+SELECT description FROM pages WHERE name = 'the other thing' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/that
+
+get that
+SELECT id FROM pages WHERE name = 'that' 
+SELECT * FROM triples WHERE subject_id = 27 
+backlinks to that
+SELECT id FROM pages WHERE name = 'that' 
+SELECT * FROM triples WHERE object_id = 27 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '23' 
+describe that
+SELECT description FROM pages WHERE name = 'that' 

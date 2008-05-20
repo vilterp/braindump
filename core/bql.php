@@ -1,8 +1,6 @@
 <?php
 // FIXME: something like 'knights of columbus' would break setting and getting
 // FIXME: error reporting on parse errors instead of putting in the wrong thing or doing nothing...
-// FIXME: keep better track of datatypes
-// FIXME: why am i using split and preg_split? what's the difference?
 class BQL {
   function query($query) {
     if($GLOBALS['config']['keep_log']) write_to_log($query);
@@ -100,7 +98,7 @@ class BQL {
       return $GLOBALS['db']->select_column('pages','name','',array('order by'=>'name'));
     } else {
       $conditions = array();
-      foreach(preg_split("/( and | or )/",$conditions_string) as $condition_string) {
+      foreach(split("( and | or )",$conditions_string) as $condition_string) {
         $condition = explode(' is ',$condition_string);
         $predicate_id = page::id_from_name($condition[0]);
         $object_id = page::id_from_name($condition[1]);

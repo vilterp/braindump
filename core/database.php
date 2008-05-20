@@ -1,10 +1,14 @@
 <?php
 // FIXME: use ternary (?) operator for return values
 // FIXME: split query generation code into another file?
-class Database {
+class Database {  
+  
+  protected $handle;
+  
   function __construct($connection_info) {
     // connect
     $this->handle = new PDO('sqlite:'.ROOT.$connection_info);
+    $this->handle->sqliteCreateFunction('regexp','preg_match');
   }
   
   function get_high_key($tablename,$column='id') {
@@ -71,8 +75,12 @@ class Database {
     $values = array();
     // split $data into $keys, $values
     foreach($data as $key=>$value) {
-      array_push($keys,$key);
-      array_push($values,$this->handle->quote($value));
+      $keys[] = $key;
+      if(is_int($value)) {
+        $values[] = $value;
+      } else {
+        $values[] = $this->handle->quote($value);
+      }
     }
     $querystring = "INSERT INTO $tablename (".implode(", ",$keys).") VALUES (".implode(", ",$values).")";
     $this->query($querystring);
@@ -84,7 +92,11 @@ class Database {
       $pairs = array();
       // key/value pairs to update
       foreach($data as $key=>$value) {
-        array_push($pairs,"$key = ".$this->handle->quote($value));
+        if(is_int($value)) {
+          $pairs[] = $value;
+        } else {
+          $pairs[] = $this->handle->quote($value);
+        }
       }
       $the_data = implode(', ',$pairs);
     }
@@ -107,14 +119,13 @@ class Database {
       // if it's an array, make an SQL string out of the key/value pairs
       $pairs = array();
       foreach($params as $key=>$value) {
-        if(is_string($value)) {
-          array_push($pairs,"$key = '$value'"); 
+        if(is_int($value)) {
+          $pairs[] = "$key = $value";
         } else {
-          array_push($pairs,"$key = $value"); 
+          $pairs[] = "$key = ".$this->handle->quote($value);
         }
       }
-      $finished = 'WHERE ';
-      return $finished.implode(" AND ",$pairs);
+      return 'WHERE '.implode(" AND ",$pairs);
     }
   }
   function sql_options($options='') {

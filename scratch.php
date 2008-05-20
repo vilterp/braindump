@@ -1,6 +1,6 @@
 <?php
 include 'core/common.php';
 
-debug_dump(BQL::query('set creator of bql console and braindump to pedro'));
+debug_dump($db->query("select * from pages where name REGEXP '/skill(s|z)/'")->fetchAll());
 
 ?>
