@@ -1,0 +1,365 @@
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set favorite group of pedro to peter, paul, and mary
+SELECT id FROM pages WHERE name = 'favorite group' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT id FROM pages WHERE name = Array 
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set favorite group of pedro to peter, paul, and mary
+SELECT id FROM pages WHERE name = 'favorite group' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT id FROM pages WHERE name = 'peter, paul, and mary' 
+INSERT INTO pages (name) VALUES ('peter, paul, and mary')
+SELECT id FROM pages WHERE name = 'peter, paul, and mary' 
+SELECT * FROM triples WHERE subject_id = 3 AND predicate_id = 9 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('9', '3', '10')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get pete
+SELECT id FROM pages WHERE name = 'pete' 
+SELECT * FROM triples WHERE subject_id = 0 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get pedro
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id = 3 
+SELECT name FROM pages WHERE id = '9' 
+SELECT name FROM pages WHERE id = '10' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set parties of U.S. Political System to Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'parties' 
+INSERT INTO pages (name) VALUES ('parties')
+SELECT id FROM pages WHERE name = 'parties' 
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+INSERT INTO pages (name) VALUES ('U.S. Political System')
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+INSERT INTO pages (name) VALUES ('Democrat, Republican, and Libertarian')
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE subject_id = 12 AND predicate_id = 11 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('11', '12', '13')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get U.S. Political System
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+SELECT * FROM triples WHERE subject_id = 12 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '13' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+unset U.S. Political System
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+DELETE FROM triples WHERE subject_id = 12
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set parties of U.S. Political System to Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'parties' 
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE subject_id = 12 AND predicate_id = 11 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('11', '12', '13')
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set parties of U.S. Political System to Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'parties' 
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE subject_id = 12 AND predicate_id = 11 
+UPDATE triples SET predicate_id = '11', subject_id = '12', object_id = '13' WHERE subject_id = 12 AND predicate_id = 11
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set parties of U.S. Political System to Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'parties' 
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE subject_id = 12 AND predicate_id = 11 
+UPDATE triples SET predicate_id = '11', subject_id = '12', object_id = '13' WHERE subject_id = 12 AND predicate_id = 11
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set parties of U.S. Political System to Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'parties' 
+SELECT id FROM pages WHERE name = 'U.S. Political System' 
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE subject_id = 12 AND predicate_id = 11 
+UPDATE triples SET predicate_id = '11', subject_id = '12', object_id = '13' WHERE subject_id = 12 AND predicate_id = 11
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set colors of the rainbow to red, green, and indigo
+SELECT id FROM pages WHERE name = 'color' 
+INSERT INTO pages (name) VALUES ('color')
+SELECT id FROM pages WHERE name = 'color' 
+SELECT id FROM pages WHERE name = 'the rainbow' 
+INSERT INTO pages (name) VALUES ('the rainbow')
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT id FROM pages WHERE name = 'red' 
+INSERT INTO pages (name) VALUES ('red')
+SELECT id FROM pages WHERE name = 'red' 
+SELECT * FROM triples WHERE subject_id = 15 AND predicate_id = 14 AND object_id = 16 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('14', '15', '16')
+SELECT id FROM pages WHERE name = 'color' 
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT id FROM pages WHERE name = 'green' 
+INSERT INTO pages (name) VALUES ('green')
+SELECT id FROM pages WHERE name = 'green' 
+SELECT * FROM triples WHERE subject_id = 15 AND predicate_id = 14 AND object_id = 17 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('14', '15', '17')
+SELECT id FROM pages WHERE name = 'color' 
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT id FROM pages WHERE name = 'indigo' 
+INSERT INTO pages (name) VALUES ('indigo')
+SELECT id FROM pages WHERE name = 'indigo' 
+SELECT * FROM triples WHERE subject_id = 15 AND predicate_id = 14 AND object_id = 18 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('14', '15', '18')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE subject_id = 15 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '16' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '18' 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/the%20rainbow
+
+get the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE subject_id = 15 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '16' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '18' 
+backlinks to the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE object_id = 15 
+describe the rainbow
+SELECT description FROM pages WHERE name = 'the rainbow' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/indigo
+
+get indigo
+SELECT id FROM pages WHERE name = 'indigo' 
+SELECT * FROM triples WHERE subject_id = 18 
+backlinks to indigo
+SELECT id FROM pages WHERE name = 'indigo' 
+SELECT * FROM triples WHERE object_id = 18 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+describe indigo
+SELECT description FROM pages WHERE name = 'indigo' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/the%20rainbow
+
+get the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE subject_id = 15 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '16' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '18' 
+backlinks to the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE object_id = 15 
+describe the rainbow
+SELECT description FROM pages WHERE name = 'the rainbow' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/green
+
+get green
+SELECT id FROM pages WHERE name = 'green' 
+SELECT * FROM triples WHERE subject_id = 17 
+backlinks to green
+SELECT id FROM pages WHERE name = 'green' 
+SELECT * FROM triples WHERE object_id = 17 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+describe green
+SELECT description FROM pages WHERE name = 'green' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/the%20rainbow
+
+get the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE subject_id = 15 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '16' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '18' 
+backlinks to the rainbow
+SELECT id FROM pages WHERE name = 'the rainbow' 
+SELECT * FROM triples WHERE object_id = 15 
+describe the rainbow
+SELECT description FROM pages WHERE name = 'the rainbow' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/red
+
+get red
+SELECT id FROM pages WHERE name = 'red' 
+SELECT * FROM triples WHERE subject_id = 16 
+backlinks to red
+SELECT id FROM pages WHERE name = 'red' 
+SELECT * FROM triples WHERE object_id = 16 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+describe red
+SELECT description FROM pages WHERE name = 'red' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages
+
+list
+SELECT name FROM pages  ORDER BY name
+
+GET /~petevilter/svn/braindump/trunk/index.php/facts
+
+SELECT * FROM triples  
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '5' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '10' 
+SELECT name FROM pages WHERE id = '9' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '13' 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+SELECT name FROM pages WHERE id = '16' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+SELECT name FROM pages WHERE id = '18' 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages/show/Democrat,%20Republican,%20and%20Libertarian
+
+get Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE subject_id = 13 
+backlinks to Democrat, Republican, and Libertarian
+SELECT id FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+SELECT * FROM triples WHERE object_id = 13 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+describe Democrat, Republican, and Libertarian
+SELECT description FROM pages WHERE name = 'Democrat, Republican, and Libertarian' 
+
+GET /~petevilter/svn/braindump/trunk/index.php/pages
+
+list
+SELECT name FROM pages  ORDER BY name
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set creator of bql console and braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console and braindump' 
+INSERT INTO pages (name) VALUES ('bql console and braindump')
+SELECT id FROM pages WHERE name = 'bql console and braindump' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id = 19 AND predicate_id = 1 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('1', '19', '3')
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set creator of bql console and braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = 'bql console and braindump' 
+SELECT id FROM pages WHERE name = 'pedro' 
+SELECT * FROM triples WHERE subject_id = 19 AND predicate_id = 1 
+UPDATE triples SET predicate_id = '1', subject_id = '19', object_id = '3' WHERE subject_id = 19 AND predicate_id = 1
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set creator of bql console and braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name =  
+
+GET /~petevilter/svn/braindump/trunk/scratch
+
+set creator of bql console and braindump to pedro
+SELECT id FROM pages WHERE name = 'creator' 
+SELECT id FROM pages WHERE name = Array 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+set artist of Vehicle to The Ides of March
+SELECT id FROM pages WHERE name = 'artist' 
+INSERT INTO pages (name) VALUES ('artist')
+SELECT id FROM pages WHERE name = 'artist' 
+SELECT id FROM pages WHERE name = 'Vehicle' 
+INSERT INTO pages (name) VALUES ('Vehicle')
+SELECT id FROM pages WHERE name = 'Vehicle' 
+SELECT id FROM pages WHERE name = 'The Ides' 
+INSERT INTO pages (name) VALUES ('The Ides')
+SELECT id FROM pages WHERE name = 'The Ides' 
+SELECT * FROM triples WHERE subject_id = 21 AND predicate_id = 20 
+INSERT INTO triples (predicate_id, subject_id, object_id) VALUES ('20', '21', '22')
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get Vehichle
+SELECT id FROM pages WHERE name = 'Vehichle' 
+SELECT * FROM triples WHERE subject_id = 0 
+
+POST /~petevilter/svn/braindump/trunk/xmlrpc.php
+
+get Vehicle
+SELECT id FROM pages WHERE name = 'Vehicle' 
+SELECT * FROM triples WHERE subject_id = 21 
+SELECT name FROM pages WHERE id = '20' 
+SELECT name FROM pages WHERE id = '22' 

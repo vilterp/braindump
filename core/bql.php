@@ -16,7 +16,8 @@ class BQL {
       case 'set':
         $params = split("(set | of | to )",$query);
         $objects = english_to_array($params[3]);
-        return self::_set($params[1],$params[2],$objects);
+        if(count($objects) > 1 && is_plural($params[1])) $params[3] = $objects;
+        return self::_set($params[1],$params[2],$params[3]);
         break;
         
       case 'list':
@@ -86,7 +87,7 @@ class BQL {
     }
   }
   function _set($predicate,$subject,$object) {
-    if(is_array($object)) {
+    if(is_plural($predicate)) {
       foreach($object as $item)
         triple::set(singularize($predicate),$subject,$item,false);
       return true;
