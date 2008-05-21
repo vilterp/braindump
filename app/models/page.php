@@ -2,6 +2,9 @@
 // this and the triple class are pretty much just collections of static 
 // functions now...
 class page {
+  
+  //static $id_cache = array();
+  
   // helpers
   function exists($page_name) {
     $id = $GLOBALS['db']->select_one('pages','id',array('name'=>$page_name));
@@ -18,6 +21,7 @@ class page {
   }
   function name_from_id($id) {
     if(empty($id)) return NULL;
+    //if(array_key_exists($id,self::$id_cache)) return self::$id_cache[$id];
     if(is_array($id)) {
       $ids = array();
       foreach($id as $page) {
@@ -25,10 +29,13 @@ class page {
       }
       return $ids;
     }
-    return $GLOBALS['db']->select_one('pages','name',array('id'=>$id));    
+    $result = $GLOBALS['db']->select_one('pages','name',array('id'=>$id));
+    //self::$id_cache[$id] = $result;
+    return $result;
   }
   function id_from_name($name) {
     if(empty($name)) return NULL;
+    //if(in_array($name,self::$id_cache)) return array_search($name,self::$id_cache[$name]);
     if(is_array($name)) {
       $names = array();
       foreach($name as $page) {
@@ -36,7 +43,9 @@ class page {
       }
       return $names;
     } else {
-      return (int) $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
+      $result = (int) $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
+      //self::$id_cache[$result] = $name;
+      return $result;
     }
   }
 }
