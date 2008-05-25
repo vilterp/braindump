@@ -5,15 +5,11 @@ class pages_controller {
   
   function index() {
     // TODO: semantic custom query goodness
-    pass_var('pages',BQL::query('list'));
+    pass_var('pages',BQL::_list());
   }
   function show() {
     global $runtime;
-    // FIXME: this runs id_from_name several times - inefficient
-    $page->links_out = BQL::query("get $runtime[ident]");
-    $page->links_in = BQL::query("backlinks to $runtime[ident]");
-    $page->description = BQL::query("describe $runtime[ident]");
-    pass_var('page',$page);
+    pass_var('page',new Page($runtime['ident']));
   }
   
   // for AJAX in place edit
@@ -21,30 +17,30 @@ class pages_controller {
   function just_body() {
     no_layout();
     global $runtime;
-    echo BQL::query("describe $runtime[ident]");
+    echo BQL::_describe($runtime['ident']);
   }
-  // FIXME: it shouldn't use $_POST['value'] - something more descriptive
   function save_body() {
     no_layout();
     global $runtime;
-    BQL::query("describe $runtime[ident] as ".$_POST['value']);
+    // FIXME: it shouldn't use $_POST['value'] - something more descriptive
+    BQL::_describe($runtime['ident'],$_POST['value']);
     echo do_filters('page_body',$_POST['value']);
   }
   function just_meta() { // loaded into edit box
     no_layout();
     global $runtime;
-    print_meta(BQL::query("get $runtime[ident]"));
+    print_metadata(BQL::_get($runtime['ident']));
   }
   // FIXME: is it necessary to re-get the page here?
-  function save_meta() {
+  function save_metadata() {
     no_layout();
     global $runtime;
-    save_meta($runtime['ident'],parse_meta($_POST['value']));
-    print_meta(BQL::query("get $runtime[ident]"),true);
+    save_metadata($runtime['ident'],parse_metadata($_POST['value']));
+    print_metadata(BQL::_get($runtime['ident']),true);
   }
   
   function delete() {
-    BQL::query("unset $runtime[ident]");
+    BQL::_unset($runtime['ident']);
     redirect('pages');
   }
   // delete the entire db. useful sometimes.

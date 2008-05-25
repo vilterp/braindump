@@ -93,9 +93,9 @@ class Database {
       // key/value pairs to update
       foreach($data as $key=>$value) {
         if(is_int($value)) {
-          $pairs[] = $value;
+          $pairs[] = "$key = $value";
         } else {
-          $pairs[] = $this->handle->quote($value);
+          $pairs[] = "$key = ".$this->handle->quote($value);
         }
       }
       $the_data = implode(', ',$pairs);

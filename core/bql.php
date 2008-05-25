@@ -32,18 +32,14 @@ class BQL {
         
       case 'describe':
         $split = split("(describe | as )",$query);
-        if(is_null($split[2])) {
-          return self::_get_description($split[1]);
-        } else {
-          return self::_set_description($split[1],$split[2]);
-        }
+        return self::_describe($split[1],$split[2]);
         
       case 'rename':
         $split = split("(rename | to )",$query);
         return self::_rename($split[1],$split[2]);
     }
   }
-  function _get($predicate,$subject) {
+  function _get($predicate,$subject=NULL) {
     global $db;
     if(is_null($subject)) { // get .
       $subject_id = page::id_from_name($predicate);
@@ -93,7 +89,7 @@ class BQL {
       return triple::set($predicate,$subject,$object);
     }
   }
-  function _list($conditions_string) {
+  function _list($conditions_string=NULL) {
     if(empty($conditions_string)) {
       return $GLOBALS['db']->select_column('pages','name','',array('order by'=>'name'));
     } else {
@@ -149,21 +145,22 @@ class BQL {
       return false;
     }
   }
-  function _get_description($name) {
-    $result = $GLOBALS['db']->select_one('pages','description',array('name'=>$name));
-    if($result) {
-      return $result;
-    } else {
-      return false;
+  function _describe($name,$description=NULL) {
+    global $db;
+    if(is_null($description)) { // describe .
+      $result = $db->select_one('pages','description',array('name'=>$name));
+      if($result) {
+        return $result;
+      } else {
+        return false;
+      }
+    } else { // describe . as .
+      $db->update('pages',
+        array('description'=>$description),
+        array('name'=>$name)
+      );
+      return true;
     }
-  }
-  function _set_description($name,$description) {
-    // FIXME: the DB field should be called 'description', not 'body'
-    $GLOBALS['db']->update('pages',
-      array('description'=>$description),
-      array('name'=>$name)
-    );
-    return true;
   }
   function _rename($old_name,$new_name) {
     $GLOBALS['db']->update('pages',array('name'=>$new_name),array('name'=>$old_name));

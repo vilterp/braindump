@@ -2,7 +2,7 @@
   <?php load_js('jquery.jeditable') ?>
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-      $('#page_metadata').editable("<?php echo getURL('pages/save_meta/'.$runtime['ident']) ?>", {
+      $('#page_metadata').editable("<?php echo getURL('pages/save_metadata/'.$runtime['ident']) ?>", {
         loadurl: "<?php echo getURL('pages/just_meta/'.$runtime['ident']) ?>",
         type: 'textarea',
         submit: 'Save',

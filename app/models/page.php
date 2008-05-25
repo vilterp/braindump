@@ -5,6 +5,16 @@ class page {
   
   //static $id_cache = array();
   
+  function __construct($name=NULL) {
+    // FIXME: this runs id_from_name several times - inefficient
+    if(!is_null($name)) {
+      $this->name = $name;
+      $this->metadata = BQL::_get($name);
+      $this->description = BQL::_describe($name);
+      $this->backlinks = BQL::_backlinks($name);
+    }
+  }
+  
   // helpers
   function exists($page_name) {
     $id = $GLOBALS['db']->select_one('pages','id',array('name'=>$page_name));

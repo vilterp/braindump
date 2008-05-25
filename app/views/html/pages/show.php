@@ -1,6 +1,6 @@
 <div id="page_metadata">
-  <?php if ($page->links_out): ?>
-    <?php print_meta($page->links_out,true) ?>
+  <?php if ($page->metadata): ?>
+    <?php print_metadata($page->metadata,true) ?>
   <?php else: ?>
     <p class="edit_prompt">double click to add metadata</p>
   <?php endif ?>
@@ -12,8 +12,8 @@
       <p class="edit_prompt">double click to add a description</p>
     <?php endif ?>
   </div>
-<?php if($page->links_in): ?>
+<?php if($page->backlinks): ?>
   <div id="page_links_in">
-    <?php print_backlinks($page->links_in) ?>
+    <?php print_backlinks($page->backlinks) ?>
   </div>
 <?php endif ?>

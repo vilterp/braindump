@@ -1,5 +1,5 @@
 <?php
-function print_meta($input,$withlinks=false) {
+function print_metadata($input,$withlinks=false) {
   if($input) {
     foreach($input as $predicate => $object) {
       if($withlinks) {
@@ -29,7 +29,7 @@ function print_backlinks($input) {
     }
   }
 }
-function parse_meta($input) {
+function parse_metadata($input) {
   $pairs = array();
   foreach(explode("\n",$input) as $line) {
     if(!empty($line)) {
@@ -39,7 +39,7 @@ function parse_meta($input) {
   }
   return $pairs;
 }
-function save_meta($name,$input) {
+function save_metadata($name,$input) {
   BQL::query("unset $name");
   foreach($input as $key=>$value) {
     BQL::query("set $key of $name to $value");
