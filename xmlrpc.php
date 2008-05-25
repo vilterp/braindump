@@ -8,4 +8,7 @@ function bql_query($querystring) {
 $server = new IXR_Server(array(
   'bql.query' => 'bql_query'
 ));
+
+$server->serve();
+
 ?>
