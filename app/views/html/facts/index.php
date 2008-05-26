@@ -1,3 +1,4 @@
+<?php // FIXME: this should be a special page. ?>
 <?php if ($facts): ?>
   <ul>
     <?php foreach ($facts as $fact): ?>

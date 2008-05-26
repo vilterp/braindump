@@ -23,7 +23,7 @@ do_hooks('absolute_beginning');
 include_dir(PATH_TO_HELPERS);
 include_dir(PATH_TO_LIB);
 // get config
-$config = Spyc::YAMLLoad(PATH_TO_CONFIG);
+include PATH_TO_CONFIG;
 // log the request
 if($config['keep_log'])
   write_to_log("\n".$_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI']."\n");

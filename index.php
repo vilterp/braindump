@@ -3,8 +3,7 @@ include 'core/common.php';
 // decide which controller, action, ident
 $runtime['url'] = parse_request($_SERVER['REQUEST_URI']);
 include PATH_TO_ROUTES;
-// decide which format
-$runtime['format'] = parse_format(parse_request($_SERVER['REQUEST_URI'],false));
+$runtime['format'] = parse_request($_SERVER['REQUEST_URI'],true);
 // revert to defaults if necessary
 if(empty($runtime['controller'])) $runtime['controller']=$defaults['controller'];
 if(empty($runtime['action'])) $runtime['action']='index';
