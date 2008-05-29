@@ -1,7 +1,7 @@
 <?php
 define('BD_VERSION','0.2');
 // app paths
-define('PATH_TO_CONFIG','app/config.yaml');
+define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');
 define('PATH_TO_MODELS','app/models');
 define('PATH_TO_VIEWS','app/views/');

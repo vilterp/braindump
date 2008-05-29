@@ -37,6 +37,10 @@ class BQL {
       case 'rename':
         $split = split("(rename | to )",$query);
         return self::_rename($split[1],$split[2]);
+        
+      case 'between':
+        $split = split("(between | and )",$query);
+        return self::_between($split[1],$split[2]);
     }
   }
   function _get($predicate,$subject=NULL) {
@@ -165,6 +169,17 @@ class BQL {
   function _rename($old_name,$new_name) {
     $GLOBALS['db']->update('pages',array('name'=>$new_name),array('name'=>$old_name));
     return true;
+  }
+  // FIXME: what if there are multiple predicates...?
+  function _between($one,$two) {
+    $ids = array(
+      page::id_from_name($one),
+      page::id_from_name($two)
+    );
+    $result = $GLOBALS['db']->select_one('triples','predicate_id',
+      "(subject_id = $ids[0] AND object_id = $ids[1]) OR ".
+      "(subject_id = $ids[1] AND object_id = $ids[0])");
+    if($result) {return page::name_from_id($result);}else{return false;};
   }
   function set_or_add($array,$var) {
     if(isset($array)) {
