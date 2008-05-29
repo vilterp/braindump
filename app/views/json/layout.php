@@ -1,1 +1,5 @@
-<?php mime_type('application/json'); include $runtime['view'] ?>
+<?php 
+// FIXME: is this the right mime type to use?
+mime_type('text/javascript');
+include $runtime['view'];
+?>
