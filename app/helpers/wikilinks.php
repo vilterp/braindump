@@ -1,4 +1,5 @@
 <?php
+// FIXME: is this at all appropriate or necessary...?
 function parse_wiki_links($input) { // I need to learn regular expressions...
   $final = "";
   $split = split("}",$input);

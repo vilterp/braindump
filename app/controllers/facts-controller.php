@@ -1,7 +1,7 @@
 <?php
 class facts_controller {
   function index() {
-    $GLOBALS['facts'] = $GLOBALS['db']->select('triples');
+    pass_var('facts',$GLOBALS['db']->select('triples'));
   }
 }
 ?>

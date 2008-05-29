@@ -1,59 +1,58 @@
 <?php
 class pages_controller {
-  function __construct() {
-    global $runtime;
-    $this->page = new page(page::id_from_name($runtime['ident']));
-    if(is_null($this->page->name)) $this->page->name = $runtime['ident'];
-  }
   
   // main views
   
   function index() {
     // TODO: semantic custom query goodness
-    $GLOBALS['pages'] = $this->page->find_all(array('order by'=>'name'),false);
+    pass_var('pages',BQL::_list());
   }
   function show() {
-    pass_var('page',$this->page);
+    global $runtime;
+    pass_var('page',new Page($runtime['ident']));
   }
   
   // for AJAX in place edit
   
   function just_body() {
     no_layout();
-    echo $this->page->body;
+    global $runtime;
+    echo BQL::_describe($runtime['ident']);
   }
   function save_body() {
     no_layout();
-    $this->page->body = $_POST['value'];
-    $this->page->save();
-    echo do_filters('page_body',$this->page->body);
+    global $runtime;
+    // FIXME: it shouldn't use $_POST['value'] - something more descriptive
+    BQL::_describe($runtime['ident'],$_POST['value']);
+    echo do_filters('page_body',$_POST['value']);
   }
-  function just_meta() {
+  function just_meta() { // loaded into edit box
     no_layout();
-    echo $this->page->meta();
+    global $runtime;
+    print_metadata(BQL::_get($runtime['ident']));
   }
-  function save_meta() {
+  // FIXME: is it necessary to re-get the page here?
+  function save_metadata() {
     no_layout();
-    // $GLOBALS['db']->print_queries = true;
-    $this->page->save_meta(parse_meta($_POST['value']),$this->page->id);
-    print_meta($this->page->links_from);
-  }
-  
-  // for search bar
-  
-  function redirect() { // for the goto box
-    redirect("pages/show/".$_GET['name']);
+    global $runtime;
+    save_metadata($runtime['ident'],parse_metadata($_POST['value']));
+    print_metadata(BQL::_get($runtime['ident']),true);
   }
   
   function delete() {
-    $this->page->delete_all();
+    BQL::_unset($runtime['ident']);
     redirect('pages');
   }
+  // delete the entire db. useful sometimes.
   function delete_everything() {
     global $db;
     $db->delete('pages');
     $db->delete('triples');
     redirect('pages');
+  }
+  
+  function redirect() { // for the goto box
+    redirect("pages/show/".$_GET['name']);
   }
 }
 ?>

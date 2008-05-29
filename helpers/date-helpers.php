@@ -28,7 +28,7 @@ function split_by_day($items,$time_key,$date_format="l, n/j/Y") {
   }
   return $result;
 }
-// from the comments at the bottom of the PHP documentation for time()
+// http://php.net/time#78677
 // returns 'n units ago'
 function timeDiff($time, $opt = array()) {
     // The default values

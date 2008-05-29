@@ -1,0 +1,1 @@
+<?php mime_type('application/json'); include $runtime['view'] ?>

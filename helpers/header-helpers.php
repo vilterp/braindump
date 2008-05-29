@@ -2,7 +2,7 @@
 function redirect($url) {
   header('Location: '.getURL($url));
 }
-function content_type($content_type) {
+function mime_type($content_type) {
   header("Content-type: $content_type");
 }
 function force_download($filename='') {

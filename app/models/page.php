@@ -1,107 +1,61 @@
 <?php
-class page extends DatabaseObject {
-  function connect() {
-    $this->has_many('triple','to_id','links_to');
-    $this->has_many('triple','from_id','links_from');
-  }
-  // money functions
-  function get_attribute($attribute) {
-    $triple = new triple();
-    $page = $triple->find_one(array('from_id'=>$this->id,'rel'=>$attribute))->to_id;
-    return $this->name_from_id($page);
-  }
-  function get_type() {
-    return $this->get_attribute('type');
-  }
-  function get_types_by_links_to() {
-    $types = array();
-    foreach($this->links_to as $link) {
-      $link_page = new page(page::id_from_name($link->rel));
-      if($link_page->in_db) array_push($types,$link_page->get_attribute('to type'));
-    }
-    return $types;
-  }
-  function get_attributes_for_type($type) {
-    $triple = new triple();
-    $pages = $triple->find(array(
-      'from_id' => page::id_from_name($type),
-      'rel' => 'attribute'
-    ));
-    $answers = array();
-    foreach($pages as $triple) {
-      array_push($answers,page::name_from_id($triple->to_id));
-    }
-    return $answers;
-  }
-  // saving helpers
-  function save_meta($input,$page_id) {
-    $existing_triples = array();
-    foreach($input as $item) { // go through links
-      $triple = new triple();
-      $triple->from_id = $page_id;
-      if(!page::exists($item['value'])) { // if the to page doesn't exist, make it
-        $to_page = new page();
-        $to_page->name = trim($item['value']);
-        $to_page->save();
-        $to_id = $to_page->id;
-      } else { // otherwise, get its id
-        $to_id = page::id_from_name($item['value']); 
-      }
-      $triple->to_id = $to_id;
-      $triple->rel = trim($item['key']);
-      if($existing_triple = 
-        triple::exists($triple->from_id,$triple->rel,$triple->to_id)) {
-        array_push($existing_triples,$existing_triple);
-      } else {
-        // save the triple if it doesn't already exist
-        $triple->save();
-        array_push($existing_triples,$triple->id);
-      }
-    }
-    if($existing_triples) // delete triples not in input
-      $GLOBALS['db']->delete('triples',"from_id = ".$page_id." AND id != ".
-        implode(" AND id != ",$existing_triples));
-    // reload newly created links into the page object
-    $this->connect();
-  }
-  // helpers...
-  function meta() {
-    if($this->links_from) {
-      $final = '';
-      for($i=0; $i<count($this->links_from); $i++) {
-        $link = $this->links_from[$i];
-        $final .= $link->rel.': '.page::name_from_id($link->to_id);
-        if($i+1 < count($this->links_from)) $final .= "\n";
-      }
-      return $final;
-    } else {
-      return NULL;
+// this and the triple class are pretty much just collections of static 
+// functions now...
+class page {
+  
+  //static $id_cache = array();
+  
+  function __construct($name=NULL) {
+    // FIXME: this runs id_from_name several times - inefficient
+    if(!is_null($name)) {
+      $this->name = $name;
+      $this->metadata = BQL::_get($name);
+      $this->description = BQL::_describe($name);
+      $this->backlinks = BQL::_backlinks($name);
     }
   }
+  
+  // helpers
   function exists($page_name) {
-    return $GLOBALS['db']->select_row('pages',array('name'=>$page_name));
+    $id = $GLOBALS['db']->select_one('pages','id',array('name'=>$page_name));
+    if($id) return (int) $id; else return false;
+  }
+  function create_if_doesnt_exist($page_name) {
+    if($id = self::exists($page_name)) {
+      return $id;
+    } else {
+      global $db;
+      $db->insert('pages',array('name'=>$page_name));
+      return (int) $db->select_one('pages','id',array('name'=>$page_name));
+    }
   }
   function name_from_id($id) {
     if(empty($id)) return NULL;
+    //if(array_key_exists($id,self::$id_cache)) return self::$id_cache[$id];
     if(is_array($id)) {
       $ids = array();
       foreach($id as $page) {
-        array_push($ids,page::name_from_id($page));
+        array_push($ids,self::name_from_id($page));
       }
       return $ids;
     }
-    return $GLOBALS['db']->select_one('pages','name',array('id'=>$id));    
+    $result = $GLOBALS['db']->select_one('pages','name',array('id'=>$id));
+    //self::$id_cache[$id] = $result;
+    return $result;
   }
   function id_from_name($name) {
     if(empty($name)) return NULL;
+    //if(in_array($name,self::$id_cache)) return array_search($name,self::$id_cache[$name]);
     if(is_array($name)) {
       $names = array();
       foreach($name as $page) {
-        array_push($names,page::id_from_name($page));
+        array_push($names,self::id_from_name($page));
       }
       return $names;
     } else {
-      return $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
+      $result = (int) $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
+      //self::$id_cache[$result] = $name;
+      return $result;
     }
   }
 }

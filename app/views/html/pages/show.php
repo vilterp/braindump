@@ -1,39 +1,19 @@
 <div id="page_metadata">
-  <?php if($page->links_from): ?>
-    <?php print_meta($page->links_from) ?>
+  <?php if ($page->metadata): ?>
+    <?php print_metadata($page->metadata,true) ?>
   <?php else: ?>
-    <p><em>double click to add metadata</em></p>
+    <p class="edit_prompt">double click to add metadata</p>
   <?php endif ?>
 </div>
   <div id="page_body">
-    <?php if ($page->body): ?>
-      <?php echo do_filters('page_body',$page->body) ?>
+    <?php if($page->description): ?>
+      <?php echo do_filters('page_body',$page->description) ?>
     <?php else: ?>
-      <p><em>double click to add a description</em></p>
+      <p class="edit_prompt">double click to add a description</p>
     <?php endif ?>
   </div>
-<?php if($page->links_to): ?>
-  <div id="page_links_to">
-    <?php foreach ($page->links_to as $link): ?>
-      <?php echo $link->rel ?> of 
-      <?php $from_page = page::name_from_id($link->from_id) ?>
-      <?php echo getLink($from_page,"pages/show/$from_page") ?>
-      <br />
-    <?php endforeach ?>
-  </div>
-  <div id="types">
-    <ul>
-      <?php $types = $page->get_types_by_links_to() ?>
-      <?php foreach($types as $type): ?>
-        <li><?php echo $type ?>
-          <?php $attributes = page::get_attributes_for_type($type) ?>
-          <ul>
-            <?php foreach ($attributes as $attribute): ?>
-              <li><?php echo $attribute ?></li>
-            <?php endforeach ?>
-          </ul>
-        </li>
-      <?php endforeach ?>
-    </ul>
+<?php if($page->backlinks): ?>
+  <div id="page_links_in">
+    <?php print_backlinks($page->backlinks) ?>
   </div>
 <?php endif ?>

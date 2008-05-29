@@ -38,3 +38,6 @@ a:active {
   font-size: inherit;
   font-family: inherit;
 }
+.edit_prompt {
+  font-style: italic;
+}
