@@ -1,10 +1,11 @@
 <?php
 include 'core/common.php';
 
+// annoying
 function bql_query($querystring){return BQL::query($querystring);}
 function bql_get($s,$p=NULL){return BQL::get($s,$p);}
-function bql_set($p,$s,$o){return BQL::set($p,$s,$o);}
-function bql_unset($p,$s=NULL){return BQL::_unset($p,$s);}
+function bql_set($s,$p,$o){return BQL::set($s,$p,$o);}
+function bql_unset($s,$p=NULL){return BQL::_unset($s,$p);}
 function bql_list($criteria=NULL){return BQL::_list($criteria);}
 function bql_backlinks($subject){return BQL::backlinks($subject);}
 function bql_describe($subject,$desc=NULL){return BQL::describe($subject,$desc);}
@@ -12,6 +13,7 @@ function bql_rename($old,$new){return BQL::rename($old,$new);}
 function bql_between($one,$two){return BQL::between($one,$two);}
 
 $server = new IXR_Server(array(
+  // also annoying
   'bql.query' => 'bql_query',
   'bql.get' => 'bql_get',
   'bql.set' => 'bql_set',

@@ -5,7 +5,6 @@
 function get_app_path() {
   global $runtime;
   $path = array();
-  array_push($path,getLink($runtime['controller'],$runtime['controller']));
   if($runtime['action'] != 'index') {
     if($runtime['action'] == 'all') $runtime['action'] = 'list'; // grr
     array_push($path,$runtime['action']);

@@ -10,7 +10,6 @@ define('PATH_TO_APP_HELPERS','app/helpers/');
 // system paths
 define('ROOT',realpath(dirname(__FILE__)."/../").'/');
 define('PATH_TO_CORE','core/');
-define('PATH_TO_SCHEMA_CACHE','core/db/logs/schema-cache.txt');
 define('PATH_TO_LOG','core/log.txt');
 define('PATH_TO_HELPERS','helpers/');
 define('PATH_TO_LIB','lib/');

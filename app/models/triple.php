@@ -10,15 +10,15 @@ class triple {
     $answer = $GLOBALS['db']->select('triples',$params);
     if($answer) return true; else return false;
   }
-  function set($predicate,$subject,$object,$update_if_exists=true) {
+  function set($subject,$predicate,$object,$allow_multiple=true) {
+    // get id's
     $data = array(
       'predicate_id' => page::create_if_doesnt_exist($predicate),
       'subject_id' => page::create_if_doesnt_exist($subject),
       'object_id' => page::create_if_doesnt_exist($object)
     );
-    // if this triple isn't already in the db, insert it
-    if($update_if_exists) {
-      if(self::exists($data['subject_id'],$data['predicate_id'])) {
+    if($allow_multiple) { // allow only one object for a given subject and predicate
+      if(self::exists($data['subject_id'],$data['predicate_id'],$data['object_id'])) {
         $GLOBALS['db']->update('triples',$data,array(
           'subject_id' => $data['subject_id'],
           'predicate_id' => $data['predicate_id']
@@ -26,8 +26,8 @@ class triple {
       } else {
         $GLOBALS['db']->insert('triples',$data);
       }
-    } else {
-      if(self::exists($data['subject_id'],$data['predicate_id'],$data['object_id'])) {
+    } else { // allow setting multiple objects for one subject and predicate
+      if(self::exists($data['subject_id'],$data['predicate_id'])) {
         $GLOBALS['db']->update('triples',$data,array(
           'subject_id' => $data['subject_id'],
           'predicate_id' => $data['predicate_id']

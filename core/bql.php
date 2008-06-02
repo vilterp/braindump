@@ -8,14 +8,14 @@ class BQL {
     switch($querysplit[0]) { // first word
       case 'get':
         $params = split("(get | of )",$query);
-        return self::get($params[1],$params[2]);
+        return self::get($params[2],$params[1]);
         break;
       
       case 'set':
         $params = split("(set | of | to )",$query);
         $objects = english_to_array($params[3]);
         if(count($objects) > 1 && is_plural($params[1])) $params[3] = $objects;
-        return self::set($params[1],$params[2],$params[3]);
+        return self::set($params[2],$params[1],$params[3]);
         break;
         
       case 'list':
@@ -24,7 +24,7 @@ class BQL {
       
       case 'unset':
         $params = split("(unset | of )",$query);
-        return self::_unset($params[1],$params[2]);
+        return self::_unset($params[2],$params[1]);
         break;
         
       case 'backlinks':
@@ -44,18 +44,20 @@ class BQL {
     }
   }
   
-  function get($predicate,$subject=NULL) {
+  function get($subject,$predicate=NULL) {
     global $db;
-    if(is_null($subject)) { // get .
-      $subject_id = page::id_from_name($predicate);
+    $subject_id = page::id_from_name($subject);
+    if(is_null($predicate)) { // get .
       $result = $db->select('triples',array('subject_id'=>$subject_id));
       if($result) {
+        // get names from id's, group plurals, put in result array
         $answers = array();
         foreach($result as $answer) {
           $predicate = page::name_from_id($answer['predicate_id']);
           $object = page::name_from_id($answer['object_id']);
           $answers[$predicate] = self::set_or_add($answers[$predicate],$object);
         }
+        // pluralize key if value is an array
         foreach($answers as $predicate=>$object) {
           if(is_array($object)) {
             $answers[pluralize($predicate)] = $answers[$predicate];
@@ -65,7 +67,6 @@ class BQL {
         return $answers;
       }
     } else { // get . of .
-      $subject_id = page::id_from_name($subject);
       if(is_singular($predicate)) { // eg. get color of apple
         $result = $db->select_column('triples','object_id',array(
           'subject_id' => $subject_id,
@@ -85,13 +86,13 @@ class BQL {
       }
     }
   }
-  function set($predicate,$subject,$object) {
-    if(is_plural($predicate)) {
+  function set($subject,$predicate,$object) {
+    if(is_plural($predicate)) { // set colors of the rainbow to red, orange, ...
       foreach($object as $item)
-        triple::set(singularize($predicate),$subject,$item,false);
+        triple::set($subject,singularize($predicate),$item,false);
       return true;
-    } else {
-      return triple::set($predicate,$subject,$object);
+    } else { // set color of apple to red
+      return triple::set($subject,$predicate,$object);
     }
   }
   function _list($conditions_string=NULL) {
@@ -118,11 +119,11 @@ class BQL {
       }
     }
   }
-  function _unset($predicate,$subject) {
+  function _unset($subject,$predicate=NULL) {
     // FIXME: should unset delete the record in the pages table as well?
-    if(is_null($subject)) { // unset .
+    if(is_null($predicate)) { // unset .
       $GLOBALS['db']->delete('triples',array(
-        'subject_id' => page::id_from_name($predicate)
+        'subject_id' => page::id_from_name($subject)
       ));
     } else { // unset . of .
       if(is_plural($predicate)) $predicate = singularize($predicate);
@@ -140,6 +141,7 @@ class BQL {
     ));
     $answers = array();
     if($matches) {
+      // get names from id's, group multiples
       foreach($matches as $match) {
         $predicate = page::name_from_id($match['predicate_id']);
         $subject = page::name_from_id($match['subject_id']);
@@ -178,6 +180,7 @@ class BQL {
       page::id_from_name($one),
       page::id_from_name($two)
     );
+    // checks for links either direction
     $result = $GLOBALS['db']->select_one('triples','predicate_id',
       "(subject_id = $ids[0] AND object_id = $ids[1]) OR ".
       "(subject_id = $ids[1] AND object_id = $ids[0])");

@@ -41,4 +41,8 @@ function array_flatten($a) {
     return $array;
   }
 }
+function strip_extension($filename) {
+  $split = explode('.',$filename);
+  return $split[0];
+}
 ?>

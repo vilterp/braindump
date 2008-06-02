@@ -1,9 +1,10 @@
 <?php
-$runtime['controller'] = $runtime['url'][0];
-$runtime['action'] = $runtime['url'][1];
-$runtime['ident'] = $runtime['url'][2];
-// maps to controller/action/ident
+$runtime['controller'] = 'pages';
+$runtime['action'] = $runtime['url'][0];
+$runtime['ident'] = $runtime['url'][1];
+// maps to /action/ident
+// controller always pages
 
-$defaults['controller'] = 'pages';
+$defaults['controller'] = 'pages'; // FIXME: unecessary...
 $defaults['format'] = 'html';
 ?>

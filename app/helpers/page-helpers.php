@@ -10,7 +10,7 @@ function print_metadata($input,$withlinks=false) {
         }
       } else {
         if(is_array($object)) {
-          echo "$predicate: ".array_to_english($object);
+          echo "$predicate: ".array_to_english($object)."\n";
         } else {
           echo "$predicate: $object\n";
         }
@@ -40,9 +40,9 @@ function parse_metadata($input) {
   return $pairs;
 }
 function save_metadata($name,$input) {
-  BQL::query("unset $name");
+  BQL::_unset($name);
   foreach($input as $key=>$value) {
-    BQL::query("set $key of $name to $value");
+    BQL::set($name,$key,$value);
   }
 }
 function linked_page_list($pages) {
@@ -53,9 +53,9 @@ function linked_page_list($pages) {
   return array_to_english($links);
 }
 function pagelink($name) {
-  return getLink($name,"pages/show/$name");
+  return getLink($name,"show/$name");
 }
 function pageurl($name) {
-  return getURL("pages/show/$name");
+  return getURL("show/$name");
 }
 ?>

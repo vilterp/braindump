@@ -1,6 +1,7 @@
 <div id="page_metadata">
   <?php if ($page->metadata): ?>
     <?php print_metadata($page->metadata,true) ?>
+    <?php // FIXME add to page class? like $page->print_metadata(true) ?>
   <?php else: ?>
     <p class="edit_prompt">double click to add metadata</p>
   <?php endif ?>

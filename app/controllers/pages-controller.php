@@ -11,15 +11,19 @@ class pages_controller {
     global $runtime;
     pass_var('page',new Page($runtime['ident']));
   }
+  function special() {
+    global $runtime;
+    $runtime['view'] = "special_pages/$runtime[ident].php";
+  }
   
   // for AJAX in place edit
   
-  function just_body() {
+  function just_description() {
     no_layout();
     global $runtime;
     echo BQL::describe($runtime['ident']);
   }
-  function save_body() {
+  function save_description() {
     no_layout();
     global $runtime;
     // FIXME: it shouldn't use $_POST['value'] - something more specific
@@ -41,18 +45,18 @@ class pages_controller {
   
   function delete() {
     BQL::_unset($runtime['ident']);
-    redirect('pages');
+    redirect('');
   }
   // delete the entire db. useful sometimes.
   function delete_everything() {
     global $db;
     $db->delete('pages');
     $db->delete('triples');
-    redirect('pages');
+    redirect('');
   }
   
   function redirect() { // for the goto box
-    redirect("pages/show/".$_GET['name']);
+    redirect("show/$_GET[name]");
   }
 }
 ?>

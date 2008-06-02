@@ -6,6 +6,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php [L]
 </IfModule>
 # prevent database from being downloaded
-<FilesMatch "\.(sqlite|sqlite2|sqlite3|sq|sq2|sq3)$">
+<FilesMatch "\.sqlite3$">
 Deny from all
 </FilesMatch>

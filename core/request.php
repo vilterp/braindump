@@ -34,16 +34,10 @@ function parse_request($input_url,$strip_extensions=true) {
 // eg. users/bob.yaml
 // very RESTful
 function parse_format($url) {
-  global $defaults;
   $backwards = array_reverse($url);
   $last = $backwards[0];
   $dot_split = explode('.',$last);
-  $extension = $dot_split[1];
-  if(is_null($extension)) {
-    $format = $defaults['format'];
-  } else {
-    $format = $extension;
-  }
-  return $format;
+  $extension = $dot_split[count($dot_split)-1];
+  return $extension;
 }
 ?>

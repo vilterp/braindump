@@ -6,6 +6,8 @@ include PATH_TO_ROUTES;
 // decide which format
 $runtime['format'] = parse_format(parse_request($_SERVER['REQUEST_URI'],false));
 // revert to defaults if necessary
+if(!in_array($runtime['format'],scandir(PATH_TO_VIEWS)) || is_null($runtime['format']))
+  $runtime['format'] = $defaults['format'];
 if(empty($runtime['controller'])) $runtime['controller']=$defaults['controller'];
 if(empty($runtime['action'])) $runtime['action']='index';
 // this will be included from wrapper.php
