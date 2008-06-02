@@ -9,9 +9,9 @@ class page {
     // FIXME: this runs id_from_name several times - inefficient
     if(!is_null($name)) {
       $this->name = $name;
-      $this->metadata = BQL::_get($name);
-      $this->description = BQL::_describe($name);
-      $this->backlinks = BQL::_backlinks($name);
+      $this->metadata = BQL::get($name);
+      $this->description = BQL::describe($name);
+      $this->backlinks = BQL::backlinks($name);
     }
   }
   

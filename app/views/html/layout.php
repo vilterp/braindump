@@ -4,7 +4,10 @@
     <title>&laquo; braindump &raquo;</title>
     <?php load_css('braindump') ?>
     <?php load_js('jquery') ?>
-    <?php include('app/helpers/in-place-edit.php') ?>
+    <?php if($runtime['action'] == 'show'): ?>
+      <?php load_js('jquery.jeditable') ?>
+      <?php include 'assets/js/edit-in-place.php' ?>
+    <?php endif ?>
   </head>
   <body>
     <?php // TODO: layout with <div>s, css ?>

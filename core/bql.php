@@ -8,14 +8,14 @@ class BQL {
     switch($querysplit[0]) { // first word
       case 'get':
         $params = split("(get | of )",$query);
-        return self::_get($params[1],$params[2]);
+        return self::get($params[1],$params[2]);
         break;
       
       case 'set':
         $params = split("(set | of | to )",$query);
         $objects = english_to_array($params[3]);
         if(count($objects) > 1 && is_plural($params[1])) $params[3] = $objects;
-        return self::_set($params[1],$params[2],$params[3]);
+        return self::set($params[1],$params[2],$params[3]);
         break;
         
       case 'list':
@@ -28,22 +28,23 @@ class BQL {
         break;
         
       case 'backlinks':
-        return self::_backlinks(substr($query,13));
+        return self::backlinks(substr($query,13));
         
       case 'describe':
         $split = split("(describe | as )",$query);
-        return self::_describe($split[1],$split[2]);
+        return self::describe($split[1],$split[2]);
         
       case 'rename':
         $split = split("(rename | to )",$query);
-        return self::_rename($split[1],$split[2]);
+        return self::rename($split[1],$split[2]);
         
       case 'between':
         $split = split("(between | and )",$query);
-        return self::_between($split[1],$split[2]);
+        return self::between($split[1],$split[2]);
     }
   }
-  function _get($predicate,$subject=NULL) {
+  
+  function get($predicate,$subject=NULL) {
     global $db;
     if(is_null($subject)) { // get .
       $subject_id = page::id_from_name($predicate);
@@ -84,7 +85,7 @@ class BQL {
       }
     }
   }
-  function _set($predicate,$subject,$object) {
+  function set($predicate,$subject,$object) {
     if(is_plural($predicate)) {
       foreach($object as $item)
         triple::set(singularize($predicate),$subject,$item,false);
@@ -132,7 +133,7 @@ class BQL {
     }
     return true;
   }
-  function _backlinks($name) {
+  function backlinks($name) {
     // backlinks to .
     $matches = $GLOBALS['db']->select('triples',array(
       'object_id' => page::id_from_name($name)
@@ -149,7 +150,7 @@ class BQL {
       return false;
     }
   }
-  function _describe($name,$description=NULL) {
+  function describe($name,$description=NULL) {
     global $db;
     if(is_null($description)) { // describe .
       $result = $db->select_one('pages','description',array('name'=>$name));
@@ -166,12 +167,13 @@ class BQL {
       return true;
     }
   }
-  function _rename($old_name,$new_name) {
+  function rename($old_name,$new_name) {
     $GLOBALS['db']->update('pages',array('name'=>$new_name),array('name'=>$old_name));
     return true;
   }
-  // FIXME: what if there are multiple predicates...?
-  function _between($one,$two) {
+  // FIXME: what if there are multiple predicates
+  // between a given subject and object?
+  function between($one,$two) {
     $ids = array(
       page::id_from_name($one),
       page::id_from_name($two)
@@ -181,6 +183,7 @@ class BQL {
       "(subject_id = $ids[1] AND object_id = $ids[0])");
     if($result) {return page::name_from_id($result);}else{return false;};
   }
+  // just a helper...
   function set_or_add($array,$var) {
     if(isset($array)) {
       if(is_array($array)) {
