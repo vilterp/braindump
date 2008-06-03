@@ -95,23 +95,30 @@ class BQL {
       return triple::set($subject,$predicate,$object);
     }
   }
-  function _list($conditions_string=NULL) {
-    if(empty($conditions_string)) {
-      return $GLOBALS['db']->select_column('pages','name','',array('order by'=>'name'));
+  function _list($criteria=NULL) {
+    global $db;
+    if(empty($criteria)) {
+      return $db->select_column('pages','name');
     } else {
-      $conditions = array();
-      foreach(split("( and | or )",$conditions_string) as $condition_string) {
-        $condition = explode(' is ',$condition_string);
-        $predicate_id = page::id_from_name($condition[0]);
-        $object_id = page::id_from_name($condition[1]);
-        $conditions[] = "(predicate_id=$predicate_id AND object_id=$object_id)";
+      $pairs = array_flatten(split("(\(|\)| and | or )",$criteria));
+      foreach($pairs as $pair) {
+        $split = split(" is ",$pair);
+        $pred = $split[0];
+        $obj = $split[1];
+        $pred_id = page::id_from_name($pred);
+        $obj_id = page::id_from_name($obj);
+        $sql = "(predicate_id = $pred_id AND object_id = $obj_id)";
+        $criteria = str_replace($pair,$sql,$criteria);
       }
-      // TODO: actually pay attention to 'and' and 'or' operators...
-      $matches = $GLOBALS['db']->select_column('triples','subject_id',implode(' AND ',$conditions));
-      if($matches) {
+      // OCD
+      $criteria = str_replace(' or ',' OR ',$criteria);
+      $criteria = str_replace(' and ',' AND ',$criteria);
+      // business
+      $result = $db->select_column('triples','subject_id',$criteria);
+      if($result) {
         $answers = array();
-        foreach($matches as $match) {
-          $answers[] = page::name_from_id($match);
+        foreach($result as $subject_id) {
+          $answers[] = page::name_from_id($subject_id);
         }
         return $answers;
       } else {

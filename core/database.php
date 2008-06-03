@@ -47,7 +47,7 @@ class Database {
     return $this->query($querystring)->fetch();
   }
   // select specified columns
-  function select_column($tablename,$column,$params,$options='') {
+  function select_column($tablename,$column,$params='',$options='') {
     $querystring = "SELECT $column FROM $tablename ".$this->where_clause($params)." ".$this->sql_options($options);
     $result = $this->query($querystring)->fetchAll();
     if(count($result) > 0) {

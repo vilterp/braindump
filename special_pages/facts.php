@@ -1,3 +1,4 @@
+<?php // FIXME: group multiples together ?>
 <?php $facts = $GLOBALS['db']->select('triples'); ?>
 <?php if ($facts): ?>
   <ul>
@@ -11,5 +12,5 @@
     <?php endforeach ?>
   </ul>
 <?php else: ?>
-  <p>I know nothing.</p>
+  <p class="notice">I know nothing.</p>
 <?php endif ?>
