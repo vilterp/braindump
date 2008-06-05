@@ -5,7 +5,8 @@ class pages_controller {
   
   function index() {
     // TODO: semantic custom query goodness
-    pass_var('pages',BQL::_list());
+    pass_var('pages',BQL::_list($_GET['criteria']));
+    pass_var('show_box',(!empty($_GET['criteria'])));
   }
   function show() {
     global $runtime;
@@ -14,6 +15,19 @@ class pages_controller {
   function special() {
     global $runtime;
     $runtime['view'] = "special_pages/$runtime[ident].php";
+  }
+  function dump() {}
+  function import() {}
+  function process_import() {
+    $file = Spyc::YAMLLoad($_FILES['file']['tmp_name']);
+    foreach($file['data'] as $page=>$data) {
+      if($data['metadata'])
+        foreach($data['metadata'] as $attribute=>$value)
+          BQL::set($page,$attribute,$value);
+      BQL::describe($page,$data['description']);
+    }
+    flash('Pages sucessfully imported.'); # FIXME: doesn't work
+    redirect('');
   }
   
   // for AJAX in place edit

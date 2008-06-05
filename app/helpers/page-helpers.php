@@ -42,6 +42,7 @@ function parse_metadata($input) {
 function save_metadata($name,$input) {
   BQL::_unset($name);
   foreach($input as $key=>$value) {
+    if(is_plural($key)) $value = english_to_array($value); // multiple values
     BQL::set($name,$key,$value);
   }
 }

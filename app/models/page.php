@@ -1,6 +1,8 @@
 <?php
 // this and the triple class are pretty much just collections of static 
 // functions now...
+
+// FIXME: really need to cache id's. very inefficient right now.
 class page {
   
   //static $id_cache = array();
@@ -53,7 +55,7 @@ class page {
       }
       return $names;
     } else {
-      $result = (int) $GLOBALS['db']->select_one('pages','id',array('name'=>$name));
+      $result = (int) $GLOBALS['db']->query("SELECT id FROM pages WHERE name LIKE '$name'")->fetchColumn();
       //self::$id_cache[$result] = $name;
       return $result;
     }

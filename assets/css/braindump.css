@@ -41,3 +41,7 @@ a:active {
 .notice {
   font-style: italic;
 }
+.flash {
+  padding: 10px;
+  border: medium solid red;
+}

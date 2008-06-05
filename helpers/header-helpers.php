@@ -12,4 +12,12 @@ function force_download($filename='') {
     header('Content-Disposition: attachment; filename="'.$filename.'"');
   }
 }
+function flash($message) {
+  session_start();
+  $_SESSION[] = $message;
+}
+function get_flashes() {
+  session_start();
+  if($_SESSION) return $_SESSION; else return false;
+}
 ?>

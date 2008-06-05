@@ -10,7 +10,7 @@ class triple {
     $answer = $GLOBALS['db']->select('triples',$params);
     if($answer) return true; else return false;
   }
-  function set($subject,$predicate,$object,$allow_multiple=true) {
+  function set($subject,$predicate,$object,$allow_multiple=false) {
     // get id's
     $data = array(
       'predicate_id' => page::create_if_doesnt_exist($predicate),

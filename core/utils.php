@@ -32,14 +32,12 @@ function add_trailing_slash($path) {
     return $path;
   }
 }
-// http://www.php.net/manual/en/ref.array.php#82161
 function array_flatten($a) {
-  foreach($a as $k=>$v) $a[$k]=(array)$v;
-  if(count($a) > 0) {
-    return call_user_func_array(array_merge,$a);
-  } else {
-    return $array;
+  $final = array();
+  foreach($a as $key=>$item) {
+    if(!empty($item)) $final[] = $item;
   }
+  return $final;
 }
 function strip_extension($filename) {
   $split = explode('.',$filename);

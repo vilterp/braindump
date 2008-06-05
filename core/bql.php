@@ -1,5 +1,4 @@
 <?php
-// FIXME: something like 'knights of columbus' would break setting and getting
 // FIXME: error reporting on parse errors instead of putting in the wrong thing or doing nothing...
 class BQL {
   function query($query) {
@@ -89,7 +88,7 @@ class BQL {
   function set($subject,$predicate,$object) {
     if(is_plural($predicate)) { // set colors of the rainbow to red, orange, ...
       foreach($object as $item)
-        triple::set($subject,singularize($predicate),$item,false);
+        triple::set($subject,singularize($predicate),$item,true);
       return true;
     } else { // set color of apple to red
       return triple::set($subject,$predicate,$object);
@@ -102,11 +101,12 @@ class BQL {
     } else {
       $pairs = array_flatten(split("(\(|\)| and | or )",$criteria));
       foreach($pairs as $pair) {
-        $split = split(" is ",$pair);
+        $split = split("( is not | isn't | is )",$pair);
         $pred = $split[0];
         $obj = $split[1];
         $pred_id = page::id_from_name($pred);
         $obj_id = page::id_from_name($obj);
+        if(!$obj_id || !$pred_id) return false; // pages don't exist
         $sql = "(predicate_id = $pred_id AND object_id = $obj_id)";
         $criteria = str_replace($pair,$sql,$criteria);
       }
