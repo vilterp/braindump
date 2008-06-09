@@ -3,6 +3,7 @@ $(document).ready(function(){
         box = $("#criteria_box");
         if(box.css('display') == 'none') {
             box.show();
+            $("#criteria_input").focus();
             $(this).html("Hide");
         } else {
             box.hide();

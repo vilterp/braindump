@@ -6,10 +6,12 @@
     Or, you can <?php echo getLink('import','import') ?> pages from a .dump.yaml file.
   </p>
 <?php else: ?>
-  <a href="#" id="criteria_box_toggle"><?php if($show_box) echo 'Hide'; else echo 'Filter'; ?></a>
+  <small>
+    <a href="#" id="criteria_box_toggle"><?php if($show_box) echo 'Hide'; else echo 'Filter'; ?></a>
+  </small>
   <div id="criteria_box"<?php if(!$show_box) echo ' style="display: none;"'; ?>>
     <form method="get" action="">
-      <input type="text" name="criteria" value="<?php echo $_GET['criteria'] ?>" id="criteria" />
+      <input type="text" name="criteria" value="<?php echo $_GET['criteria'] ?>" id="criteria_input" size="20"/>
       <input type="submit" value="Update">
     </form>
   </div>
