@@ -348,7 +348,7 @@ EOD;
                 return new IXR_Error(-32601, 'server error. requested function "'.$method.'" does not exist.');
             }
             // Call the function
-            $result = $method($args);
+            $result = call_user_func_array($method,$args); // changed from $method($args)
         }
         return $result;
     }

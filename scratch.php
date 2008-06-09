@@ -1,6 +1,5 @@
 <?php
 
-include 'core/common.php'
-
+include 'core/common.php';
 
 ?>
