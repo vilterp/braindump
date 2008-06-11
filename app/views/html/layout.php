@@ -20,11 +20,13 @@
       </tr>
       <tr id="content">
         <td id="main">
+          <?php /* 
           <?php if (get_flashes()): ?>
             <?php foreach(get_flashes() as $flash): ?>
               <div class="flash"><?php echo $flash ?></div>
             <?php endforeach ?>
           <?php endif ?>
+          */ ?>
           <?php if(file_exists($runtime['view'])) include $runtime['view'] ?>
         </td>
         <td id="sidebar" >

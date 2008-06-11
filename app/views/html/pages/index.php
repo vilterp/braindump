@@ -1,3 +1,4 @@
+<?php // FIXME: probably shouldn't be using <small> so much... ?>
 <?php if (!$pages && empty($_GET['criteria'])): ?>
   <p class="notice">
     No pages. Make one by typing its name into the box on the right &raquo;
@@ -11,8 +12,10 @@
   </small>
   <div id="criteria_box"<?php if(!$show_box) echo ' style="display: none;"'; ?>>
     <form method="get" action="">
+      gimme pages where 
       <input type="text" name="criteria" value="<?php echo $_GET['criteria'] ?>" id="criteria_input" size="20"/>
-      <input type="submit" value="Update">
+      <input type="submit" value="Update"> 
+      <small><a href="#" id="criteria_box_clear">clear</a></small>
     </form>
   </div>
   <?php if ($pages): ?>

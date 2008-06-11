@@ -7,7 +7,11 @@ class BQL {
     switch($querysplit[0]) { // first word
       case 'get':
         $params = split("(get | of )",$query);
-        return self::get($params[2],$params[1]);
+        if(count($params) == 2) { // get .
+          return self::get($params[1]);
+        } else { // get . of .
+          return self::get($params[2],$params[1]);
+        }
         break;
       
       case 'set':

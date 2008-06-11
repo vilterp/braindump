@@ -10,4 +10,8 @@ $(document).ready(function(){
             $(this).html("Filter");
         }
     });
+    $("#criteria_box_clear").click(function(){
+        $('#criteria_input').attr('value','');
+        $('#criteria_input').focus();
+    })
 })
