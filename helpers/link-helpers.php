@@ -4,7 +4,7 @@ function getLink($text,$url='',$options='') {
   return "<a href='".getURL($url)."' ".html_options($options).">$text</a>";
 }
 function getURL($url) {
-  if($GLOBALS['config']['enable_mod_rewrite']) {
+  if($GLOBALS['config']['clean_urls']) {
     return baseURL().$url;
   } else {
     return baseURL()."index.php/".$url;

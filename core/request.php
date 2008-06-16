@@ -6,7 +6,7 @@ function parse_request($input_url,$strip_extensions=true) {
   global $format;
   $url = array();
   $start = split("\?",$input_url);
-  if($config['enable_mod_rewrite']) {
+  if($config['clean_urls']) {
     $lastitem = array_reverse(split('/',$config['base_url']));
     $urlsplit = split($lastitem[1],$start[0]);
   } else {
