@@ -3,7 +3,7 @@
 // get the juicy part of the url
 // ex: /index.php/class/function/id/ => array('class','function','id')
 function parse_request($input_url,$strip_extensions=true) {
-  global $format;
+  global $format, $config;
   $url = array();
   $start = split("\?",$input_url);
   if($config['clean_urls']) {

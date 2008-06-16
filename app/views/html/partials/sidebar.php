@@ -1,13 +1,9 @@
 <form method="get" action="<?php echo getURL('redirect') ?>">
-  <input type="text" name="name" value="goto" onclick="if(this.value='goto'){this.value=''}">
+  <input id="goto_box" type="text" value="goto">
 </form>
 
-<ul>
-  <?php // print special pages ?>
-  <?php foreach(scandir('special_pages') as $page): ?>
-    <?php if(strpos($page,'.') != 0): ?>
-      <?php $clean = strip_extension($page) ?>
-      <li><?php echo getLink(ucwords($clean),"special/$clean") ?></li>
-    <?php endif ?>
+<ul id="special_pages">
+  <?php foreach(get_special_pages() as $special_page): ?>
+    <li class="special_page"><?php echo special_page_link($special_page) ?></li>
   <?php endforeach ?>
 </ul>

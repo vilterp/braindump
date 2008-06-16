@@ -1,8 +1,15 @@
 <?php
+function dir_contents($directory) {
+  $contents = array();
+  foreach(scandir($directory) as $item) {
+    if(strpos($item,'.') !== 0) $contents[] = $item;
+  }
+  return $contents;
+}
 function include_dir($directory) {
-  foreach(scandir("$directory/") as $file) {
+  foreach(dir_contents($directory) as $file) {
     // make sure it's not a hidden file, a folder, or a non-php file
-    if(!strpos($file,".") == 0 && !is_dir($file) && strpos($file,'.php')) {
+    if(!is_dir($file) && strpos($file,'.php')) {
       require_once "$directory/$file";
     }
   }

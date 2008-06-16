@@ -1,4 +1,5 @@
 <?php
+// TODO: this should all be atom.
 class RSSFeed {
   function __construct($attributes=array(),$items=array()) {
     foreach($attributes as $attribute=>$value) {

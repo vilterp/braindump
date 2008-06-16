@@ -1,23 +1,19 @@
 <?php
 $GLOBALS['filters'] = array();
 // ugh comes_after is a mess... don't use this too much though
-function do_filters($list,$text) {
-  foreach($GLOBALS['filters'] as $filter) {
-    if($filter['list'] == $list) {
-      eval("\$text = $filter[function](\$text);");
-    }
-  }
-  return $text;
+function do_filters($filter_point,$text) {
+  foreach($GLOBALS['filters'] as $filter_point)
+    if($filter['filter_point'] == $filter_point)
+      return call_user_func($filter['function_name'],$text);
 }
-function add_filter($filterlist,$functionname,$comes_after=NULL) {
-  if(is_string($filterlist)) {
-    // just a string of the filter list name
-    array_push($GLOBALS['filters'],array("function"=>$functionname,"list"=>$filterlist,"comes_after"=>$comes_after));
-  } else {
-    // array of filter list names
-    foreach($filterlist as $list) {
-      array_push($GLOBALS['filters'],array("function"=>$functionname,"list"=>$list,"comes_after"=>$comes_after));
-    }
+function add_filter($filter_point,$function_name) {
+  if(is_string($filter_point)) {
+    $GLOBALS['filters'][] = array(
+      'filter_point' => $filter_point,
+      'function_name' => $function_name
+    );
+} else { // array of filter points
+    foreach($filter_point as $point) add_filter($point,$function_name);
   }
 }
 function remove_filter($filtername) {
