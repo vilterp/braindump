@@ -12,6 +12,6 @@ function load_js($path) {
   echo "<script type='text/javascript' src='".assetURL("js/$path")."'></script>\n";
 }
 function image($path,$options='') {
-  return "<img src='".assetURL("images/$path")."' ".html_options($options).">\n";
+  return "<img src='".assetURL("images/$path")."'".html_options($options).">\n";
 }
 ?>

@@ -1,10 +1,4 @@
 <?php
-
-function textilize($text) {
-  $textile = new Textile();
-  return $textile->TextileThis($text);
-}
-
 /**
  * Example: get XHTML from a given Textile-markup string ($string)
  *

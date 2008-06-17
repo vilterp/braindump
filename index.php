@@ -1,24 +1,21 @@
 <?php
 include 'core/common.php';
 
-// decide which controller, action, ident
+// decide which format, controller, action, ident
+$runtime['format'] = $_GET['format'];
 $runtime['url'] = parse_request($_SERVER['REQUEST_URI']);
+$runtime['entire_url'] = "http://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]";
 include PATH_TO_ROUTES;
 
-// decide which format
-$runtime['format'] = parse_format(parse_request($_SERVER['REQUEST_URI'],false));
-
 // revert to defaults if necessary
-if(!in_array($runtime['format'],scandir(PATH_TO_VIEWS)) || is_null($runtime['format']))
-  $runtime['format'] = $defaults['format'];
-if(empty($runtime['controller'])) $runtime['controller']=$defaults['controller'];
-if(empty($runtime['action'])) $runtime['action']='index';
+if(is_null($runtime['format'])) $runtime['format'] = $defaults['format'];
+if(empty($runtime['controller'])) $runtime['controller'] = $defaults['controller'];
+if(empty($runtime['action'])) $runtime['action'] = 'index';
 
 // check for hooks in init.php of each format
 foreach(dir_contents(PATH_TO_VIEWS) as $format)
   if(file_exists(PATH_TO_VIEWS."/$format/init.php"))
     include PATH_TO_VIEWS."$format/init.php";
-if(file_exists("$runtime[format]/init.php")) include "$runtime[format]/init.php";
 
 // this will be included from layout.php
 $runtime['view'] = PATH_TO_VIEWS."$runtime[format]/$runtime[controller]/$runtime[action].php";

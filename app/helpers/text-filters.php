@@ -1,3 +1,0 @@
-<?php // this file is superfluous i think...
-add_filter('page_body','textilize');
-?>

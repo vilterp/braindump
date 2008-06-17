@@ -17,6 +17,7 @@ body {
 }
 #footer {
   border-top: thin gray solid;
+  font-size: small;
 }
 /* links */
 a {
@@ -29,6 +30,17 @@ a:hover {
 a:active {
   color: orange;
 }
+/* typography */
+.control {
+  font-size: small;
+}
+.notice {
+  font-style: italic;
+}
+.flash {
+  padding: 10px;
+  border: medium solid red;
+}
 /* show page */
 #page_body textarea {
   font-size: inherit;
@@ -37,11 +49,4 @@ a:active {
 #page_metadata textarea {
   font-size: inherit;
   font-family: inherit;
-}
-.notice {
-  font-style: italic;
-}
-.flash {
-  padding: 10px;
-  border: medium solid red;
 }

@@ -2,10 +2,10 @@
 // FIXME: is this at all appropriate or necessary...?
 function parse_wiki_links($input) { // I need to learn regular expressions...
   $final = "";
-  $split = split("}",$input);
+  $split = explode("]]",$input);
   for($i=0; $i<count($split)-1; $i++) {
     $segment = $split[$i];
-    $split2 = split("{",$segment);
+    $split2 = explode("[[",$segment);
     $final .= $split2[0];
     $page_name = $split2[1];
     $final .= pagelink($page_name);
@@ -13,5 +13,5 @@ function parse_wiki_links($input) { // I need to learn regular expressions...
   $final .= $split[count($split)-1];
   return $final;
 }
-add_filter(array('page_body'),'parse_wiki_links');
+add_filter('page_description','parse_wiki_links');
 ?>

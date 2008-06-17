@@ -37,7 +37,7 @@ class pages_controller {
     global $runtime;
     // FIXME: it shouldn't use $_POST['value'] - something more specific
     BQL::describe($runtime['ident'],$_POST['value']);
-    echo do_filters('page_body',$_POST['value']);
+    echo do_filters('page_description',$_POST['value']);
   }
   function just_meta() { // loaded into edit box
     no_layout();

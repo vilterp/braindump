@@ -39,9 +39,7 @@
       </tr>
       <tr>
         <td id="footer" colspan="2">
-          <small>
-            this is a <a href="http://code.google.com/p/brain-dump/" title="v<?php echo BD_VERSION ?>">braindump</a>.
-          </small>
+          this is a <a href="http://code.google.com/p/brain-dump/" title="v<?php echo BD_VERSION ?>">braindump</a>.
         </td>
       </tr>
     </table>

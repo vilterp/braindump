@@ -8,7 +8,7 @@
 </div>
   <div id="page_body">
     <?php if($page->description): ?>
-      <?php echo do_filters('page_body',$page->description) ?>
+      <?php echo do_filters('page_description',$page->description) ?>
     <?php else: ?>
       <p class="notice">double click to add a description</p>
     <?php endif ?>
