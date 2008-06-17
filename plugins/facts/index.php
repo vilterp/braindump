@@ -5,9 +5,9 @@
     <?php foreach ($facts as $fact): ?>
       <li>
         <?php // FIXME: urg too much code... ?>
-        <?php echo pagelink(page::name_from_id($fact['object_id'])) ?> is the 
-        <?php echo pagelink(page::name_from_id($fact['predicate_id'])) ?> of 
-        <?php echo pagelink(page::name_from_id($fact['subject_id'])) ?>
+        <?php echo page_link(page::name_from_id($fact['object_id'])) ?> is the 
+        <?php echo page_link(page::name_from_id($fact['predicate_id'])) ?> of 
+        <?php echo page_link(page::name_from_id($fact['subject_id'])) ?>
       </li>
     <?php endforeach ?>
   </ul>

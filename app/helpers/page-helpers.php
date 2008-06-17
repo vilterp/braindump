@@ -6,7 +6,7 @@ function print_metadata($input,$withlinks=false) {
         if(is_array($object)) {
           echo "$predicate: ".linked_page_list($object)."<br />";
         } else {
-          echo "$predicate: ".pagelink($object)."<br />";
+          echo "$predicate: ".page_link($object)."<br />";
         }
       } else {
         if(is_array($object)) {
@@ -24,7 +24,7 @@ function print_backlinks($input) {
       if(is_array($subject)) {
         echo "$predicate of ".linked_page_list($subject)."<br />";
       } else {
-        echo "$predicate of ".pagelink($subject)."<br />";
+        echo "$predicate of ".page_link($subject)."<br />";
       }
     }
   }
@@ -49,14 +49,14 @@ function save_metadata($name,$input) {
 function linked_page_list($pages) {
   $links = array();
   foreach($pages as $page) {
-    $links[] = pagelink($page);
+    $links[] = page_link($page);
   }
   return array_to_english($links);
 }
-function pagelink($name) {
+function page_link($name) {
   return getLink($name,"show/$name");
 }
-function pageurl($name) {
+function page_url($name) {
   return getURL("show/$name");
 }
 ?>

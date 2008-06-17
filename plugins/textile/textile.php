@@ -6,5 +6,5 @@ function textilize($text) {
   return $textile->TextileThis($text);
 }
 
-add_hook('page_description','textilize');
+add_filter('page_description','textilize');
 ?>

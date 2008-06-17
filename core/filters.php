@@ -2,9 +2,11 @@
 $GLOBALS['filters'] = array();
 // ugh comes_after is a mess... don't use this too much though
 function do_filters($filter_point,$text) {
+  $output = $text;
   foreach($GLOBALS['filters'] as $filter)
     if($filter['filter_point'] == $filter_point)
-      return call_user_func($filter['function_name'],$text);
+      $output = call_user_func($filter['function_name'],$output);
+  return $output;
 }
 function add_filter($filter_point,$function_name) {
   if(is_string($filter_point)) {

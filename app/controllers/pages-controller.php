@@ -15,14 +15,10 @@ class pages_controller {
     global $runtime;
     isset($runtime['sub_special_page']) ?
       $special_page = $runtime['sub_special_page'] : 
-      $special_page = 'index.php';
+      $special_page = 'index';
     $runtime['view'] = PATH_TO_PLUGINS."$runtime[ident]/$special_page.php";
     $info = get_plugin_info($runtime['ident']);
     if($info['pages'][$special_page]['layout'] === false) no_layout();
-  }
-  function dump() {
-    global $runtime;
-    $runtime['format'] = 'dump'; // meh...
   }
   
   // for AJAX in place edit

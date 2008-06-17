@@ -10,7 +10,7 @@
   <?php if ($pages): ?>
     <ul>
       <?php foreach ($pages as $page): ?>
-        <li><?php echo pagelink($page) ?></li>
+        <li><?php echo page_link($page) ?></li>
       <?php endforeach ?>
     </ul>
   <?php elseif(!empty($_GET['criteria'])): ?>

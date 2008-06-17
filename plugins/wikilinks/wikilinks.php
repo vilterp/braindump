@@ -8,7 +8,7 @@ function parse_wiki_links($input) { // I need to learn regular expressions...
     $split2 = explode("[[",$segment);
     $final .= $split2[0];
     $page_name = $split2[1];
-    $final .= pagelink($page_name);
+    $final .= page_link($page_name);
   }
   $final .= $split[count($split)-1];
   return $final;
