@@ -3,12 +3,13 @@
 function getLink($text,$url='',$options=NULL) {
   return "<a href='".getURL($url)."'".html_options($options).">$text</a>";
 }
-function getURL($url) {
+function getURL($url,$format=NULL) {
   if($GLOBALS['config']['clean_urls']) {
-    return baseURL().$url;
+    $final = baseURL().$url;
   } else {
-    return baseURL()."index.php/".$url;
+    $final = baseURL()."index.php/".$url;
   }
+  if($format) return $final."?format=$format"; else return $final;
 }
 function baseURL() {
   return $GLOBALS['config']['base_url'];

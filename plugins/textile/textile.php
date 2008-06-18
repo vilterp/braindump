@@ -1,5 +1,5 @@
 <?php
-include 'lib/textile.php';
+include 'lib/Textile.php';
 
 function textilize($text) {
   $textile = new Textile();

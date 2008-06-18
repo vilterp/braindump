@@ -56,7 +56,7 @@ function linked_page_list($pages) {
 function page_link($name) {
   return getLink($name,"show/$name");
 }
-function page_url($name) {
-  return getURL("show/$name");
+function page_url($name,$format=NULL) {
+  return getURL("show/$name",$format);
 }
 ?>
