@@ -21,15 +21,10 @@ foreach(dir_contents(PATH_TO_VIEWS) as $format)
 $runtime['view'] = PATH_TO_VIEWS."$runtime[format]/$runtime[controller]/$runtime[action].php";
 $runtime['layout'] = PATH_TO_VIEWS."$runtime[format]/layout.php";
 
-// load, initialize the main class (if it's there and it's not a crazy url)
-$controller_path = PATH_TO_CONTROLLERS."$runtime[controller]-controller.php";
-if(file_exists($controller_path)) {
-  include $controller_path;
-  eval("\$main_controller = new $runtime[controller]"."_controller();");
-  eval("\$main_controller -> $runtime[action]();");
-} else {
-  $runtime['notfound'] = true;
-}
+// load, initialize the main class
+include PATH_TO_CONTROLLERS."$runtime[controller]-controller.php";
+eval("\$main_controller = new $runtime[controller]"."_controller();");
+eval("\$main_controller -> $runtime[action]();");
 
 // get the show on the road
 if($runtime['layout']) include $runtime['layout']; else include $runtime['view'];

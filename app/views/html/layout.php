@@ -17,7 +17,7 @@
     <table id="content" width="100%">
       <tr>
         <td colspan="2" id="header">
-          <h1><?php echo getLink('Braindump').'/'.implode('/',get_app_path()) ?></h1>
+          <h1><?php echo get_link('Braindump').'/'.implode('/',get_app_path()) ?></h1>
         </td>
       </tr>
       <tr id="content">

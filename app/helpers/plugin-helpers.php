@@ -15,6 +15,6 @@ function get_special_pages() {
   return $special_pages;
 }
 function special_page_link($special_page) {
-  return getLink(ucwords($special_page),"special/$special_page");
+  return get_link(ucwords($special_page),"special/$special_page");
 }
 ?>

@@ -3,7 +3,7 @@
 function insert_dump_link() {
   global $pages;
   if($pages)
-    echo getLink('dump this list &raquo;',"?format=dump&criteria=$_GET[criteria]",array('class'=>'control'))."\n";
+    echo get_link('dump this list &raquo;',"?format=dump&criteria=$_GET[criteria]",array('class'=>'control'))."\n";
 }
 
 add_hook('after_main_content','insert_dump_link');

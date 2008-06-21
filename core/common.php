@@ -1,6 +1,8 @@
 <?php
 define('BD_VERSION','0.2');
 
+// FIXME: are all these constants necessary...?
+
 // app paths
 define('PATH_TO_CONFIG','app/config.php');
 define('PATH_TO_ROUTES','app/routes.php');

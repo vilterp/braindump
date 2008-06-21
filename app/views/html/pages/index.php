@@ -1,4 +1,3 @@
-<?php // FIXME: probably shouldn't be using <small> so much... ?>
 <?php if (!$pages && empty($_GET['criteria'])): ?>
   <p class="notice">
     No pages. Make one by typing its name into the box on the right &raquo;

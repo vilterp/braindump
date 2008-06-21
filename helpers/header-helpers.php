@@ -1,6 +1,6 @@
 <?php
 function redirect($url) {
-  header('Location: '.getURL($url));
+  header('Location: '.get_url($url));
 }
 function mime_type($content_type) {
   header("Content-type: $content_type");

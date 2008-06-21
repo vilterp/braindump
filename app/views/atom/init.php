@@ -2,7 +2,7 @@
 function insert_atom_link() {
   global $runtime;
   if($runtime['action'] == 'index') {
-    echo '<link rel="alternate" type="application/atom+xml" href="'.getURL("?format=atom&amp;criteria=$_GET[criteria]").'"/>'."\n";
+    echo '<link rel="alternate" type="application/atom+xml" href="'.get_url("?format=atom&amp;criteria=$_GET[criteria]").'"/>'."\n";
   }
 }
 
