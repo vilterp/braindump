@@ -1,5 +1,5 @@
 <form method="get" action="<?php echo get_url('redirect') ?>">
-  <input id="goto_box" type="text" value="goto">
+  <input id="goto_box" type="text" value="goto" name="name">
 </form>
 
 <ul id="special_pages">

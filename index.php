@@ -27,7 +27,11 @@ eval("\$main_controller = new $runtime[controller]"."_controller();");
 eval("\$main_controller -> $runtime[action]();");
 
 // get the show on the road
-if($runtime['layout']) include $runtime['layout']; else include $runtime['view'];
+if($runtime['layout']) {
+  include $runtime['layout']; 
+} else {
+  include $runtime['view'];
+}
 
 // finish up
 do_hooks('absolute_end');
