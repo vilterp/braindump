@@ -5,9 +5,14 @@
 // FIXME: really need to cache id's. very inefficient right now.
 class page {
   
+  public $name;
+  public $metadata;
+  public $description;
+  public $backlinks;
+  
   //static $id_cache = array();
   
-  function __construct($name=NULL) {
+  function __construct($name=NULL) { // FIXME: is this page class useful?
     // FIXME: this runs id_from_name several times - inefficient
     if(!is_null($name)) {
       $this->name = $name;

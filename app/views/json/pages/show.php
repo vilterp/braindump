@@ -1,1 +1,4 @@
-<?php unset($page->name); echo json_encode($page) ?>
+<?php 
+unset($page->name);
+echo json_encode($page);
+?>

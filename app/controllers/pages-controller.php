@@ -7,6 +7,25 @@ class pages_controller {
     pass_var('pages',BQL::_list($_GET['criteria']));
     pass_var('show_box',(!empty($_GET['criteria'])));
   }
+  function dump() { // like index, but full page data passed
+    global $config;
+    $metadata = array(
+      'criteria' => $_GET['criteria'],
+      'time' => date('c'), # ISO 8601
+      'site_url' => $config['base_url'],
+      'dump_schema' => 0.1
+    );
+    pass_var('metadata',$metadata);
+    
+    $pages = array();
+    foreach(BQL::_list($_GET['criteria']) as $page) {
+      $pages[$page] = array(
+        'metadata' => BQL::get($page),
+        'description' => BQL::describe($page)
+      );
+    }
+    pass_var('pages',$pages);
+  }
   function show() {
     global $runtime;
     pass_var('page',new Page($runtime['ident']));
