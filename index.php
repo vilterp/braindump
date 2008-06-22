@@ -12,10 +12,10 @@ if(is_null($runtime['format'])) $runtime['format'] = $defaults['format'];
 if(empty($runtime['controller'])) $runtime['controller'] = $defaults['controller'];
 if(empty($runtime['action'])) $runtime['action'] = 'index';
 
-// check for hooks in init.php of each format
+// check for hooks in hooks.php of each format
 foreach(dir_contents(PATH_TO_VIEWS) as $format)
-  if(file_exists(PATH_TO_VIEWS."/$format/init.php"))
-    include PATH_TO_VIEWS."$format/init.php";
+  if(file_exists(PATH_TO_VIEWS."/$format/hooks.php"))
+    include PATH_TO_VIEWS."$format/hooks.php";
 
 // this will be included from layout.php
 $runtime['view'] = PATH_TO_VIEWS."$runtime[format]/$runtime[controller]/$runtime[action].php";

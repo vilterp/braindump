@@ -24,13 +24,16 @@ function debug_dump($var) {
 }
 function write_to_log($message) {
   // TODO: print stack trace when something goes wrong
-  $log = fopen(PATH_TO_LOG,'a');
-  if(is_string($message)) {
-    fwrite($log,$message."\n");
-  } else {
-    fwrite($log,json_encode($message)."\n"); // just a good way to serialize objects
+  global $config;
+  if($config['keep_log']) {
+    $log = fopen(PATH_TO_LOG,'a');
+    if(is_string($message)) {
+      fwrite($log,$message."\n");
+    } else {
+      fwrite($log,json_encode($message)."\n"); // just a good way to serialize objects
+    }
+    fclose($log);
   }
-  fclose($log);
 }
 function add_trailing_slash($path) {
   if(!strripos($path,'/')+1 == strlen($path)) { // if it doesn't have one
