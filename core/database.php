@@ -1,9 +1,8 @@
 <?php
-// FIXME: use ternary (?) operator for return values
 // FIXME: split query generation code into another file?
 class Database {  
   
-  protected $handle;
+  public $handle;
   
   function __construct($connection_info) {
     // connect

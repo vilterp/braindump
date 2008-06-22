@@ -19,11 +19,9 @@ class page {
   
   // helpers
   function exists($page_name) {
-    write_to_log("page.php: exists($page_name)");
     return page::id_from_name($page_name); // returns false if doesn't exist, id otherwise
   }
   function create_if_doesnt_exist($page_name) {
-    write_to_log("page.php: create_if_doesnt_exist($page_name)");
     if($id = self::exists($page_name)) {
       return $id;
     } else {
@@ -41,9 +39,9 @@ class page {
     return $result;
   }
   function id_from_name($name) {
-    write_to_log("page.php: id_from_name($name)");
     if(in_array($name,self::$id_cache)) return array_search($name,self::$id_cache);
-    $result = (int) $GLOBALS['db']->query("SELECT id FROM pages WHERE name LIKE '$name'")->fetchColumn();
+    global $db;
+    $result = (int) $db->query("SELECT id FROM pages WHERE name LIKE ".$db->handle->quote($name))->fetchColumn();
     if($result == 0) {
       return false;
     } else {

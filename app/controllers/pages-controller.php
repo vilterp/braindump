@@ -3,7 +3,8 @@ class pages_controller {
   
   // main views
   
-  function index() {
+  function index() { // FIXME: should be 'list'?
+    // TODO: make sure this isn't cached (in any format)
     pass_var('pages',BQL::_list($_GET['criteria']));
     pass_var('show_box',(!empty($_GET['criteria'])));
   }

@@ -90,7 +90,6 @@ class BQL {
     }
   }
   function set($subject,$predicate,$object) {
-    write_to_log("BQL: setting $predicate of $subject to $object");
     if(is_plural($predicate)) { // set colors of the rainbow to red, orange, ...
       foreach($object as $item)
         triple::set($subject,singularize($predicate),$item,true);
