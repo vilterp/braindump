@@ -32,12 +32,18 @@ class pages_controller {
   }
   function special() {
     global $runtime;
+    
     isset($runtime['sub_special_page']) ?
       $special_page = $runtime['sub_special_page'] : 
       $special_page = 'index';
-    $runtime['view'] = PATH_TO_PLUGINS."$runtime[ident]/$special_page.php";
-    $info = get_plugin_info($runtime['ident']);
-    if($info['pages'][$special_page]['layout'] === false) no_layout();
+      
+    $base_path = PATH_TO_PLUGINS."$runtime[ident]";
+    if(file_exists("$base_path/$special_page.php")) {
+      $runtime['view'] = "$base_path/$special_page.php";
+    } elseif(file_exists("$base_path/_$special_page.php")) {
+      $runtime['view'] = "$base_path/_$special_page.php";
+      no_layout(); // no layout if underscore in front of filename
+    }
   }
   
   // for AJAX in place edit

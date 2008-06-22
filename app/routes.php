@@ -5,7 +5,7 @@ $runtime['ident'] = $runtime['url'][1];
 // maps to /action/ident (controller is always pages)
 
 if($runtime['action'] == 'special' && count($runtime['url']) == 3) { // for sub-special pages
-  // special/plugin/[sub_special_page]
+  // special/[plugin]/[sub_special_page]
   $runtime['sub_special_page'] = $runtime['url'][2];
 }
 

@@ -1,5 +1,0 @@
-description: allow braindump to be accessed through Firefox's search bar with the Opensearch standard.
-
-pages:
-  description:
-    layout: false
