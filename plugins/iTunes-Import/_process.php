@@ -1,9 +1,7 @@
 <?php
 include 'lib/plist.php';
 
-$doc = Plist::parse('plugins/iTunes-Import/sample.xml');
-
-$start = microtime();
+$doc = Plist::parse($_FILES['file']['tmp_name']);
 
 $track_names = array(); // needed cuz playlists refer to tracks by id numbers
 foreach($doc['Tracks'] as $track) {
@@ -31,9 +29,5 @@ foreach($doc['Playlists'] as $playlist) {
   BQL::set($playlist['Name'],'members',$members);
 }
 
-$end = microtime();
-
-echo $end-$start;
-
-//redirect('');
+redirect('');
 ?>
