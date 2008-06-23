@@ -108,4 +108,8 @@ function array_to_english($array) {
   $final .= ' and '.$array[count($array)-1];
   return $final;
 }
+function print_or_list($items,$return=false) {
+  is_array($items) ? $final = array_to_english($items) : $final = $items;
+  if($return) return $final; else echo $final;
+}
 ?>

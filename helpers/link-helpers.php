@@ -5,16 +5,13 @@ function get_link($text,$url='',$options=NULL) {
 }
 function get_url($url,$format=NULL) {
   if($GLOBALS['config']['clean_urls']) {
-    $final = baseURL().$url;
+    $final = base_url().$url;
   } else {
-    $final = baseURL()."index.php/".$url;
+    $final = base_url()."index.php/".$url;
   }
   if($format) return $final."?format=$format"; else return $final;
 }
-function baseURL() {
+function base_url() {
   return $GLOBALS['config']['base_url'];
-}
-function ipLink($ip,$options=NULL) {
-  return "<a href='http://ws.arin.net/cgi-bin/whois.pl?queryinput=$ip'".html_options($options).">$ip</a>";
 }
 ?>

@@ -1,3 +1,4 @@
+// TODO: dynamic javascript.php a la Chyrp - plugins can add js to document.ready hook
 $(document).ready(function(){
     // focus criteria input if visible
     if($('#criteria_form').css('display') != 'none') {

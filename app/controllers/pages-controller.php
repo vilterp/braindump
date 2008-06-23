@@ -6,7 +6,7 @@ class pages_controller {
   function index() { // FIXME: should be 'list'?
     // TODO: make sure this isn't cached (in any format)
     pass_var('pages',BQL::_list($_GET['criteria']));
-    pass_var('show_box',(!empty($_GET['criteria'])));
+    pass_var('no_criteria',empty($_GET['criteria']));
   }
   function dump() { // like index, but full page data passed
     global $config;
@@ -38,13 +38,15 @@ class pages_controller {
       $special_page = $runtime['sub_special_page'] : 
       $special_page = 'index';
       
-    $base_path = PATH_TO_PLUGINS.hyphenate($runtime['ident']);
+    $base_path = PATH_TO_PLUGINS.$runtime['ident'];
     if(file_exists("$base_path/$special_page.php")) {
       $runtime['view'] = "$base_path/$special_page.php";
     } elseif(file_exists("$base_path/_$special_page.php")) {
       $runtime['view'] = "$base_path/_$special_page.php";
       no_layout(); // no layout if underscore in front of filename
     }
+    
+    $runtime['ident'] = unhyphenate($runtime['ident']);
   }
   
   // for AJAX in place edit
