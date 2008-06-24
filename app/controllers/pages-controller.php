@@ -35,18 +35,16 @@ class pages_controller {
     global $runtime;
     
     isset($runtime['sub_special_page']) ?
-      $special_page = $runtime['sub_special_page'] : 
+      $special_page = unhyphenate($runtime['sub_special_page']) : 
       $special_page = 'index';
       
-    $base_path = PATH_TO_PLUGINS.$runtime['ident'];
+    $base_path = PATH_TO_PLUGINS.hyphenate($runtime['ident']);
     if(file_exists("$base_path/$special_page.php")) {
       $runtime['view'] = "$base_path/$special_page.php";
     } elseif(file_exists("$base_path/_$special_page.php")) {
       $runtime['view'] = "$base_path/_$special_page.php";
       no_layout(); // no layout if underscore in front of filename
     }
-    
-    $runtime['ident'] = unhyphenate($runtime['ident']);
   }
   
   // for AJAX in place edit

@@ -15,7 +15,7 @@ function get_special_pages() {
   $special_pages = array();
   foreach(dir_contents(PATH_TO_PLUGINS) as $plugin) {
     if(file_exists(PATH_TO_PLUGINS."$plugin/index.php")) {
-      $special_pages[unhyphenate($plugin)] = $plugin;
+      $special_pages[] = unhyphenate($plugin);
     }
   }
   return $special_pages;

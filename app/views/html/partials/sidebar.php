@@ -3,7 +3,7 @@
 </form>
 
 <ul id="special_pages">
-  <?php foreach(get_special_pages() as $special_page=>$clean): ?>
-    <li class="special_page"><?php echo special_page_link(ucwords($special_page),$clean) ?></li>
+  <?php foreach(get_special_pages() as $page): ?>
+    <li class="special_page"><?php echo get_link($page,'special/'.hyphenate($page)) ?></li>
   <?php endforeach ?>
 </ul>
