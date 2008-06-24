@@ -334,14 +334,14 @@ EOD;
             $args = $args[0];
         }
         // Are we dealing with a function or a method?
-        if (substr($method, 0, 5) == 'this:') {
+        $split = explode('::',$method);
+        if (count($split) == 2) {
             // It's a class method - check it exists
-            $method = substr($method, 5);
-            if (!method_exists($this, $method)) {
+            if (!method_exists($split[0], $split[1])) {
                 return new IXR_Error(-32601, 'server error. requested class method "'.$method.'" does not exist.');
             }
             // Call the method
-            $result = $this->$method($args);
+            $result = call_user_func_array($split,$args);
         } else {
             // It's a function - does it exist?
             if (!function_exists($method)) {

@@ -1,7 +1,7 @@
 <?php  
 $pages = array();
-foreach(BQL::_list($_GET['criteria']) as $page) {
-  $pages[$page] = BQL::get($page);
+foreach(Graph::_list($_GET['criteria']) as $page) {
+  $pages[$page] = Graph::get($page);
 }
 
 $attributes = array();

@@ -40,10 +40,10 @@ function parse_metadata($input) {
   return $pairs;
 }
 function save_metadata($name,$input) {
-  BQL::_unset($name);
+  Graph::_unset($name);
   foreach($input as $key=>$value) {
     if(is_plural($key)) $value = english_to_array($value); // multiple values
-    BQL::set($name,$key,$value);
+    Graph::set($name,$key,$value);
   }
 }
 function linked_page_list($pages) {

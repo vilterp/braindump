@@ -5,7 +5,7 @@ class pages_controller {
   
   function index() { // FIXME: should be 'list'?
     // TODO: make sure this isn't cached (in any format)
-    pass_var('pages',BQL::_list($_GET['criteria']));
+    pass_var('pages',Graph::_list($_GET['criteria']));
     pass_var('no_criteria',empty($_GET['criteria']));
   }
   function dump() { // like index, but full page data passed
@@ -19,10 +19,10 @@ class pages_controller {
     pass_var('metadata',$metadata);
     
     $pages = array();
-    foreach(BQL::_list($_GET['criteria']) as $page) {
+    foreach(Graph::_list($_GET['criteria']) as $page) {
       $pages[$page] = array(
-        'metadata' => BQL::get($page),
-        'description' => BQL::describe($page)
+        'metadata' => Graph::get($page),
+        'description' => Graph::describe($page)
       );
     }
     pass_var('pages',$pages);
@@ -54,30 +54,30 @@ class pages_controller {
   function just_description() {
     no_layout();
     global $runtime;
-    echo BQL::describe($runtime['ident']);
+    echo Graph::describe($runtime['ident']);
   }
   function save_description() {
     no_layout();
     global $runtime;
     // FIXME: it shouldn't use $_POST['value'] - something more specific
-    BQL::describe($runtime['ident'],$_POST['value']);
+    Graph::describe($runtime['ident'],$_POST['value']);
     echo do_filters('page_description',$_POST['value']);
   }
   function just_meta() { // loaded into edit box
     no_layout();
     global $runtime;
-    print_metadata(BQL::get($runtime['ident']));
+    print_metadata(Graph::get($runtime['ident']));
   }
   // FIXME: is it necessary to re-get the page here?
   function save_metadata() {
     no_layout();
     global $runtime;
     save_metadata($runtime['ident'],parse_metadata($_POST['value']));
-    print_metadata(BQL::get($runtime['ident']),true);
+    print_metadata(Graph::get($runtime['ident']),true);
   }
   
   function delete() {
-    BQL::_unset($runtime['ident']);
+    Graph::_unset($runtime['ident']);
     redirect('');
   }
   // delete the entire db. useful sometimes.

@@ -1,6 +1,6 @@
 <?php
 // FIXME: error reporting on parse errors instead of putting in the wrong thing or doing nothing...
-class BQL {
+class Graph {
   function query($query) {
     if($GLOBALS['config']['keep_log']) write_to_log($query);
     $querysplit = explode(' ',$query);
@@ -68,7 +68,7 @@ class BQL {
           }
         }
         return $answers;
-      }
+      } else return false;
     } else { // get . of .
       if(is_singular($predicate)) { // eg. get color of apple
         $result = $db->select_column('triples','object_id',array(

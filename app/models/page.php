@@ -11,9 +11,9 @@ class page {
   function __construct($name=NULL) { // FIXME: is this page class useful?
     if(!is_null($name)) {
       $this->name = $name;
-      $this->metadata = BQL::get($name);
-      $this->description = BQL::describe($name);
-      $this->backlinks = BQL::backlinks($name);
+      $this->metadata = Graph::get($name);
+      $this->description = Graph::describe($name);
+      $this->backlinks = Graph::backlinks($name);
     }
   }
   
