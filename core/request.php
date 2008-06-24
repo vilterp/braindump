@@ -2,7 +2,7 @@
 
 // get the juicy part of the url
 // ex: /index.php/class/function/id/ => array('class','function','id')
-function parse_request($input_url,$strip_extensions=true) {
+function parse_request($input_url) {
   global $format, $config;
   $url = array();
   $start = split("\?",$input_url);
@@ -16,13 +16,7 @@ function parse_request($input_url,$strip_extensions=true) {
     $urlsplit2 = split("/",$urlsplit[1]);
     foreach($urlsplit2 as $item) {
       if(!empty($item) || $item == "0") {
-        $text = urldecode($item);
-        if($strip_extensions) {
-          $dot_split = explode('.',$text);
-          array_push($url,$dot_split[0]); 
-        } else {
-          array_push($url,$item);
-        }
+        array_push($url,urldecode($item));
       }
     }
   } else { // root of app

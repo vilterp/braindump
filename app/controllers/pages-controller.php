@@ -89,7 +89,7 @@ class pages_controller {
   }
   
   function redirect() { // for the goto box
-    redirect("show/$_GET[name]");
+    redirect("show/".urlencode($_GET['name']));
   }
 }
 ?>
