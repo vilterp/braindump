@@ -30,7 +30,7 @@ eval("\$main_controller -> $runtime[action]();");
 if($runtime['layout']) {
   include $runtime['layout']; 
 } else {
-  include $runtime['view'];
+  if(file_exists($runtime['view'])) include $runtime['view'];
 }
 
 // finish up

@@ -6,8 +6,10 @@ foreach(BQL::_list($_GET['criteria']) as $page) {
 
 $attributes = array();
 foreach($pages as $page) {
-  foreach($page as $attr=>$value) {
-    if(!in_array($attr,$attributes)) $attributes[] = $attr;
+  if($page) {
+    foreach($page as $attr=>$value) {
+      if(!in_array($attr,$attributes)) $attributes[] = $attr;
+    }
   }
 }
 
@@ -23,7 +25,7 @@ $(document).ready(function(){
 <form method='get' action=''>
   criteria: 
   <input type="text" name="criteria" value="<?php echo $_GET['criteria'] ?>"/>
-  <input type="submit" value="Update &raquo;"/>
+  <input type="submit" value="Update"/>
 </form>
 <table class="tablesorter">
   <thead>
