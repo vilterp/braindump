@@ -54,9 +54,9 @@ function linked_page_list($pages) {
   return array_to_english($links);
 }
 function page_link($name) {
-  return get_link($name,"show/$name");
+  return get_link($name,'show/'.urlencode($name));
 }
 function page_url($name,$format=NULL) {
-  return get_url("show/$name",$format);
+  return get_url('show/'.urlencode($name),$format);
 }
 ?>

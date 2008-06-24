@@ -166,6 +166,7 @@ class BQL {
   function describe($name,$description=NULL) {
     global $db;
     if(is_null($description)) { // describe .
+      write_to_log('describing '.$name);
       $result = $db->select_one('pages','description',array('name'=>$name));
       if($result) {
         return $result;
