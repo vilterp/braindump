@@ -9,6 +9,8 @@ from page import Page
 
 # will set_description() have to create the page if it doesn't exist?
 
+# id caching
+
 class Graph:
   
   def __init__(self, database_path):
@@ -47,14 +49,20 @@ class Graph:
   def id_from_name(self, name, create_if_nonexistent=False):
     result = self.cursor.execute('SELECT id FROM pages WHERE name = ?',(name,)).fetchone()
     if not result:
-      if create_if_nonexistent: return self.create_page(name)
-      else: return None
-    else: return result[0]
+      if create_if_nonexistent:
+        return self.create_page(name)
+      else:
+        raise NonexistentPageError(name)
+        return None
+    else:
+      return result[0]
   
   def name_from_id(self, id):
     result = self.cursor.execute('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
-    if not result: return None
-    else: return result[0]
+    if not result:
+      raise NonexistentPageError
+    else:
+      return result[0]
   
   def create_page(self, name):
     self.cursor.execute('INSERT INTO pages (name) VALUES (?)',(name,))
@@ -65,30 +73,29 @@ class Graph:
     result = self.cursor.execute("""SELECT * FROM triples WHERE
                                     subject_id = ? AND predicate_id = ? AND object_id = ?""",
                                               (subject_id,predicate_id,object_id)).fetchone()
-    if result is None: return False
-    else: return True
+    if result is None:
+      return False
+    else:
+      return True
   
   def list(self, criteria=None):
     result = self.cursor.execute('SELECT name FROM pages').fetchall()
     pages = []
     for page in result:
-      pages.append(Page(page[0]))
+      pages.append(Page(self,page[0]))
     return pages
   
   def get(self, page, attribute=None):
     if attribute is None: # return dict with all attributes
       page_id = self.id_from_name(page)
       result = self.cursor.execute("""SELECT predicate_id, object_id FROM triples WHERE
-                                      subject_id = ?""",(page_id,)).fetchall()                    
-      if not result:
-        return None
-      else:
-        page = {}
-        for row in result:
-          pred = self.name_from_id(row[0])
-          obj = self.name_from_id(row[1])
-          page[pred] = set_or_append(page.get(pred,None),obj) # group plurals here
-        return pluralize_key_if_value_is_list(page)
+                                      subject_id = ?""",(page_id,)).fetchall()
+      page = {}
+      for row in result:
+        pred = self.name_from_id(row[0])
+        obj = self.name_from_id(row[1])
+        page[pred] = set_or_append(page.get(pred,None),obj) # group plurals here
+      return pluralize_key_if_value_is_list(page)
       
     else: # return single string attribute
       if is_plural(attribute): attribute = singularize(attribute)
@@ -116,7 +123,7 @@ class Graph:
       predicate_id = self.id_from_name(predicate,True)
       object_id = self.id_from_name(objekt,True)
       
-      if allow_multiple_values:
+      if allow_multiple_values: # e.g. languages: [php, python]
         # delete any existing value(s)
         self.cursor.execute("""DELETE FROM triples WHERE 
                                subject_id = ? AND predicate_id = ?""",
@@ -167,11 +174,14 @@ class Graph:
     if description is None: # get description
       result = self.cursor.execute('SELECT description FROM pages WHERE name = ?',
                                                                             (page,)).fetchone()
-      if result: return result[0]
-      else: return None # or empty string?
+      if result:
+        return result[0]
+      else:
+        return '' # return None?
     else: # set description
-      self.cursor.execute("""UPDATE pages SET description = ? WHERE name = ?""",
-                                                                (description,page))
+      page_id = self.id_from_name(page,True) # just so page will be created if nonexistent
+      self.cursor.execute("""UPDATE pages SET description = ? WHERE id = ?""",
+                                                                (description,page_id))
       self.connection.commit()
-      return True # return description? return nothing?
+      return True
   
