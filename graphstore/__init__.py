@@ -5,6 +5,7 @@ from page import Page
 class Graph:
   
   def __init__(self, database_path):
+    self.database_path = database_path
     self.connection = sqlite3.connect(database_path)
     self.cursor = self.connection.cursor()
     self.connection.create_function('id_from_name',1,self.id_from_name)
@@ -13,9 +14,13 @@ class Graph:
   def __getitem__(self, index):
     return Page(self,index)
   
-  def __setattr__(self, index, value):
+  def __setitem__(self, index, value):
+    print index, value
     for attr in value.keys():
       self.set(index,attr,value[attr])
+  
+  def __repr__(self):
+    return "<Graph source: %s>" % self.database_path
   
   def create_schema(self):
     # pages
@@ -46,6 +51,13 @@ class Graph:
     self.cursor.execute('INSERT INTO pages (name) VALUES (?)',(name,))
     self.connection.commit()
     return self.id_from_name(name) # wish it wasn't necessary to query again...
+  
+  def triple_exists(self, subject_id, predicate_id, object_id):
+    result = self.cursor.execute("""SELECT * FROM triples WHERE
+                                    subject_id = ? AND predicate_id = ? AND object_id = ?""",
+                                                           (subject_id,predicate_id,object_id)).fetchone()
+    if result is None: return False
+    else: return True
   
   def list(self, criteria=None):
     result = self.cursor.execute('SELECT name FROM pages').fetchall()
@@ -100,14 +112,23 @@ class Graph:
       object_id = self.id_from_name(objekt,True)
       
       if allow_multiple_values:
-        # FIXME: this misses existing values
+        # delete any existing value(s)
+        self.cursor.execute("""DELETE FROM triples WHERE 
+                               subject_id = ? AND predicate_id = ?""",
+                                              (subject_id,predicate_id))
+        self.cursor.commit()
+        # set new values
         self.cursor.execute('INSERT INTO triples VALUES (?, ?, ?)',
                                                     (subject_id,predicate_id,object_id))
         self.connection.commit()
       else:
-        self.cursor.execute("""UPDATE triples SET object_id = ? WHERE
-                               subject_id = ? AND predicate_id = ?""",
-                                    (object_id,subject_id,predicate_id))
+        if self.triple_exists(subject_id,predicate_id,object_id):
+          self.cursor.execute("""UPDATE triples SET object_id = ? WHERE
+                                 subject_id = ? AND predicate_id = ?""",
+                                      (object_id,subject_id,predicate_id))
+        else:
+          self.cursor.execute('INSERT INTO triples VALUES (?, ?, ?)',
+                                   (subject_id,predicate_id,object_id))
         self.connection.commit()
     return True
   
