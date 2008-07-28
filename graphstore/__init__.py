@@ -2,7 +2,7 @@ import sqlite3, re
 from util import *
 from page import Page
 
-# TODO: firm up NonexistentPageError vs. None
+# TODO: firm up NonexistentPageError vs. None...
 
 # should describe() check if page exists or just go ahead and UPDATE?
 
@@ -16,19 +16,27 @@ class Graph:
     self.database_path = database_path
     self.connection = sqlite3.connect(database_path)
     self.cursor = self.connection.cursor()
-    self.connection.create_function('id_from_name',1,self.id_from_name)
-    self.connection.create_function('name_from_id',1,self.name_from_id)
-  
-  def __getitem__(self, index):
-    return Page(self,index)
-  
-  def __setitem__(self, index, value):
-    for attr in value.keys():
-      self.set(index,attr,value[attr])
-    return True
   
   def __repr__(self):
     return "<Graph source: %s>" % self.database_path
+  
+  def __getitem__(self, key):
+    return Page(self,key)
+  
+  def __setitem__(self, key, value):
+    for attr in value.keys():
+      self.set(key,attr,value[attr])
+    return True
+  
+  def __delitem__(self, key):
+    self.unset(key)
+    return True
+  
+  def __iter__(self):
+    return self.list().__iter__()
+  
+  def __len__(self):
+    return len(self.list())
   
   def create_schema(self):
     # pages
@@ -93,12 +101,14 @@ class Graph:
       
       # parenthesized arguments?
       # regular expressions?
+      # more sophisticated ordering? (by attributes, SQL style?)
       
       expressions = criteria.split(' or ',1)
       if len(expressions) is 2:
         results1 = self.list(expressions[0])
         results2 = self.list(expressions[1])
         results1.extend(results2)
+        results1.sort()
         return results1
       
       expressions = criteria.split(' and ',1)
@@ -106,7 +116,9 @@ class Graph:
         results1 = set(self.list(expressions[0]))
         results2 = set(self.list(expressions[1]))
         intersection = results1.intersection(results2)
-        return list(intersection)
+        listify = list(intersection)
+        listify.sort()
+        return listify
       
       # match one condition - all queries eventually come down to this
       condition = criteria.split(' is ')
@@ -120,6 +132,7 @@ class Graph:
     pages = []
     for page in result:
       pages.append(page[0])
+    pages.sort()
     return pages
   
   def get(self, page, attribute=None):
