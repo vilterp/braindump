@@ -12,6 +12,13 @@ def is_singular(word):
 def is_plural(word):
   return word == pluralize(word)
 
+def merge(*sequences):
+  merged = {}
+  for sequence in sequences:
+    for item in sequence:
+      merged[item] = 1
+  return merged.keys()
+
 def set_or_append(target, item):
   if target is None:
     return item

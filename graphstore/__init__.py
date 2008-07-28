@@ -1,15 +1,17 @@
-import sqlite3
+import sqlite3, re
 from util import *
 from page import Page
 
-# todo: improve behavior when things are nonexistent
-## when a page exists but has no attributes, return empty dict
+# to test: correct behavior when pages are nonexistent?
 ## when a page doesn't exist, return some type of error?
 ## either way, distinguish between nonexistent page and empty page
+## but errors are annoying
 
 # will set_description() have to create the page if it doesn't exist?
 
 # id caching
+
+# case insensitivity
 
 class Graph:
   
@@ -24,9 +26,9 @@ class Graph:
     return Page(self,index)
   
   def __setitem__(self, index, value):
-    print index, value
     for attr in value.keys():
       self.set(index,attr,value[attr])
+    return True
   
   def __repr__(self):
     return "<Graph source: %s>" % self.database_path
@@ -79,10 +81,39 @@ class Graph:
       return True
   
   def list(self, criteria=None):
-    result = self.cursor.execute('SELECT name FROM pages').fetchall()
+    if criteria is None:
+      result = self.cursor.execute('SELECT name FROM pages').fetchall()
+    else: # the magic of braindump
+      
+      # parenthesized arguments?
+      # regular expressions?
+      
+      expressions = criteria.split(' or ',1)
+      if len(expressions) is 2:
+        results1 = self.list(expressions[0])
+        results2 = self.list(expressions[1])
+        results1.extend(results2)
+        return results1
+      
+      expressions = criteria.split(' and ',1)
+      if len(expressions) is 2: # match both conditions, return intersection
+        results1 = set(self.list(expressions[0]))
+        results2 = set(self.list(expressions[1]))
+        intersection = results1.intersection(results2)
+        return list(intersection)
+      
+      # match one condition - all queries eventually come down to this
+      condition = criteria.split(' is ')
+      attr_id = self.id_from_name(condition[0])
+      value_id = self.id_from_name(condition[1])
+      result = self.cursor.execute("""SELECT pages.name FROM pages, triples WHERE
+                                      pages.id = triples.subject_id AND
+                                      triples.predicate_id = ? AND
+                                      triples.object_id = ?""",
+                                      (attr_id,value_id)).fetchall()
     pages = []
     for page in result:
-      pages.append(Page(self,page[0]))
+      pages.append(page[0])
     return pages
   
   def get(self, page, attribute=None):

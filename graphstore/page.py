@@ -15,6 +15,9 @@ class Page:
   def __str__(self):
     return self.graph.get(self.name).__str__()
   
+  def __eq__(self, other):
+    return self.name is other.name
+  
   def __getattr__(self, attr):
     if attr is 'description':
       return self.graph.describe(self.name)
