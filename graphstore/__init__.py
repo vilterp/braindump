@@ -1,5 +1,6 @@
 import sqlite3
 from util import *
+from page import Page
 
 class Graph:
   
@@ -9,7 +10,13 @@ class Graph:
     self.connection.create_function('id_from_name',1,self.id_from_name)
     self.connection.create_function('name_from_id',1,self.name_from_id)
   
-  def __get__():
+  def __getitem__(self, index):
+    return Page(self,index)
+  
+  def __setattr__(self, index, value):
+    for attr in value.keys():
+      self.set(index,attr,value[attr])
+  
   def create_schema(self):
     # pages
     self.cursor.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
