@@ -2,18 +2,15 @@ import sqlite3, re
 from util import *
 from page import Page
 
-# to test: correct behavior when pages are nonexistent?
-## when a page doesn't exist, return some type of error?
-## either way, distinguish between nonexistent page and empty page
-## but errors are annoying
+# TODO: firm up NonexistentPageError vs. None
 
-# will set_description() have to create the page if it doesn't exist?
+# should describe() check if page exists or just go ahead and UPDATE?
 
-# id caching
-
-# case insensitivity
+# case insensitive id caching?
 
 class Graph:
+  
+  id_cache = {}
   
   def __init__(self, database_path):
     self.database_path = database_path
@@ -49,22 +46,31 @@ class Graph:
     return True
   
   def id_from_name(self, name, create_if_nonexistent=False):
-    result = self.cursor.execute('SELECT id FROM pages WHERE name = ?',(name,)).fetchone()
-    if not result:
-      if create_if_nonexistent:
-        return self.create_page(name)
-      else:
-        raise NonexistentPageError(name)
-        return None
+    if name in self.id_cache:
+      return self.id_cache[name]
     else:
-      return result[0]
+      result = self.cursor.execute('SELECT id FROM pages WHERE name LIKE ?',(name,)).fetchone()
+      # LIKE: case insensitive
+      if not result:
+        if create_if_nonexistent:
+          return self.create_page(name)
+        else:
+          raise NonexistentPageError(name)
+          return None
+      else:
+        self.id_cache[name] = result[0]
+        return result[0]
   
   def name_from_id(self, id):
-    result = self.cursor.execute('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
-    if not result:
-      raise NonexistentPageError
+    if id in self.id_cache.values():
+      return find_key(self.id_cache,id)
     else:
-      return result[0]
+      result = self.cursor.execute('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
+      if not result:
+        raise NonexistentPageError # this wouldn't ever happen... where would the id # come from..
+      else:
+        self.id_cache[result[0]] = id
+        return result[0]
   
   def create_page(self, name):
     self.cursor.execute('INSERT INTO pages (name) VALUES (?)',(name,))

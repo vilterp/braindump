@@ -12,6 +12,9 @@ def is_singular(word):
 def is_plural(word):
   return word == pluralize(word)
 
+def find_key(dic, val):
+  return [k for k, v in dic.iteritems() if v == val][0]
+
 def merge(*sequences):
   merged = {}
   for sequence in sequences:

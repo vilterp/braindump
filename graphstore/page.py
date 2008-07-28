@@ -47,7 +47,7 @@ class Page:
     if self.graph.get(self.name,key): return True
     else: return False
   
-  def __iter__(self): # this throws error. look at http://docs.python.org/lib/typeiter.html
+  def __iter__(self):
     return self.graph.get(self.name).itervalues()
   
   def keys(self):
