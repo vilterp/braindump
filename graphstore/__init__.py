@@ -2,6 +2,13 @@ import sqlite3
 from util import *
 from page import Page
 
+# todo: improve behavior when things are nonexistent
+## when a page exists but has no attributes, return empty dict
+## when a page doesn't exist, return some type of error?
+## either way, distinguish between nonexistent page and empty page
+
+# will set_description() have to create the page if it doesn't exist?
+
 class Graph:
   
   def __init__(self, database_path):
@@ -34,6 +41,8 @@ class Graph:
                                                  predicat_id numeric,
                                                  object_id numeric)""")
     self.connection.commit()
+    
+    return True
   
   def id_from_name(self, name, create_if_nonexistent=False):
     result = self.cursor.execute('SELECT id FROM pages WHERE name = ?',(name,)).fetchone()
@@ -55,7 +64,7 @@ class Graph:
   def triple_exists(self, subject_id, predicate_id, object_id):
     result = self.cursor.execute("""SELECT * FROM triples WHERE
                                     subject_id = ? AND predicate_id = ? AND object_id = ?""",
-                                                           (subject_id,predicate_id,object_id)).fetchone()
+                                              (subject_id,predicate_id,object_id)).fetchone()
     if result is None: return False
     else: return True
   
@@ -63,7 +72,7 @@ class Graph:
     result = self.cursor.execute('SELECT name FROM pages').fetchall()
     pages = []
     for page in result:
-      pages.append(page[0])
+      pages.append(Page(page[0]))
     return pages
   
   def get(self, page, attribute=None):
@@ -71,19 +80,15 @@ class Graph:
       page_id = self.id_from_name(page)
       result = self.cursor.execute("""SELECT predicate_id, object_id FROM triples WHERE
                                       subject_id = ?""",(page_id,)).fetchall()                    
-      if not result: return None
+      if not result:
+        return None
       else:
         page = {}
         for row in result:
           pred = self.name_from_id(row[0])
           obj = self.name_from_id(row[1])
           page[pred] = set_or_append(page.get(pred,None),obj) # group plurals here
-      
-        for attribute in page.keys():
-          if isinstance(page[attribute],list):
-            page[pluralize(attribute)] = page[attribute]
-            del page[attribute]
-        return page
+        return pluralize_key_if_value_is_list(page)
       
     else: # return single string attribute
       if is_plural(attribute): attribute = singularize(attribute)
@@ -119,7 +124,7 @@ class Graph:
         self.cursor.commit()
         # set new values
         self.cursor.execute('INSERT INTO triples VALUES (?, ?, ?)',
-                                                    (subject_id,predicate_id,object_id))
+                                 (subject_id,predicate_id,object_id))
         self.connection.commit()
       else:
         if self.triple_exists(subject_id,predicate_id,object_id):
@@ -141,6 +146,32 @@ class Graph:
       if is_plural(attribute): attribute = singularize(attribute)
       predicate_id = self.id_from_name(attribute)
       self.cursor.execute('DELETE FROM triples WHERE subject_id = ? AND predicate_id = ?',
-                                                                (subject_id,predicate_id))
+                                                                  (subject_id,predicate_id))
     return True
+  
+  def backlinks(self, page):
+    object_id = self.id_from_name(page)
+    result = self.cursor.execute("""SELECT subject_id, predicate_id FROM triples WHERE
+                                    object_id = ?""",(object_id,)).fetchall()
+    if not result:
+      return None
+    else:
+      backlinks = {}
+      for triple in result:
+        subj = self.name_from_id(triple[0])
+        pred = self.name_from_id(triple[1])
+        backlinks[pred] = set_or_append(backlinks.get(pred,None),subj)
+      return backlinks
+  
+  def describe(self, page, description=None): # should this be split up into 2 methods?
+    if description is None: # get description
+      result = self.cursor.execute('SELECT description FROM pages WHERE name = ?',
+                                                                            (page,)).fetchone()
+      if result: return result[0]
+      else: return None # or empty string?
+    else: # set description
+      self.cursor.execute("""UPDATE pages SET description = ? WHERE name = ?""",
+                                                                (description,page))
+      self.connection.commit()
+      return True # return description? return nothing?
   

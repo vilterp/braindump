@@ -1,13 +1,30 @@
 # for magic attribute access
 
+# how to return the whole dict?
+
 class Page:
   
   def __init__(self, graph, name):
     self.graph = graph
     self.name = name
   
-  def __repr__(self):
-    return self.graph.get(self.name)
+  def __str__(self):
+    return self.name
+  
+  def __getattr__(self, attr):
+    if attr is 'description':
+      return self.graph.get_description(self.name)
+    elif attr is 'backlinks':
+      return self.graph.backlinks(self.name)
+    else:
+      raise AttributeError
+  
+  def __setattr__(self, attr, value):
+    if attr is 'description':
+      self.graph.describe(self.name, value)
+      # backlinks can't be set
+    else:
+      raise AttributeError
   
   def __getitem__(self, key):
     return self.graph.get(self.name,key)
@@ -22,7 +39,7 @@ class Page:
     if self.graph.get(self.name,key): return True
     else: return False
   
-  def __iter__(self): # http://docs.python.org/lib/typeiter.html
+  def __iter__(self): # this throws error. look at http://docs.python.org/lib/typeiter.html
     return self.graph.get(self.name)
   
   def __len__(self):

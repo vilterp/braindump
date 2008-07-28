@@ -22,3 +22,10 @@ def set_or_append(target, item):
     target = [target]
     target.append(item)
     return target
+
+def pluralize_key_if_value_is_list(the_dict):
+  for attribute in the_dict.keys():
+    if isinstance(the_dict[attribute],list):
+      the_dict[pluralize(attribute)] = the_dict[attribute]
+      del the_dict[attribute]
+  return the_dict
