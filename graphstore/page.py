@@ -10,7 +10,7 @@ class Page:
   
   # repr vs. str... hmm... 
   def __repr__(self): # should people just use ".name"?
-    return self.name
+    return self.name.__repr__()
   
   def __str__(self):
     return self.graph.get(self.name).__str__()

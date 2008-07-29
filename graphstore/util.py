@@ -1,4 +1,5 @@
 from inflector.Rules.English import English
+import re
 
 def singularize(word):
   return English().singularize(word)
@@ -42,3 +43,7 @@ def pluralize_key_if_value_is_list(the_dict):
 
 class NonexistentPageError(NameError):
   pass
+
+def regexp(expr, item):
+  r = re.compile(expr)
+  return r.match(item) is not None
