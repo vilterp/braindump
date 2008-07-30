@@ -1,0 +1,35 @@
+/* fonts/global stuff */
+body {
+  font-family: 'Lucida Grande' sans-serif;
+}
+a {
+  text-decoration: none;
+  color: blue;
+}
+a:hover {
+  color: green;
+}
+/* layout */
+#heading {
+  border-bottom: thin grey solid;
+}
+#heading h1 {
+  margin: .3em 0px .3em 0px;
+}
+#sidebar {
+  float: right;
+  border-left: thin grey solid;
+}
+#footer {
+  font-size: small;
+  border-top: thin grey solid;
+  clear: right;
+}
+/* filter interface */
+#visibility_toggle {
+  font-size: small;
+  padding-top: 15px;
+}
+#clear_link {
+  font-size: small;
+}

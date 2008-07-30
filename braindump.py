@@ -1,3 +1,3 @@
 from controller import *
 
-cherrypy.quickstart(Main())
+cherrypy.quickstart(Main(),config='development.config')
