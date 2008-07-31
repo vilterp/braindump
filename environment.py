@@ -25,7 +25,7 @@ cherrypy.engine.subscribe('start_thread',init_graph)
 lookups = {}
 for format in os.listdir('templates'):
   if not re.search('^\.',format):
-    lookups[format] = TemplateLookup(directories=['templates/%s' % format],module_directory='templates/%s' % format)
+    lookups[format] = TemplateLookup(directories=['templates/%s' % format])
 
 def register_to_context(context, themodule):
   for function in dir(themodule):

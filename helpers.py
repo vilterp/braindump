@@ -29,5 +29,3 @@ def load_js(source):
 def autodiscover(source, title, type="atom"):
   mimetypes = {'atom': 'application/atom+xml', 'rss': 'application/rss+xml'}
   return '<link rel="alternate" title="%s" type="%s" href="%s"/>' % (title,mimetypes[type],url(source))
-
-print pagelink('bla')

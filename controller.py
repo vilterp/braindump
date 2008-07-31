@@ -17,10 +17,8 @@ class Main:
   
   def show(self, page, section=None, format='html'):
     page = cherrypy.thread_data.graph[page]
-    print page
     # render metadata and description sections in alt. formats?
     # apply filters?!?
-    print section
     if section == 'metadata':
       content_type('text/plain')
       return render('metadata-plain',page=page)
