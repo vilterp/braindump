@@ -1,7 +1,7 @@
 <%inherit file="layout.mako"/>  
 <%def name="title()"></%def>
 <%def name="heading()"></%def>
-<%def name="head()">${javascript_include_tag(url('javascripts/filter_interface'))}</%def>
+<%def name="head()">${load_js('filter_interface')}</%def>
 <%def name="content()">
 <div id="filter_interface">
   <a href="#" id="visibility_toggle" accesskey="f"><% 
@@ -31,10 +31,10 @@
   <li><% 
   if criteria: theurl = '?criteria=%s' % escape(criteria) # url escape
   else: theurl = ''
-  context.write(link_to('permalink',url(theurl),id='permalink')) %></li>
+  context.write(link('permalink',theurl,id='permalink')) %></li>
   <li><% 
   if criteria: theurl = '?format=dump&criteria=%s' % escape(criteria) # url escape
   else: theurl = '?format=dump'
-  context.write(link_to('dump &raquo;',url(theurl),id="dump_link")) %></li>
+  context.write(link('dump &raquo;',theurl,id="dump_link")) %></li>
 </ul>
 </%def>

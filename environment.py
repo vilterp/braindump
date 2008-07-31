@@ -2,7 +2,6 @@ import cherrypy, graphstore, re, os, urllib
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
-import webhelpers.rails.wrapped as webhelpers
 import helpers
 
 def redirect(url):
@@ -26,7 +25,7 @@ cherrypy.engine.subscribe('start_thread',init_graph)
 lookups = {}
 for format in os.listdir('templates'):
   if not re.search('^\.',format):
-    lookups[format] = TemplateLookup(directories=['templates/%s' % format])
+    lookups[format] = TemplateLookup(directories=['templates/%s' % format],module_directory='templates/%s' % format)
 
 def register_to_context(context, themodule):
   for function in dir(themodule):
@@ -39,9 +38,6 @@ def render(template,format='html',**context):
   
   # TODO: save all this in a permanent context object?
   # TODO: automate additions to context?
-  register_to_context(context,webhelpers)
   register_to_context(context,helpers)
-  context['url'] = cherrypy.url
-  context['escape'] = urllib.quote
   
   return template.render(**context)
