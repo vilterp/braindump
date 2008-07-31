@@ -182,7 +182,7 @@ class Graph:
                                               (subject_id,predicate_id))
         self.cursor.commit()
         # set new values
-        self.cursor.execute('INSERT INTO triples VALUES (?, ?, ?)',
+        self.cursor.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                  (subject_id,predicate_id,object_id))
         self.connection.commit()
       else:
@@ -191,7 +191,7 @@ class Graph:
                                  subject_id = ? AND predicate_id = ?""",
                                       (object_id,subject_id,predicate_id))
         else:
-          self.cursor.execute('INSERT INTO triples VALUES (?, ?, ?)',
+          self.cursor.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                    (subject_id,predicate_id,object_id))
         self.connection.commit()
     return True
