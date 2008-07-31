@@ -1,3 +1,5 @@
+// FIXME: rename to list.js?
+
 $(document).ready(function(){
   
   // toggle visibility of form when 'Filter|Hide' link clicked

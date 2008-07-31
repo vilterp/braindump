@@ -52,3 +52,10 @@ input.placeholder {
 #spinner {
   margin: 0px 0px 10px 10px;
 }
+/* show page */
+a.control {
+  font-size: small;
+}
+#metadata_list, #backlinks_list {
+  margin: 5px 5px 5px 0px;
+}

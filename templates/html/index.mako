@@ -1,9 +1,7 @@
 <%inherit file="layout.mako"/>  
 <%def name="title()"></%def>
 <%def name="heading()"></%def>
-<%def name="head()">
-${javascript_include_tag(url('javascripts/filter_interface.js'))}
-</%def>
+<%def name="head()">${javascript_include_tag(url('javascripts/filter_interface'))}</%def>
 <%def name="content()">
 <div id="filter_interface">
   <a href="#" id="visibility_toggle" accesskey="f"><% 

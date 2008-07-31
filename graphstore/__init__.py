@@ -22,6 +22,7 @@ class Graph:
     return Page(self,key)
   
   def __setitem__(self, key, value):
+    self.unset(key)
     for attr in value.keys():
       self.set(key,attr,value[attr])
     return True

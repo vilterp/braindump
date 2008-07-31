@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+<!-- TODO: validate & correctly indent everything -->
 <html>
   <head>
-    <title>${self.title()}</title>
-    ${stylesheet_link_tag(url('stylesheets/braindump'))}
-    ${javascript_include_tag(url('javascripts/jquery'))}
-    ${javascript_include_tag(url('javascripts/placeholders'))}
+    <title>braindump${self.title()}</title>
+    ${stylesheet_link_tag(url('/stylesheets/braindump'))}
+    ${javascript_include_tag(url('/javascripts/jquery'))}
+    ${javascript_include_tag(url('/javascripts/placeholders'))}
     ${self.head()}
   </head>
   <body>
     
     <div id="heading">
-      <h1>${link_to('braindump',url('/')) + self.heading()}</h1>
+      <h1>${link_to('braindump',url('/'))}${self.heading()}</h1>
     </div>
     
     <!-- round this and just have it float there? -->

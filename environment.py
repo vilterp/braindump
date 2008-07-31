@@ -3,11 +3,15 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
 import webhelpers
+import helpers
 
 def redirect(url):
   """redirect the browser to url"""
   cherrypy.response.status = 302
   cherrypy.response.headers['Location'] = cherrypy.url(url)
+
+def content_type(type):
+  cherrypy.response.headers['Content-type'] = type
 
 def init_graph(thread_index):
   """the graph object has to be in cherrypy's special thread_data 
@@ -32,8 +36,12 @@ def register_to_context(context, themodule):
 def render(template,format='html',**context):
   """render templates/[format]/[template].mako and return result"""
   template = lookups[format].get_template('%s.mako' % template)
-  # makes all functions from the webhelpers module usable
+  
+  # TODO: save all this in a permanent context object?
+  # TODO: automate additions to context?
   register_to_context(context,webhelpers)
+  register_to_context(context,helpers)
   context['url'] = cherrypy.url
   context['escape'] = urllib.quote
+  
   return template.render(**context)

@@ -15,10 +15,32 @@ class Main:
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
-  def show(self, page, format='html'):
+  def show(self, page, section=None, format='html'):
     page = cherrypy.thread_data.graph[page]
-    return render('show',format,page=page)
+    print page
+    # render metadata and description sections in alt. formats?
+    # apply filters?!?
+    print section
+    if section == 'metadata':
+      content_type('text/plain')
+      return render('metadata-plain',page=page)
+    elif section == 'description':
+      content_type('text/plain')
+      return render('description-plain',page=page)
+    else:
+      return render('show',format,page=page)
   show.exposed = True
+  
+  def savemetadata(self, page, metadata=None, **kwargs):
+    pagedata = {}
+    for line in metadata.split("\n"):
+      item = line.split(':')
+      attribute = item[0].strip()
+      value = item[1].strip()
+      pagedata[attribute] = value
+    cherrypy.thread_data.graph[page] = pagedata
+    return render('metadata-html',page=pagedata)
+  savemetadata.exposed = True
   
   def redirect(self, page):
     redirect('show/%s' % page)

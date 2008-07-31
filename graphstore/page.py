@@ -51,7 +51,7 @@ class Page:
     return self.graph.get(self.name).itervalues()
   
   def keys(self):
-    return self.graph.get(self.name).iterkeys()
+    return self.graph.get(self.name).keys()
   
   def __len__(self):
     return len(self.graph.get(self.name))
