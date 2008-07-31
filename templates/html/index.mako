@@ -31,11 +31,11 @@ ${javascript_include_tag(url('javascripts/filter_interface.js'))}
 <span class="sidebar_heading">This List:</span>
 <ul>
   <li><% 
-  if criteria: theurl = '?criteria=%s' % criteria # url escape
+  if criteria: theurl = '?criteria=%s' % escape(criteria) # url escape
   else: theurl = ''
   context.write(link_to('permalink',url(theurl),id='permalink')) %></li>
   <li><% 
-  if criteria: theurl = '?format=dump&criteria=%s' % criteria # url escape
+  if criteria: theurl = '?format=dump&criteria=%s' % escape(criteria) # url escape
   else: theurl = '?format=dump'
   context.write(link_to('dump &raquo;',url(theurl),id="dump_link")) %></li>
 </ul>

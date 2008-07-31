@@ -12,8 +12,6 @@ class Main:
   def list(self, criteria=None, **params):
     # for ajax: returns a simple <ul>
     pages = cherrypy.thread_data.graph.list(criteria)
-    import time
-    time.sleep(1)
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   

@@ -221,6 +221,22 @@ class Graph:
         backlinks[pred] = set_or_append(backlinks.get(pred,None),subj)
       return backlinks
   
+  def between(self, page1, page2):
+    id1 = self.id_from_name(page1)
+    id2 = self.id_from_name(page2)
+    result = self.cursor.execute("""SELECT name FROM pages, triples WHERE
+                                    pages.id = triples.predicate_id AND
+                                    ((triples.subject_id = ? AND
+                                    triples.object_id = ?)
+                                    OR
+                                    (triples.subject_id = ? AND
+                                    triples.object_id = ?))""",
+                                    (id1,id2,id2,id1)).fetchone()
+    if result:
+      return result[0]
+    else:
+      return None # would be cool to find shortest distance between two pages not directly linked
+  
   def describe(self, page, description=None): # should this be split up into 2 methods?
     if description is None: # get description
       result = self.cursor.execute('SELECT description FROM pages WHERE name = ?',

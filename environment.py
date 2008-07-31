@@ -1,4 +1,4 @@
-import cherrypy, graphstore, re, os
+import cherrypy, graphstore, re, os, urllib
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
@@ -35,12 +35,5 @@ def render(template,format='html',**context):
   # makes all functions from the webhelpers module usable
   register_to_context(context,webhelpers)
   context['url'] = cherrypy.url
+  context['escape'] = urllib.quote
   return template.render(**context)
-
-# FIXME: sep. helpers file for stuff like this?
-def ternary(condition, item1, item2):
-  if condition:
-    return item1
-  else:
-    return item2
-
