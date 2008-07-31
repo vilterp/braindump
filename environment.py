@@ -2,7 +2,7 @@ import cherrypy, graphstore, re, os, urllib
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
-import webhelpers
+import webhelpers.rails.wrapped as webhelpers
 import helpers
 
 def redirect(url):
