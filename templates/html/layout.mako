@@ -4,6 +4,7 @@
     <title>${self.title()}</title>
     ${stylesheet_link_tag(url('stylesheets/braindump'))}
     ${javascript_include_tag(url('javascripts/jquery'))}
+    ${javascript_include_tag(url('javascripts/placeholders'))}
     ${self.head()}
   </head>
   <body>
@@ -14,7 +15,12 @@
     
     <!-- round this and just have it float there? -->
     <div id="sidebar">
-      <%include file="sidebar.mako"/>
+      <form method="GET" action="redirect">
+        <input type="text" value="Go To" id="goto_box" name="page" class="placeholder"/>
+        <div id="sidebar_actions">
+          ${self.sidebar_actions()}
+        </div>
+      </form>
     </div>
     
     <div id="content">

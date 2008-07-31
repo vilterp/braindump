@@ -7,7 +7,7 @@ import webhelpers
 def redirect(url):
   """redirect the browser to url"""
   cherrypy.response.status = 302
-  cherrypy.response.headers['Location'] = url
+  cherrypy.response.headers['Location'] = cherrypy.url(url)
 
 def init_graph(thread_index):
   """the graph object has to be in cherrypy's special thread_data 
@@ -29,10 +29,18 @@ def register_to_context(context, themodule):
     context[function] = getattr(themodule,function)
   return context
 
-def render(template,format,**context):
+def render(template,format='html',**context):
   """render templates/[format]/[template].mako and return result"""
   template = lookups[format].get_template('%s.mako' % template)
   # makes all functions from the webhelpers module usable
   register_to_context(context,webhelpers)
   context['url'] = cherrypy.url
   return template.render(**context)
+
+# FIXME: sep. helpers file for stuff like this?
+def ternary(condition, item1, item2):
+  if condition:
+    return item1
+  else:
+    return item2
+

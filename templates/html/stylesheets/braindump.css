@@ -1,3 +1,5 @@
+/* TODO: majorly jazz this up. I'm thinkin' sheet of paper... */
+
 /* fonts/global stuff */
 body {
   font-family: 'Lucida Grande' sans-serif;
@@ -9,6 +11,12 @@ a {
 a:hover {
   color: green;
 }
+p.notice {
+  font-style: italic;
+}
+input.placeholder {
+  color: grey;
+}
 /* layout */
 #heading {
   border-bottom: thin grey solid;
@@ -19,6 +27,14 @@ a:hover {
 #sidebar {
   float: right;
   border-left: thin grey solid;
+  height: 100%;
+  font-size: small;
+}
+.sidebar_heading {
+  font-weight: bold;
+}
+#sidebar_actions {
+  padding: 5px 0px 0px 5px;
 }
 #footer {
   font-size: small;
@@ -32,4 +48,7 @@ a:hover {
 }
 #clear_link {
   font-size: small;
+}
+#spinner {
+  margin: 0px 0px 10px 10px;
 }

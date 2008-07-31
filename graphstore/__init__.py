@@ -2,11 +2,9 @@ import sqlite3, re
 from util import *
 from page import Page
 
-# TODO: firm up NonexistentPageError vs. None...
+# TODO: firm up NonexistentPageError vs. returning None...
 
 # should describe() check if page exists or just go ahead and UPDATE?
-
-# case insensitive id caching?
 
 class Graph:
   
@@ -54,8 +52,8 @@ class Graph:
     return True
   
   def id_from_name(self, name, create_if_nonexistent=False):
-    if name in self.id_cache:
-      return self.id_cache[name]
+    if name.lower() in self.id_cache:
+      return self.id_cache[name.lower()]
     else:
       result = self.cursor.execute('SELECT id FROM pages WHERE name LIKE ?',(name,)).fetchone()
       # LIKE: case insensitive
@@ -66,7 +64,7 @@ class Graph:
           raise NonexistentPageError(name)
           return None
       else:
-        self.id_cache[name] = result[0]
+        self.id_cache[name.lower()] = result[0]
         return result[0]
   
   def name_from_id(self, id):
@@ -77,7 +75,7 @@ class Graph:
       if not result:
         raise NonexistentPageError # this wouldn't ever happen... where would the id # come from..
       else:
-        self.id_cache[result[0]] = id
+        self.id_cache[result[0].lower()] = id
         return result[0]
   
   def create_page(self, name):
@@ -95,12 +93,15 @@ class Graph:
       return True
   
   def list(self, criteria=None):
-    if criteria is None:
+    if criteria is None or criteria.strip() is '':
       result = self.cursor.execute('SELECT name FROM pages').fetchall()
     else: # the magic of braindump
       
-      # parenthesized arguments?
-      # regular expressions?
+      # parenthesized arguments: split but not in parens, recurse until
+      #                          (condition) received
+      
+      # regular expressions? - return multiple id no's, how to fit in query?
+      
       # more sophisticated ordering? (by attributes, SQL style?)
       
       expressions = criteria.split(' or ',1)
@@ -234,4 +235,22 @@ class Graph:
                                                                 (description,page_id))
       self.connection.commit()
       return True
+  
+  def rename(self, old, new):
+    self.cursor.execute('UPDATE pages SET name = ? WHERE name = ?',(new,old))
+    self.connection.commit()
+    return True
+  
+  # is this necessary with unset?
+  def delete(self, page):
+    page_id = self.id_from_name(page)
+    # delete triples containing page
+    self.cursor.execute("""DELETE FROM triples WHERE
+                           subject_id = ? OR
+                           predicate_id = ? OR
+                           object_id = ?""",(page_id,page_id,page_id))
+    self.connection.commit()
+    # delete page
+    self.cursor.execute("DELETE FROM pages WHERE id = ?",(page_id,))
+    self.connection.commit()
   
