@@ -1,0 +1,158 @@
+
+GET /svn/braindump/trunk/?criteria=artist+is+dianne+reeves
+
+SELECT id FROM pages WHERE name LIKE 'artist'
+SELECT id FROM pages WHERE name LIKE 'dianne reeves'
+SELECT subject_id FROM triples WHERE (predicate_id = 4 AND object_id = 18) 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '20' 
+SELECT name FROM pages WHERE id = '21' 
+SELECT name FROM pages WHERE id = '22' 
+SELECT name FROM pages WHERE id = '23' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '28' 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '30' 
+SELECT name FROM pages WHERE id = '31' 
+SELECT name FROM pages WHERE id = '32' 
+SELECT name FROM pages WHERE id = '33' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+list
+SELECT name FROM pages  
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+get Miles Davis
+SELECT id FROM pages WHERE name LIKE 'Miles Davis'
+SELECT * FROM triples WHERE subject_id = 5 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+backlinks to Miles Davis
+SELECT id FROM pages WHERE name LIKE 'Miles Davis'
+SELECT * FROM triples WHERE object_id = 5 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '10' 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+SELECT name FROM pages WHERE id = '16' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+get So What
+SELECT id FROM pages WHERE name LIKE 'So What'
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '9' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+get good stuff
+SELECT id FROM pages WHERE name LIKE 'good stuff'
+SELECT * FROM triples WHERE subject_id = 143 
+SELECT name FROM pages WHERE id = '142' 
+SELECT name FROM pages WHERE id = '62' 
+SELECT name FROM pages WHERE id = '110' 
+SELECT name FROM pages WHERE id = '58' 
+SELECT name FROM pages WHERE id = '37' 
+SELECT name FROM pages WHERE id = '60' 
+SELECT name FROM pages WHERE id = '101' 
+SELECT name FROM pages WHERE id = '93' 
+SELECT name FROM pages WHERE id = '86' 
+SELECT name FROM pages WHERE id = '140' 
+SELECT name FROM pages WHERE id = '66' 
+SELECT name FROM pages WHERE id = '104' 
+SELECT name FROM pages WHERE id = '80' 
+SELECT name FROM pages WHERE id = '77' 
+SELECT name FROM pages WHERE id = '139' 
+SELECT name FROM pages WHERE id = '107' 
+SELECT name FROM pages WHERE id = '45' 
+SELECT name FROM pages WHERE id = '119' 
+SELECT name FROM pages WHERE id = '124' 
+SELECT name FROM pages WHERE id = '61' 
+SELECT name FROM pages WHERE id = '70' 
+SELECT name FROM pages WHERE id = '138' 
+SELECT name FROM pages WHERE id = '128' 
+SELECT name FROM pages WHERE id = '116' 
+SELECT name FROM pages WHERE id = '50' 
+SELECT name FROM pages WHERE id = '33' 
+SELECT name FROM pages WHERE id = '89' 
+SELECT name FROM pages WHERE id = '129' 
+SELECT name FROM pages WHERE id = '131' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+list where artist is miles davis
+SELECT id FROM pages WHERE name LIKE 'artist'
+SELECT id FROM pages WHERE name LIKE 'miles davis'
+SELECT subject_id FROM triples WHERE (predicate_id = 4 AND object_id = 5) 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '10' 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+SELECT name FROM pages WHERE id = '16' 
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/index.php/show/Que+Sera%2C+Sera+%28Whatever+Will+Be%2C+Will+Be%29
+
+SELECT id FROM pages WHERE name LIKE 'Que Sera, Sera (Whatever Will Be, Will Be)'
+SELECT * FROM triples WHERE subject_id = 83 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '84' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '85' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '40' 
+describing Que Sera, Sera (Whatever Will Be, Will Be)
+SELECT description FROM pages WHERE name = 'Que Sera, Sera (Whatever Will Be, Will Be)' 
+SELECT * FROM triples WHERE object_id = 83 
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/
+
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/?criteria=artist+is+dianne+reeves
+
+SELECT id FROM pages WHERE name LIKE 'artist'
+SELECT id FROM pages WHERE name LIKE 'dianne reeves'
+SELECT subject_id FROM triples WHERE (predicate_id = 4 AND object_id = 18) 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '20' 
+SELECT name FROM pages WHERE id = '21' 
+SELECT name FROM pages WHERE id = '22' 
+SELECT name FROM pages WHERE id = '23' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '28' 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '30' 
+SELECT name FROM pages WHERE id = '31' 
+SELECT name FROM pages WHERE id = '32' 
+SELECT name FROM pages WHERE id = '33' 
