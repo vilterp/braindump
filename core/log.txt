@@ -1,0 +1,702 @@
+
+GET /svn/braindump/trunk/?criteria=artist+is+dianne+reeves
+
+SELECT id FROM pages WHERE name LIKE 'artist'
+SELECT id FROM pages WHERE name LIKE 'dianne reeves'
+SELECT subject_id FROM triples WHERE (predicate_id = 4 AND object_id = 18) 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '20' 
+SELECT name FROM pages WHERE id = '21' 
+SELECT name FROM pages WHERE id = '22' 
+SELECT name FROM pages WHERE id = '23' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '28' 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '30' 
+SELECT name FROM pages WHERE id = '31' 
+SELECT name FROM pages WHERE id = '32' 
+SELECT name FROM pages WHERE id = '33' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+list
+SELECT name FROM pages  
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+get Miles Davis
+SELECT id FROM pages WHERE name LIKE 'Miles Davis'
+SELECT * FROM triples WHERE subject_id = 5 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+backlinks to Miles Davis
+SELECT id FROM pages WHERE name LIKE 'Miles Davis'
+SELECT * FROM triples WHERE object_id = 5 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '10' 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+SELECT name FROM pages WHERE id = '16' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+get So What
+SELECT id FROM pages WHERE name LIKE 'So What'
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '9' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+get good stuff
+SELECT id FROM pages WHERE name LIKE 'good stuff'
+SELECT * FROM triples WHERE subject_id = 143 
+SELECT name FROM pages WHERE id = '142' 
+SELECT name FROM pages WHERE id = '62' 
+SELECT name FROM pages WHERE id = '110' 
+SELECT name FROM pages WHERE id = '58' 
+SELECT name FROM pages WHERE id = '37' 
+SELECT name FROM pages WHERE id = '60' 
+SELECT name FROM pages WHERE id = '101' 
+SELECT name FROM pages WHERE id = '93' 
+SELECT name FROM pages WHERE id = '86' 
+SELECT name FROM pages WHERE id = '140' 
+SELECT name FROM pages WHERE id = '66' 
+SELECT name FROM pages WHERE id = '104' 
+SELECT name FROM pages WHERE id = '80' 
+SELECT name FROM pages WHERE id = '77' 
+SELECT name FROM pages WHERE id = '139' 
+SELECT name FROM pages WHERE id = '107' 
+SELECT name FROM pages WHERE id = '45' 
+SELECT name FROM pages WHERE id = '119' 
+SELECT name FROM pages WHERE id = '124' 
+SELECT name FROM pages WHERE id = '61' 
+SELECT name FROM pages WHERE id = '70' 
+SELECT name FROM pages WHERE id = '138' 
+SELECT name FROM pages WHERE id = '128' 
+SELECT name FROM pages WHERE id = '116' 
+SELECT name FROM pages WHERE id = '50' 
+SELECT name FROM pages WHERE id = '33' 
+SELECT name FROM pages WHERE id = '89' 
+SELECT name FROM pages WHERE id = '129' 
+SELECT name FROM pages WHERE id = '131' 
+
+POST /svn/braindump/trunk/xmlrpc.php
+
+list where artist is miles davis
+SELECT id FROM pages WHERE name LIKE 'artist'
+SELECT id FROM pages WHERE name LIKE 'miles davis'
+SELECT subject_id FROM triples WHERE (predicate_id = 4 AND object_id = 5) 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '10' 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+SELECT name FROM pages WHERE id = '16' 
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/index.php/show/Que+Sera%2C+Sera+%28Whatever+Will+Be%2C+Will+Be%29
+
+SELECT id FROM pages WHERE name LIKE 'Que Sera, Sera (Whatever Will Be, Will Be)'
+SELECT * FROM triples WHERE subject_id = 83 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '84' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '85' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '40' 
+describing Que Sera, Sera (Whatever Will Be, Will Be)
+SELECT description FROM pages WHERE name = 'Que Sera, Sera (Whatever Will Be, Will Be)' 
+SELECT * FROM triples WHERE object_id = 83 
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/
+
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/?criteria=artist+is+dianne+reeves
+
+SELECT id FROM pages WHERE name LIKE 'artist'
+SELECT id FROM pages WHERE name LIKE 'dianne reeves'
+SELECT subject_id FROM triples WHERE (predicate_id = 4 AND object_id = 18) 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '20' 
+SELECT name FROM pages WHERE id = '21' 
+SELECT name FROM pages WHERE id = '22' 
+SELECT name FROM pages WHERE id = '23' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '28' 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '30' 
+SELECT name FROM pages WHERE id = '31' 
+SELECT name FROM pages WHERE id = '32' 
+SELECT name FROM pages WHERE id = '33' 
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
+
+GET /svn/braindump/trunk/index.php/special/Table-View
+
+SELECT name FROM pages  
+SELECT id FROM pages WHERE name LIKE 'type'
+SELECT * FROM triples WHERE subject_id = 1 
+SELECT id FROM pages WHERE name LIKE 'So What'
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '9' 
+SELECT * FROM triples WHERE subject_id = 3 
+SELECT * FROM triples WHERE subject_id = 4 
+SELECT * FROM triples WHERE subject_id = 5 
+SELECT * FROM triples WHERE subject_id = 6 
+SELECT * FROM triples WHERE subject_id = 7 
+SELECT * FROM triples WHERE subject_id = 8 
+SELECT * FROM triples WHERE subject_id = 9 
+SELECT id FROM pages WHERE name LIKE 'Freddie Freeloader'
+SELECT * FROM triples WHERE subject_id = 10 
+SELECT id FROM pages WHERE name LIKE 'Blue in Green'
+SELECT * FROM triples WHERE subject_id = 11 
+SELECT id FROM pages WHERE name LIKE 'Flamenco Sketches'
+SELECT * FROM triples WHERE subject_id = 12 
+SELECT id FROM pages WHERE name LIKE 'In A Sentimental Mood'
+SELECT * FROM triples WHERE subject_id = 13 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+SELECT * FROM triples WHERE subject_id = 14 
+SELECT * FROM triples WHERE subject_id = 15 
+SELECT id FROM pages WHERE name LIKE 'All Blues'
+SELECT * FROM triples WHERE subject_id = 16 
+SELECT id FROM pages WHERE name LIKE 'One for My Baby'
+SELECT * FROM triples WHERE subject_id = 17 
+SELECT name FROM pages WHERE id = '18' 
+SELECT name FROM pages WHERE id = '19' 
+SELECT * FROM triples WHERE subject_id = 18 
+SELECT * FROM triples WHERE subject_id = 19 
+SELECT id FROM pages WHERE name LIKE 'There''ll Be Another Spring'
+SELECT * FROM triples WHERE subject_id = 20 
+SELECT id FROM pages WHERE name LIKE 'Pick Yourself Up'
+SELECT * FROM triples WHERE subject_id = 21 
+SELECT id FROM pages WHERE name LIKE 'TV Is the Thing This Year'
+SELECT * FROM triples WHERE subject_id = 22 
+SELECT id FROM pages WHERE name LIKE 'Pretend'
+SELECT * FROM triples WHERE subject_id = 23 
+SELECT id FROM pages WHERE name LIKE 'How High the Moon'
+SELECT * FROM triples WHERE subject_id = 24 
+SELECT id FROM pages WHERE name LIKE 'Too Close for Comfort'
+SELECT * FROM triples WHERE subject_id = 25 
+SELECT id FROM pages WHERE name LIKE 'Solitude'
+SELECT * FROM triples WHERE subject_id = 26 
+SELECT id FROM pages WHERE name LIKE 'Who''s Minding the Store?'
+SELECT * FROM triples WHERE subject_id = 27 
+SELECT id FROM pages WHERE name LIKE 'Into Each Life Some Rain Must Fall'
+SELECT * FROM triples WHERE subject_id = 28 
+SELECT id FROM pages WHERE name LIKE 'When I Fall In Love (Instrumental)'
+SELECT * FROM triples WHERE subject_id = 29 
+SELECT id FROM pages WHERE name LIKE 'You''re Driving Me Crazy'
+SELECT * FROM triples WHERE subject_id = 30 
+SELECT id FROM pages WHERE name LIKE 'Straighten Up and Fly Right'
+SELECT * FROM triples WHERE subject_id = 31 
+SELECT id FROM pages WHERE name LIKE 'I''ve Got My Eyes On You'
+SELECT * FROM triples WHERE subject_id = 32 
+SELECT id FROM pages WHERE name LIKE 'Gotta Be This or That'
+SELECT * FROM triples WHERE subject_id = 33 
+SELECT id FROM pages WHERE name LIKE 'Stolen Moments'
+SELECT * FROM triples WHERE subject_id = 34 
+SELECT name FROM pages WHERE id = '35' 
+SELECT name FROM pages WHERE id = '36' 
+SELECT * FROM triples WHERE subject_id = 35 
+SELECT * FROM triples WHERE subject_id = 36 
+SELECT id FROM pages WHERE name LIKE 'September'
+SELECT * FROM triples WHERE subject_id = 37 
+SELECT name FROM pages WHERE id = '38' 
+SELECT name FROM pages WHERE id = '39' 
+SELECT name FROM pages WHERE id = '40' 
+SELECT * FROM triples WHERE subject_id = 38 
+SELECT * FROM triples WHERE subject_id = 39 
+SELECT * FROM triples WHERE subject_id = 40 
+SELECT id FROM pages WHERE name LIKE 'Take the ''A'' Train'
+SELECT * FROM triples WHERE subject_id = 41 
+SELECT name FROM pages WHERE id = '42' 
+SELECT name FROM pages WHERE id = '43' 
+SELECT name FROM pages WHERE id = '44' 
+SELECT * FROM triples WHERE subject_id = 42 
+SELECT * FROM triples WHERE subject_id = 43 
+SELECT * FROM triples WHERE subject_id = 44 
+SELECT id FROM pages WHERE name LIKE 'I Get a Kick Out of You'
+SELECT * FROM triples WHERE subject_id = 45 
+SELECT name FROM pages WHERE id = '46' 
+SELECT name FROM pages WHERE id = '47' 
+SELECT * FROM triples WHERE subject_id = 46 
+SELECT * FROM triples WHERE subject_id = 47 
+SELECT id FROM pages WHERE name LIKE 'The Way You Look Tonight'
+SELECT * FROM triples WHERE subject_id = 48 
+SELECT id FROM pages WHERE name LIKE 'The Best is Yet to Come'
+SELECT * FROM triples WHERE subject_id = 49 
+SELECT id FROM pages WHERE name LIKE 'All or Nothing at all'
+SELECT * FROM triples WHERE subject_id = 50 
+SELECT id FROM pages WHERE name LIKE 'Soul Bossa Nova'
+SELECT * FROM triples WHERE subject_id = 51 
+SELECT name FROM pages WHERE id = '52' 
+SELECT name FROM pages WHERE id = '53' 
+SELECT * FROM triples WHERE subject_id = 52 
+SELECT * FROM triples WHERE subject_id = 53 
+SELECT id FROM pages WHERE name LIKE 'Drive my Car'
+SELECT * FROM triples WHERE subject_id = 54 
+SELECT name FROM pages WHERE id = '55' 
+SELECT name FROM pages WHERE id = '56' 
+SELECT name FROM pages WHERE id = '57' 
+SELECT * FROM triples WHERE subject_id = 55 
+SELECT * FROM triples WHERE subject_id = 56 
+SELECT * FROM triples WHERE subject_id = 57 
+SELECT id FROM pages WHERE name LIKE 'And Your Bird Can Sing'
+SELECT * FROM triples WHERE subject_id = 58 
+SELECT name FROM pages WHERE id = '59' 
+SELECT * FROM triples WHERE subject_id = 59 
+SELECT id FROM pages WHERE name LIKE 'And Your Bird Can Sing2'
+SELECT * FROM triples WHERE subject_id = 60 
+SELECT id FROM pages WHERE name LIKE 'Bulldog'
+SELECT * FROM triples WHERE subject_id = 61 
+SELECT id FROM pages WHERE name LIKE 'Vertigo'
+SELECT * FROM triples WHERE subject_id = 62 
+SELECT name FROM pages WHERE id = '63' 
+SELECT name FROM pages WHERE id = '64' 
+SELECT name FROM pages WHERE id = '65' 
+SELECT * FROM triples WHERE subject_id = 63 
+SELECT * FROM triples WHERE subject_id = 64 
+SELECT * FROM triples WHERE subject_id = 65 
+SELECT id FROM pages WHERE name LIKE 'Low Rider'
+SELECT * FROM triples WHERE subject_id = 66 
+SELECT name FROM pages WHERE id = '67' 
+SELECT name FROM pages WHERE id = '68' 
+SELECT name FROM pages WHERE id = '69' 
+SELECT * FROM triples WHERE subject_id = 67 
+SELECT * FROM triples WHERE subject_id = 68 
+SELECT * FROM triples WHERE subject_id = 69 
+SELECT id FROM pages WHERE name LIKE 'Crazy'
+SELECT * FROM triples WHERE subject_id = 70 
+SELECT name FROM pages WHERE id = '71' 
+SELECT name FROM pages WHERE id = '72' 
+SELECT name FROM pages WHERE id = '73' 
+SELECT * FROM triples WHERE subject_id = 71 
+SELECT * FROM triples WHERE subject_id = 72 
+SELECT * FROM triples WHERE subject_id = 73 
+SELECT id FROM pages WHERE name LIKE 'Oye Como Va'
+SELECT * FROM triples WHERE subject_id = 74 
+SELECT name FROM pages WHERE id = '75' 
+SELECT name FROM pages WHERE id = '76' 
+SELECT * FROM triples WHERE subject_id = 75 
+SELECT * FROM triples WHERE subject_id = 76 
+SELECT id FROM pages WHERE name LIKE 'Take Five'
+SELECT * FROM triples WHERE subject_id = 77 
+SELECT name FROM pages WHERE id = '78' 
+SELECT name FROM pages WHERE id = '79' 
+SELECT * FROM triples WHERE subject_id = 78 
+SELECT * FROM triples WHERE subject_id = 79 
+SELECT id FROM pages WHERE name LIKE 'Save Room'
+SELECT * FROM triples WHERE subject_id = 80 
+SELECT name FROM pages WHERE id = '81' 
+SELECT name FROM pages WHERE id = '82' 
+SELECT * FROM triples WHERE subject_id = 81 
+SELECT * FROM triples WHERE subject_id = 82 
+SELECT id FROM pages WHERE name LIKE 'Que Sera, Sera (Whatever Will Be, Will Be)'
+SELECT * FROM triples WHERE subject_id = 83 
+SELECT name FROM pages WHERE id = '84' 
+SELECT name FROM pages WHERE id = '85' 
+SELECT * FROM triples WHERE subject_id = 84 
+SELECT * FROM triples WHERE subject_id = 85 
+SELECT id FROM pages WHERE name LIKE 'It''s Your Thing'
+SELECT * FROM triples WHERE subject_id = 86 
+SELECT name FROM pages WHERE id = '87' 
+SELECT name FROM pages WHERE id = '88' 
+SELECT * FROM triples WHERE subject_id = 87 
+SELECT * FROM triples WHERE subject_id = 88 
+SELECT id FROM pages WHERE name LIKE 'Rapper''s Delight'
+SELECT * FROM triples WHERE subject_id = 89 
+SELECT name FROM pages WHERE id = '90' 
+SELECT name FROM pages WHERE id = '91' 
+SELECT name FROM pages WHERE id = '92' 
+SELECT * FROM triples WHERE subject_id = 90 
+SELECT * FROM triples WHERE subject_id = 91 
+SELECT * FROM triples WHERE subject_id = 92 
+SELECT id FROM pages WHERE name LIKE 'Brandy (You''re A Fine Girl)'
+SELECT * FROM triples WHERE subject_id = 93 
+SELECT name FROM pages WHERE id = '94' 
+SELECT name FROM pages WHERE id = '95' 
+SELECT name FROM pages WHERE id = '96' 
+SELECT * FROM triples WHERE subject_id = 94 
+SELECT * FROM triples WHERE subject_id = 95 
+SELECT * FROM triples WHERE subject_id = 96 
+SELECT id FROM pages WHERE name LIKE 'Smiley Faces'
+SELECT * FROM triples WHERE subject_id = 97 
+SELECT id FROM pages WHERE name LIKE 'Roxanne'
+SELECT * FROM triples WHERE subject_id = 98 
+SELECT name FROM pages WHERE id = '99' 
+SELECT name FROM pages WHERE id = '100' 
+SELECT * FROM triples WHERE subject_id = 99 
+SELECT * FROM triples WHERE subject_id = 100 
+SELECT id FROM pages WHERE name LIKE 'Blue Bossa'
+SELECT * FROM triples WHERE subject_id = 101 
+SELECT name FROM pages WHERE id = '102' 
+SELECT name FROM pages WHERE id = '103' 
+SELECT * FROM triples WHERE subject_id = 102 
+SELECT * FROM triples WHERE subject_id = 103 
+SELECT id FROM pages WHERE name LIKE 'Blue Bossa (chart)'
+SELECT * FROM triples WHERE subject_id = 104 
+SELECT name FROM pages WHERE id = '105' 
+SELECT name FROM pages WHERE id = '106' 
+SELECT * FROM triples WHERE subject_id = 105 
+SELECT * FROM triples WHERE subject_id = 106 
+SELECT id FROM pages WHERE name LIKE 'Seven Nation Army'
+SELECT * FROM triples WHERE subject_id = 107 
+SELECT name FROM pages WHERE id = '108' 
+SELECT name FROM pages WHERE id = '109' 
+SELECT * FROM triples WHERE subject_id = 108 
+SELECT * FROM triples WHERE subject_id = 109 
+SELECT id FROM pages WHERE name LIKE 'No Such Thing'
+SELECT * FROM triples WHERE subject_id = 110 
+SELECT name FROM pages WHERE id = '111' 
+SELECT name FROM pages WHERE id = '112' 
+SELECT * FROM triples WHERE subject_id = 111 
+SELECT * FROM triples WHERE subject_id = 112 
+SELECT id FROM pages WHERE name LIKE 'Nite Becomes Day'
+SELECT * FROM triples WHERE subject_id = 113 
+SELECT name FROM pages WHERE id = '114' 
+SELECT name FROM pages WHERE id = '115' 
+SELECT * FROM triples WHERE subject_id = 114 
+SELECT * FROM triples WHERE subject_id = 115 
+SELECT id FROM pages WHERE name LIKE 'Norwegian Wood'
+SELECT * FROM triples WHERE subject_id = 116 
+SELECT name FROM pages WHERE id = '117' 
+SELECT name FROM pages WHERE id = '118' 
+SELECT * FROM triples WHERE subject_id = 117 
+SELECT * FROM triples WHERE subject_id = 118 
+SELECT id FROM pages WHERE name LIKE '300 M.P.H. Torrential Outpour Blues'
+SELECT * FROM triples WHERE subject_id = 119 
+SELECT name FROM pages WHERE id = '120' 
+SELECT * FROM triples WHERE subject_id = 120 
+SELECT id FROM pages WHERE name LIKE 'Over My Head (Cable Car)'
+SELECT * FROM triples WHERE subject_id = 121 
+SELECT name FROM pages WHERE id = '122' 
+SELECT name FROM pages WHERE id = '123' 
+SELECT * FROM triples WHERE subject_id = 122 
+SELECT * FROM triples WHERE subject_id = 123 
+SELECT id FROM pages WHERE name LIKE 'Beautiful Day'
+SELECT * FROM triples WHERE subject_id = 124 
+SELECT name FROM pages WHERE id = '125' 
+SELECT * FROM triples WHERE subject_id = 125 
+SELECT id FROM pages WHERE name LIKE 'Love And Peace Or Else'
+SELECT * FROM triples WHERE subject_id = 126 
+SELECT id FROM pages WHERE name LIKE 'A Man And A Woman'
+SELECT * FROM triples WHERE subject_id = 127 
+SELECT id FROM pages WHERE name LIKE 'Original Of The Species'
+SELECT * FROM triples WHERE subject_id = 128 
+SELECT id FROM pages WHERE name LIKE 'Cantaloupe Island'
+SELECT * FROM triples WHERE subject_id = 129 
+SELECT name FROM pages WHERE id = '130' 
+SELECT * FROM triples WHERE subject_id = 130 
+SELECT id FROM pages WHERE name LIKE 'Oriental Folk Song'
+SELECT * FROM triples WHERE subject_id = 131 
+SELECT name FROM pages WHERE id = '132' 
+SELECT name FROM pages WHERE id = '133' 
+SELECT * FROM triples WHERE subject_id = 132 
+SELECT * FROM triples WHERE subject_id = 133 
+SELECT id FROM pages WHERE name LIKE 'Ponta de Areia'
+SELECT * FROM triples WHERE subject_id = 134 
+SELECT name FROM pages WHERE id = '135' 
+SELECT name FROM pages WHERE id = '136' 
+SELECT * FROM triples WHERE subject_id = 135 
+SELECT * FROM triples WHERE subject_id = 136 
+SELECT id FROM pages WHERE name LIKE 'I Know You Know'
+SELECT * FROM triples WHERE subject_id = 137 
+SELECT id FROM pages WHERE name LIKE 'Cuerpo y Alma (Body & Soul)'
+SELECT * FROM triples WHERE subject_id = 138 
+SELECT id FROM pages WHERE name LIKE 'She Got to You'
+SELECT * FROM triples WHERE subject_id = 139 
+SELECT id FROM pages WHERE name LIKE 'Precious'
+SELECT * FROM triples WHERE subject_id = 140 
+SELECT id FROM pages WHERE name LIKE 'If That''s True'
+SELECT * FROM triples WHERE subject_id = 141 
+SELECT id FROM pages WHERE name LIKE 'member'
+SELECT * FROM triples WHERE subject_id = 142 
+SELECT id FROM pages WHERE name LIKE 'good stuff'
+SELECT * FROM triples WHERE subject_id = 143 
+SELECT id FROM pages WHERE name LIKE 'homepage'
+SELECT * FROM triples WHERE subject_id = 144 
+SELECT id FROM pages WHERE name LIKE 'php.net'
+SELECT * FROM triples WHERE subject_id = 146 
+SELECT id FROM pages WHERE name LIKE 'php.net?'
+SELECT * FROM triples WHERE subject_id = 147 
+SELECT id FROM pages WHERE name LIKE 'php'
+SELECT * FROM triples WHERE subject_id = 148 
+
+GET /svn/braindump/trunk/index.php/special/Table-View?criteria=bla+is+bla
+
+SELECT id FROM pages WHERE name LIKE 'bla'
+SELECT id FROM pages WHERE name LIKE 'bla'
+
+GET /svn/braindump/trunk/index.php/special/Table-View?criteria=type+is+song
+
+SELECT id FROM pages WHERE name LIKE 'type'
+SELECT id FROM pages WHERE name LIKE 'song'
+SELECT subject_id FROM triples WHERE (predicate_id = 1 AND object_id = 3) 
+SELECT name FROM pages WHERE id = '2' 
+SELECT name FROM pages WHERE id = '10' 
+SELECT name FROM pages WHERE id = '11' 
+SELECT name FROM pages WHERE id = '12' 
+SELECT name FROM pages WHERE id = '13' 
+SELECT name FROM pages WHERE id = '16' 
+SELECT name FROM pages WHERE id = '17' 
+SELECT name FROM pages WHERE id = '20' 
+SELECT name FROM pages WHERE id = '21' 
+SELECT name FROM pages WHERE id = '22' 
+SELECT name FROM pages WHERE id = '23' 
+SELECT name FROM pages WHERE id = '24' 
+SELECT name FROM pages WHERE id = '25' 
+SELECT name FROM pages WHERE id = '26' 
+SELECT name FROM pages WHERE id = '27' 
+SELECT name FROM pages WHERE id = '28' 
+SELECT name FROM pages WHERE id = '29' 
+SELECT name FROM pages WHERE id = '30' 
+SELECT name FROM pages WHERE id = '31' 
+SELECT name FROM pages WHERE id = '32' 
+SELECT name FROM pages WHERE id = '33' 
+SELECT name FROM pages WHERE id = '34' 
+SELECT name FROM pages WHERE id = '37' 
+SELECT name FROM pages WHERE id = '41' 
+SELECT name FROM pages WHERE id = '45' 
+SELECT name FROM pages WHERE id = '48' 
+SELECT name FROM pages WHERE id = '49' 
+SELECT name FROM pages WHERE id = '50' 
+SELECT name FROM pages WHERE id = '51' 
+SELECT name FROM pages WHERE id = '54' 
+SELECT name FROM pages WHERE id = '58' 
+SELECT name FROM pages WHERE id = '60' 
+SELECT name FROM pages WHERE id = '61' 
+SELECT name FROM pages WHERE id = '62' 
+SELECT name FROM pages WHERE id = '66' 
+SELECT name FROM pages WHERE id = '70' 
+SELECT name FROM pages WHERE id = '74' 
+SELECT name FROM pages WHERE id = '77' 
+SELECT name FROM pages WHERE id = '80' 
+SELECT name FROM pages WHERE id = '83' 
+SELECT name FROM pages WHERE id = '86' 
+SELECT name FROM pages WHERE id = '89' 
+SELECT name FROM pages WHERE id = '93' 
+SELECT name FROM pages WHERE id = '97' 
+SELECT name FROM pages WHERE id = '98' 
+SELECT name FROM pages WHERE id = '101' 
+SELECT name FROM pages WHERE id = '104' 
+SELECT name FROM pages WHERE id = '107' 
+SELECT name FROM pages WHERE id = '110' 
+SELECT name FROM pages WHERE id = '113' 
+SELECT name FROM pages WHERE id = '116' 
+SELECT name FROM pages WHERE id = '119' 
+SELECT name FROM pages WHERE id = '121' 
+SELECT name FROM pages WHERE id = '124' 
+SELECT name FROM pages WHERE id = '126' 
+SELECT name FROM pages WHERE id = '127' 
+SELECT name FROM pages WHERE id = '128' 
+SELECT name FROM pages WHERE id = '131' 
+SELECT name FROM pages WHERE id = '134' 
+SELECT name FROM pages WHERE id = '137' 
+SELECT name FROM pages WHERE id = '138' 
+SELECT name FROM pages WHERE id = '139' 
+SELECT name FROM pages WHERE id = '140' 
+SELECT name FROM pages WHERE id = '141' 
+SELECT * FROM triples WHERE subject_id = 2 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '5' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '7' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '9' 
+SELECT * FROM triples WHERE subject_id = 10 
+SELECT * FROM triples WHERE subject_id = 11 
+SELECT * FROM triples WHERE subject_id = 12 
+SELECT * FROM triples WHERE subject_id = 13 
+SELECT name FROM pages WHERE id = '14' 
+SELECT name FROM pages WHERE id = '15' 
+SELECT * FROM triples WHERE subject_id = 16 
+SELECT * FROM triples WHERE subject_id = 17 
+SELECT name FROM pages WHERE id = '18' 
+SELECT name FROM pages WHERE id = '19' 
+SELECT * FROM triples WHERE subject_id = 20 
+SELECT * FROM triples WHERE subject_id = 21 
+SELECT * FROM triples WHERE subject_id = 22 
+SELECT * FROM triples WHERE subject_id = 23 
+SELECT * FROM triples WHERE subject_id = 24 
+SELECT * FROM triples WHERE subject_id = 25 
+SELECT * FROM triples WHERE subject_id = 26 
+SELECT * FROM triples WHERE subject_id = 27 
+SELECT * FROM triples WHERE subject_id = 28 
+SELECT * FROM triples WHERE subject_id = 29 
+SELECT * FROM triples WHERE subject_id = 30 
+SELECT * FROM triples WHERE subject_id = 31 
+SELECT * FROM triples WHERE subject_id = 32 
+SELECT * FROM triples WHERE subject_id = 33 
+SELECT * FROM triples WHERE subject_id = 34 
+SELECT name FROM pages WHERE id = '35' 
+SELECT name FROM pages WHERE id = '36' 
+SELECT * FROM triples WHERE subject_id = 37 
+SELECT name FROM pages WHERE id = '38' 
+SELECT name FROM pages WHERE id = '39' 
+SELECT name FROM pages WHERE id = '40' 
+SELECT * FROM triples WHERE subject_id = 41 
+SELECT name FROM pages WHERE id = '42' 
+SELECT name FROM pages WHERE id = '43' 
+SELECT name FROM pages WHERE id = '44' 
+SELECT * FROM triples WHERE subject_id = 45 
+SELECT name FROM pages WHERE id = '46' 
+SELECT name FROM pages WHERE id = '47' 
+SELECT * FROM triples WHERE subject_id = 48 
+SELECT * FROM triples WHERE subject_id = 49 
+SELECT * FROM triples WHERE subject_id = 50 
+SELECT * FROM triples WHERE subject_id = 51 
+SELECT name FROM pages WHERE id = '52' 
+SELECT name FROM pages WHERE id = '53' 
+SELECT * FROM triples WHERE subject_id = 54 
+SELECT name FROM pages WHERE id = '55' 
+SELECT name FROM pages WHERE id = '56' 
+SELECT name FROM pages WHERE id = '57' 
+SELECT * FROM triples WHERE subject_id = 58 
+SELECT name FROM pages WHERE id = '59' 
+SELECT * FROM triples WHERE subject_id = 60 
+SELECT * FROM triples WHERE subject_id = 61 
+SELECT * FROM triples WHERE subject_id = 62 
+SELECT name FROM pages WHERE id = '63' 
+SELECT name FROM pages WHERE id = '64' 
+SELECT name FROM pages WHERE id = '65' 
+SELECT * FROM triples WHERE subject_id = 66 
+SELECT name FROM pages WHERE id = '67' 
+SELECT name FROM pages WHERE id = '68' 
+SELECT name FROM pages WHERE id = '69' 
+SELECT * FROM triples WHERE subject_id = 70 
+SELECT name FROM pages WHERE id = '71' 
+SELECT name FROM pages WHERE id = '72' 
+SELECT name FROM pages WHERE id = '73' 
+SELECT * FROM triples WHERE subject_id = 74 
+SELECT name FROM pages WHERE id = '75' 
+SELECT name FROM pages WHERE id = '76' 
+SELECT * FROM triples WHERE subject_id = 77 
+SELECT name FROM pages WHERE id = '78' 
+SELECT name FROM pages WHERE id = '79' 
+SELECT * FROM triples WHERE subject_id = 80 
+SELECT name FROM pages WHERE id = '81' 
+SELECT name FROM pages WHERE id = '82' 
+SELECT * FROM triples WHERE subject_id = 83 
+SELECT name FROM pages WHERE id = '84' 
+SELECT name FROM pages WHERE id = '85' 
+SELECT * FROM triples WHERE subject_id = 86 
+SELECT name FROM pages WHERE id = '87' 
+SELECT name FROM pages WHERE id = '88' 
+SELECT * FROM triples WHERE subject_id = 89 
+SELECT name FROM pages WHERE id = '90' 
+SELECT name FROM pages WHERE id = '91' 
+SELECT name FROM pages WHERE id = '92' 
+SELECT * FROM triples WHERE subject_id = 93 
+SELECT name FROM pages WHERE id = '94' 
+SELECT name FROM pages WHERE id = '95' 
+SELECT name FROM pages WHERE id = '96' 
+SELECT * FROM triples WHERE subject_id = 97 
+SELECT * FROM triples WHERE subject_id = 98 
+SELECT name FROM pages WHERE id = '99' 
+SELECT name FROM pages WHERE id = '100' 
+SELECT * FROM triples WHERE subject_id = 101 
+SELECT name FROM pages WHERE id = '102' 
+SELECT name FROM pages WHERE id = '103' 
+SELECT * FROM triples WHERE subject_id = 104 
+SELECT name FROM pages WHERE id = '105' 
+SELECT name FROM pages WHERE id = '106' 
+SELECT * FROM triples WHERE subject_id = 107 
+SELECT name FROM pages WHERE id = '108' 
+SELECT name FROM pages WHERE id = '109' 
+SELECT * FROM triples WHERE subject_id = 110 
+SELECT name FROM pages WHERE id = '111' 
+SELECT name FROM pages WHERE id = '112' 
+SELECT * FROM triples WHERE subject_id = 113 
+SELECT name FROM pages WHERE id = '114' 
+SELECT name FROM pages WHERE id = '115' 
+SELECT * FROM triples WHERE subject_id = 116 
+SELECT name FROM pages WHERE id = '117' 
+SELECT name FROM pages WHERE id = '118' 
+SELECT * FROM triples WHERE subject_id = 119 
+SELECT name FROM pages WHERE id = '120' 
+SELECT * FROM triples WHERE subject_id = 121 
+SELECT name FROM pages WHERE id = '122' 
+SELECT name FROM pages WHERE id = '123' 
+SELECT * FROM triples WHERE subject_id = 124 
+SELECT name FROM pages WHERE id = '125' 
+SELECT * FROM triples WHERE subject_id = 126 
+SELECT * FROM triples WHERE subject_id = 127 
+SELECT * FROM triples WHERE subject_id = 128 
+SELECT * FROM triples WHERE subject_id = 131 
+SELECT name FROM pages WHERE id = '132' 
+SELECT name FROM pages WHERE id = '133' 
+SELECT * FROM triples WHERE subject_id = 134 
+SELECT name FROM pages WHERE id = '135' 
+SELECT name FROM pages WHERE id = '136' 
+SELECT * FROM triples WHERE subject_id = 137 
+SELECT * FROM triples WHERE subject_id = 138 
+SELECT * FROM triples WHERE subject_id = 139 
+SELECT * FROM triples WHERE subject_id = 140 
+SELECT * FROM triples WHERE subject_id = 141 
+
+GET /svn/braindump/trunk/index.php/show/The+Blues+and+the+Abstract+Truth
+
+SELECT id FROM pages WHERE name LIKE 'The Blues and the Abstract Truth'
+SELECT * FROM triples WHERE subject_id = 36 
+describing The Blues and the Abstract Truth
+SELECT description FROM pages WHERE name = 'The Blues and the Abstract Truth' 
+SELECT * FROM triples WHERE object_id = 36 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '34' 
+
+GET /svn/braindump/trunk/index.php/show/Stolen+Moments
+
+SELECT id FROM pages WHERE name LIKE 'Stolen Moments'
+SELECT * FROM triples WHERE subject_id = 34 
+SELECT name FROM pages WHERE id = '1' 
+SELECT name FROM pages WHERE id = '3' 
+SELECT name FROM pages WHERE id = '4' 
+SELECT name FROM pages WHERE id = '35' 
+SELECT name FROM pages WHERE id = '6' 
+SELECT name FROM pages WHERE id = '36' 
+SELECT name FROM pages WHERE id = '8' 
+SELECT name FROM pages WHERE id = '9' 
+describing Stolen Moments
+SELECT description FROM pages WHERE name = 'Stolen Moments' 
+SELECT * FROM triples WHERE object_id = 34 
+
+GET /svn/braindump/trunk/
+
+SELECT name FROM pages  
