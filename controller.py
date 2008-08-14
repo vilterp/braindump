@@ -33,6 +33,7 @@ class Main:
     pagedata = {}
     for line in metadata.split("\n"):
       item = line.split(':')
+      print item
       attribute = item[0].strip()
       value = item[1].strip()
       pagedata[attribute] = value
@@ -40,7 +41,7 @@ class Main:
     return render('metadata-html',page=pagedata)
   savemetadata.exposed = True
   
-  def redirect(self, page):
+  def goto(self, page):
     redirect('show/%s' % page)
-  redirect.exposed = True
+  goto.exposed = True
   

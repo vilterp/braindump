@@ -26,6 +26,6 @@ def load_js(source):
   if '.js' not in source: source += '.js'
   return '<script type="text/javascript" src="%s"></script>' % url('/javascripts/'+source)
 
-def autodiscover(source, title, type="atom"):
+def autodiscover_link(source, title, type="atom"):
   mimetypes = {'atom': 'application/atom+xml', 'rss': 'application/rss+xml'}
   return '<link rel="alternate" title="%s" type="%s" href="%s"/>' % (title,mimetypes[type],url(source))

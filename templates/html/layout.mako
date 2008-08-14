@@ -16,7 +16,7 @@
     
     <!-- round this and just have it float there? -->
     <div id="sidebar">
-      <form method="GET" action="redirect">
+      <form method="GET" action="${url('/goto')}">
         <input type="text" value="Go To" id="goto_box" name="page" class="placeholder"/>
         <div id="sidebar_actions">
           ${self.sidebar_actions()}
