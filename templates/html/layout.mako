@@ -18,10 +18,10 @@
     <div id="sidebar">
       <form method="GET" action="${url('/goto')}">
         <input type="text" value="Go To" id="goto_box" name="page" class="placeholder"/>
-        <div id="sidebar_actions">
-          ${self.sidebar_actions()}
-        </div>
       </form>
+      <div id="sidebar_actions">
+        ${self.sidebar_actions()}
+      </div>
     </div>
     
     <div id="content">
