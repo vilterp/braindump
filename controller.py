@@ -10,7 +10,7 @@ class Main:
   index.exposed = True
   
   def list(self, criteria=None, **params):
-    # for ajax: returns a simple <ul>
+    """for index's ajax interface: returns a simple <ul>"""
     pages = cherrypy.thread_data.graph.list(criteria)
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
@@ -46,8 +46,9 @@ class Main:
   goto.exposed = True
   
   def delete_everything(self):
-    for page in cherrypy.thread_data.graph.list():
-      del page
+    g = cherrypy.thread_data.graph
+    g.execute('DELETE FROM pages')
+    g.execute('DELETE FROM triples')
     redirect('/')
   delete_everything.exposed = True
 

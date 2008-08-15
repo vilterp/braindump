@@ -42,7 +42,6 @@ class Page:
       raise AttributeError(attr)
   
 
-  
 class PageMeta:
   
   def __init__(self, graph, name):

@@ -183,15 +183,17 @@ class Graph:
         self.execute("""DELETE FROM triples WHERE 
                         subject_id = ? AND predicate_id = ?""",
                                        (subject_id,predicate_id))
-        # set new values
+        # set new value
         self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                 (subject_id,predicate_id,object_id))
       else:
         if self.triple_exists(subject_id,predicate_id,object_id):
+          # update current value
           self.execute("""UPDATE triples SET object_id = ? WHERE
                           subject_id = ? AND predicate_id = ?""",
                                (object_id,subject_id,predicate_id))
         else:
+          # set new value
           self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                   (subject_id,predicate_id,object_id))
     return True
