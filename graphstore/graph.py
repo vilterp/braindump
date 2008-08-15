@@ -2,9 +2,7 @@ import sqlite3, re, os
 from util import *
 from page import Page
 
-# TODO: firm up NonexistentPageError vs. returning None...
-
-# should describe() check if page exists or just go ahead and UPDATE?
+# TODO: refactor a bit w/ list comprehensions
 
 class Graph:
   
