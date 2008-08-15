@@ -1,4 +1,4 @@
-from urllib import quote as escape
+from urllib import quote_plus as escape
 from cherrypy import url
 
 # let's see if enough helpers are necessary to make this page worth it

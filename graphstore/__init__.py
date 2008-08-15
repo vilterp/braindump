@@ -1,4 +1,4 @@
-import sqlite3, re
+import sqlite3, re, os
 from util import *
 from page import Page
 
@@ -16,16 +16,10 @@ class Graph:
     self.cursor = self.connection.cursor()
   
   def __repr__(self):
-    return "<Graph source: %s>" % self.database_path
+    return "<Graph source: %s/%s>" % (os.getcwd(), self.database_path)
   
   def __getitem__(self, key):
     return Page(self,key)
-  
-  def __setitem__(self, key, value):
-    self.unset(key)
-    for attr in value.keys():
-      self.set(key,attr,value[attr])
-    return True
   
   def __delitem__(self, key):
     self.unset(key)
@@ -93,27 +87,30 @@ class Graph:
     else:
       return True
   
+  def infer_types(self, page):
+    return self.backlinks(page).keys()
+  
   def list(self, criteria=None):
     if criteria is None or criteria.strip() is '':
       result = self.cursor.execute('SELECT name FROM pages').fetchall()
+      # upacked & returned at the bottom of this method
+    
     else: # the magic of braindump
       
       # parenthesized arguments: split but not in parens, recurse until
       #                          (condition) received
       
-      # regular expressions? - return multiple id no's, how to fit in query?
-      
       # more sophisticated ordering? (by attributes, SQL style?)
       
-      expressions = criteria.split(' or ',1)
-      if len(expressions) is 2:
+      expressions = re.split(' or | OR ',criteria,1)
+      if len(expressions) is 2: # match both connections, return union
         results1 = self.list(expressions[0])
         results2 = self.list(expressions[1])
         results1.extend(results2)
         results1.sort()
         return results1
       
-      expressions = criteria.split(' and ',1)
+      expressions = re.split(' and | AND ',criteria,1)
       if len(expressions) is 2: # match both conditions, return intersection
         results1 = set(self.list(expressions[0]))
         results2 = set(self.list(expressions[1]))
@@ -123,9 +120,9 @@ class Graph:
         return listify
       
       # match one condition - all queries eventually come down to this
-      condition = criteria.split(' is ')
-      attr_id = self.id_from_name(condition[0])
-      value_id = self.id_from_name(condition[1])
+      attr, value = re.split(' is | IS ',criteria)
+      attr_id = self.id_from_name(attr)
+      value_id = self.id_from_name(value)
       result = self.cursor.execute("""SELECT pages.name FROM pages, triples WHERE
                                       pages.id = triples.subject_id AND
                                       triples.predicate_id = ? AND
@@ -133,7 +130,7 @@ class Graph:
                                       (attr_id,value_id)).fetchall()
     pages = []
     for page in result:
-      pages.append(page[0])
+      pages.append(Page(self,page[0]))
     pages.sort()
     return pages
   
@@ -180,7 +177,7 @@ class Graph:
         self.cursor.execute("""DELETE FROM triples WHERE 
                                subject_id = ? AND predicate_id = ?""",
                                               (subject_id,predicate_id))
-        self.cursor.commit()
+        self.connection.commit()
         # set new values
         self.cursor.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                  (subject_id,predicate_id,object_id))
@@ -213,7 +210,7 @@ class Graph:
     result = self.cursor.execute("""SELECT subject_id, predicate_id FROM triples WHERE
                                     object_id = ?""",(object_id,)).fetchall()
     if not result:
-      return None
+      return {}
     else:
       backlinks = {}
       for triple in result:
@@ -245,7 +242,7 @@ class Graph:
       if result:
         return result[0]
       else:
-        return '' # return None?
+        return ''
     else: # set description
       page_id = self.id_from_name(page,True) # just so page will be created if nonexistent
       self.cursor.execute("""UPDATE pages SET description = ? WHERE id = ?""",

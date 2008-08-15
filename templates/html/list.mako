@@ -1,7 +1,7 @@
 % if pages:
   <ul>
   % for page in pages:
-    <li>${link(page,'show/%s' % page)}</li>
+    <li>${pagelink(page.name)}</li>
   % endfor
   </ul>
 % elif criteria:

@@ -45,3 +45,10 @@ class Main:
     redirect('show/%s' % page)
   goto.exposed = True
   
+  def delete_everything(self):
+    for page in cherrypy.thread_data.graph.list():
+      del page
+    redirect('/')
+  delete_everything.exposed = True
+
+  
