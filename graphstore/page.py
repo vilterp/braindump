@@ -7,6 +7,10 @@ class Page:
   def __init__(self, graph, name):
     self.graph = graph
     self.name = name
+    if not self.graph.lazy_lookup:
+      self.metadata = self.graph.get(self.name)
+      self.description = self.graph.describe(self.name)
+      self.backlinks = self.graph.backlinks(self.name)
   
   def __repr__(self):
     return "<Page: %s>" % self.name

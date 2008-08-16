@@ -8,8 +8,9 @@ class Graph:
   
   id_cache = {}
   
-  def __init__(self, database_path):
+  def __init__(self, database_path, lazy_lookup=True):
     self.database_path = database_path
+    self.lazy_lookup = lazy_lookup
     self.connection = sqlite3.connect(database_path)
     self.cursor = self.connection.cursor()
     self.queries = []

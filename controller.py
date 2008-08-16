@@ -1,4 +1,4 @@
-from environment import *
+from framework import *
 
 # todo: gzip static assets
 
@@ -16,7 +16,14 @@ class Main:
   list.exposed = True
   
   def show(self, page, section=None, format='html'):
-    page = cherrypy.thread_data.graph[page]
+    graph = cherrypy.thread_data.graph
+    try:
+      page = object(name=page,
+                    metadata=graph.get(page),
+                    description=graph.describe(page),
+                    backlinks=graph.backlinks(page))
+    except graphstore.util.NonexistentPageError:
+      page = {}
     # render metadata and description sections in alt. formats?
     # apply filters?!?
     if section == 'metadata':
@@ -30,6 +37,7 @@ class Main:
   show.exposed = True
   
   def savemetadata(self, page, metadata=None, **kwargs):
+    # save inferred types either here or in Graph.save()
     pagedata = {}
     for line in metadata.split("\n"):
       item = line.split(':')
