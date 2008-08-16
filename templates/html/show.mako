@@ -11,7 +11,7 @@
 
 <a href="#" id="edit_backlinks_link" class="control">Edit</a>
 <div id="backlinks">
-  % if page.backlinks:
+  
     <ul id="backlinks_list">
     % for attribute in page.backlinks.keys():
       <li class="backlink">${pagelink(attribute)} of ${pagelink(page.backlinks[attribute])}</li>

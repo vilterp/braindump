@@ -33,11 +33,10 @@ class Main:
     pagedata = {}
     for line in metadata.split("\n"):
       item = line.split(':')
-      print item
       attribute = item[0].strip()
       value = item[1].strip()
       pagedata[attribute] = value
-    cherrypy.thread_data.graph[page] = pagedata
+    cherrypy.thread_data.graph[page].metadata = pagedata
     return render('metadata-html',page=pagedata)
   savemetadata.exposed = True
   
