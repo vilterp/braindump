@@ -15,15 +15,16 @@ class Main:
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
-  def show(self, page, section=None, format='html'):
+  def show(self, pagename, section=None, format='html'):
     graph = cherrypy.thread_data.graph
     try:
-      page = object(name=page,
-                    metadata=graph.get(page),
-                    description=graph.describe(page),
-                    backlinks=graph.backlinks(page))
+      page = object()
+      page.name = pagename
+      page.metadata = graph.get(pagename)
+      page.description = graph.describe(pagename)
+      page.backlinks = graph.backlinks(page)
     except graphstore.util.NonexistentPageError:
-      page = {}
+      page = object()
     # render metadata and description sections in alt. formats?
     # apply filters?!?
     if section == 'metadata':

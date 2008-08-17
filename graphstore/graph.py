@@ -18,13 +18,6 @@ class Graph:
   def __repr__(self):
     return "<Graph source: %s/%s>" % (os.getcwd(), self.database_path)
   
-  def __getitem__(self, key):
-    return Page(self,key)
-  
-  def __delitem__(self, key):
-    self.unset(key)
-    return True
-  
   def __iter__(self):
     return self.list().__iter__()
   
@@ -41,8 +34,6 @@ class Graph:
     self.execute("""CREATE TABLE triples (subject_id numeric,
                                           predicat_id numeric,
                                           object_id numeric)""")
-    
-    return True
   
   def query(self, query, replacements=()):
     self.queries.append((query,replacements)) # for debugging
@@ -120,9 +111,9 @@ class Graph:
         results1 = set(self.list(expressions[0]))
         results2 = set(self.list(expressions[1]))
         intersection = results1.intersection(results2)
-        listify = list(intersection)
-        listify.sort()
-        return listify
+        listified = list(intersection)
+        listified.sort()
+        return listified
       
       # match one condition - all queries eventually come down to this
       attr, value = re.split(' is | IS ',criteria)
@@ -133,9 +124,7 @@ class Graph:
                              triples.predicate_id = ? AND
                              triples.object_id = ?""",
                              (attr_id,value_id)).fetchall()
-    pages = []
-    for page in result:
-      pages.append(Page(self,page[0]))
+    pages = [row[0] for row in result]
     pages.sort()
     return pages
   
@@ -195,7 +184,6 @@ class Graph:
           # set new value
           self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                   (subject_id,predicate_id,object_id))
-    return True
   
   def unset(self, page, attribute=None):
     subject_id = self.id_from_name(page)
@@ -206,7 +194,6 @@ class Graph:
       predicate_id = self.id_from_name(attribute)
       self.execute('DELETE FROM triples WHERE subject_id = ? AND predicate_id = ?',
                                                            (subject_id,predicate_id))
-    return True
   
   def backlinks(self, page):
     object_id = self.id_from_name(page)
@@ -250,11 +237,9 @@ class Graph:
       page_id = self.id_from_name(page,True) # just so page will be created if nonexistent
       self.execute("""UPDATE pages SET description = ? WHERE id = ?""",
                                                  (description,page_id))
-      return True
   
   def rename(self, old, new):
     self.execute('UPDATE pages SET name = ? WHERE name = ?',(new,old))
-    return True
   
   # is this necessary with unset?
   def delete(self, page):
