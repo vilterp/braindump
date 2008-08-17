@@ -1,0 +1,61 @@
+/* TODO: majorly jazz this up. I'm thinkin' sheet of paper... */
+
+/* fonts/global stuff */
+body {
+  font-family: 'Lucida Grande' sans-serif;
+}
+a {
+  text-decoration: none;
+  color: blue;
+}
+a:hover {
+  color: green;
+}
+p.notice {
+  font-style: italic;
+}
+input.placeholder {
+  color: grey;
+}
+/* layout */
+#heading {
+  border-bottom: thin grey solid;
+}
+#heading h1 {
+  margin: .3em 0px .3em 0px;
+}
+#sidebar {
+  float: right;
+  border-left: thin grey solid;
+  height: 100%;
+  font-size: small;
+}
+.sidebar_heading {
+  font-weight: bold;
+}
+#sidebar_actions {
+  padding: 5px 0px 0px 5px;
+}
+#footer {
+  font-size: small;
+  border-top: thin grey solid;
+  clear: right;
+}
+/* filter interface */
+#visibility_toggle {
+  font-size: small;
+  padding-top: 15px;
+}
+#clear_link {
+  font-size: small;
+}
+#spinner {
+  margin: 0px 0px 10px 10px;
+}
+/* show page */
+a.control {
+  font-size: small;
+}
+#metadata_list, #backlinks_list {
+  margin: 5px 5px 5px 0px;
+}
