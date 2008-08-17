@@ -3,6 +3,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
 import helpers
+import hooks, filters
 
 def redirect(url):
   """redirect the browser to url"""
@@ -39,5 +40,7 @@ def render(template,format='html',**context):
   # TODO: save all this in a permanent context object?
   # TODO: automate additions to context?
   register_to_context(context,helpers)
+  context['filters'] = filters
+  context['hooks'] = hooks
   
   return template.render(**context)
