@@ -700,3 +700,7 @@ SELECT * FROM triples WHERE object_id = 34
 GET /svn/braindump/trunk/
 
 SELECT name FROM pages  
+
+GET /svn/braindump/tags/0.3/
+
+SELECT name FROM pages  
