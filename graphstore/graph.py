@@ -40,7 +40,7 @@ class Graph:
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):
-    self.query(query)
+    self.query(query,replacements)
     self.connection.commit()
   
   def id_from_name(self, name, create_if_nonexistent=False):

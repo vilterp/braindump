@@ -35,7 +35,6 @@ def link(text, href, **options):
   return '<a href="%s"%s>%s</a>' % (url(href),htmloptions(**options),text)
 
 def pagelink(page, **options):
-  print page
   if isinstance(page,list):
     return list_to_human([pagelink(ind_page,**options) for ind_page in page])
   elif isinstance(page,Page):

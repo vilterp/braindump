@@ -1,6 +1,6 @@
 <%inherit file="layout.mako"/>  
-<%def name="title()"> &raquo; ${page.name}</%def>
-<%def name="heading()"> &raquo; <span id="page_name">${page.name}</span></%def>
+<%def name="title()"> &raquo; ${page['name']}</%def>
+<%def name="heading()"> &raquo; <span id="page_name">${page['name']}</span></%def>
 <%def name="head()"><%include file="show.js.mako"/></%def>
 <%def name="content()">
 
@@ -9,13 +9,11 @@
   <%include file="metadata-html.mako"/>
 </div>
 
-<a href="#" id="edit_backlinks_link" class="control">Edit</a>
 <div id="backlinks">
-  % if page.backlinks:
+  % if page['backlinks']:
     <ul id="backlinks_list">
-    % for attribute in page.backlinks.keys():
-      <li class="backlink">${pagelink(attribute)} of ${pagelink(page.backlinks[attribute])}</li>
-      <!-- don't forget plurals -->
+    % for attribute in page['backlinks'].keys():
+      <li class="backlink">${pagelink(attribute)} of ${pagelink(page['backlinks'][attribute])}</li>
     % endfor
     </ul>
   % else:
@@ -25,12 +23,10 @@
 
 <a href="#" id="edit_description_link" class="control">Edit</a>
 <div id="description">
-  % if page.description:
-    ${page.description} <!-- do filters... -->
-  % else:
-    <p class="notice">No description.</p>
-  % endif
+  <%include file="description-html.mako"/>
 </div>
+
+<!-- body...? -->
 
 </%def>
 <%def name="sidebar_actions()">

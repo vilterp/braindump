@@ -16,13 +16,6 @@ def is_plural(word):
 def find_key(dic, val):
   return [k for k, v in dic.iteritems() if v == val][0]
 
-def merge(*sequences):
-  merged = {}
-  for sequence in sequences:
-    for item in sequence:
-      merged[item] = 1
-  return merged.keys()
-
 def set_or_append(target, item):
   if target is None:
     return item
@@ -43,7 +36,3 @@ def pluralize_key_if_value_is_list(the_dict):
 
 class NonexistentPageError(NameError):
   pass
-
-def regexp(expr, item):
-  r = re.compile(expr)
-  return r.match(item) is not None

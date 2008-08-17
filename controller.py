@@ -18,36 +18,44 @@ class Main:
   def show(self, pagename, section=None, format='html'):
     graph = cherrypy.thread_data.graph
     try:
-      page = object()
-      page.name = pagename
-      page.metadata = graph.get(pagename)
-      page.description = graph.describe(pagename)
-      page.backlinks = graph.backlinks(page)
-    except graphstore.util.NonexistentPageError:
-      page = object()
+      page = dict(name=pagename,
+                  metadata=graph.get(pagename),
+                  description=graph.describe(pagename),
+                  backlinks=graph.backlinks(pagename))
+    except:
+      page = dict()
     # render metadata and description sections in alt. formats?
     # apply filters?!?
     if section == 'metadata':
       content_type('text/plain')
-      return render('metadata-plain',page=page)
+      return render('edit-metadata',page=page)
     elif section == 'description':
       content_type('text/plain')
-      return render('description-plain',page=page)
+      return render('edit-description',page=page)
     else:
       return render('show',format,page=page)
   show.exposed = True
   
-  def savemetadata(self, page, metadata=None, **kwargs):
+  def save_metadata(self, page, metadata):
     # save inferred types either here or in Graph.save()
     pagedata = {}
     for line in metadata.split("\n"):
       item = line.split(':')
-      attribute = item[0].strip()
-      value = item[1].strip()
-      pagedata[attribute] = value
-    cherrypy.thread_data.graph[page].metadata = pagedata
-    return render('metadata-html',page=pagedata)
-  savemetadata.exposed = True
+      if len(item) is 2: # check agains blank lines
+        attribute = item[0].strip()
+        value = item[1].strip()
+        if attribute and item: # check against blank attrs/values
+          cherrypy.thread_data.graph.set(page,attribute,value) # save to db
+          pagedata[attribute] = value
+    return render('metadata-html',page=dict(metadata=pagedata))
+  save_metadata.exposed = True
+  
+  def save_description(self, page, description=None):
+    print description
+    if description.strip():
+      cherrypy.thread_data.graph.describe(page,description)
+    return render('description-html',page=dict(description=description))
+  save_description.exposed = True
   
   def goto(self, page):
     redirect('show/%s' % page)
@@ -59,5 +67,4 @@ class Main:
     g.execute('DELETE FROM triples')
     redirect('/')
   delete_everything.exposed = True
-
   
