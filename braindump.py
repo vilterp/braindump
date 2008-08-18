@@ -1,5 +1,5 @@
 from controller import *
 
-import plugins.textile.textile
+import plugins
 
 cherrypy.quickstart(Main(),config='development.config')
