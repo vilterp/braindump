@@ -17,10 +17,11 @@
         // swap metadata area for textarea
         this.innerHTML = 'Loading...'
         $('#metadata').addClass('currently_editing')
-        $("textarea[name='metadata']").load('${url("/show/%s/metadata" % escape(page["name"]))}',
-                                            function(){
-                                              $('#edit_metadata_link').html('Save')
-                                            })
+        $('#metadata').load('${url("/show/%s/metadata" % escape(page["name"]))}',
+                            function(){
+                              $('#edit_metadata_link').html('Save')
+                              $("textarea[name='metadata']").focus()
+                            })
       }
     })
     
@@ -43,27 +44,23 @@
         $('#description').load('${url("/show/%s/description" % escape(page["name"]))}',
                                function(){
                                  $('#edit_description_link').html('Save')
+                                 $("textarea[name='description']").focus()
                                })
       }
     })
     
-    // delete
+    // delete link
 
     $('#delete_link').click(function(){
-      $(this).addClass('currently_prompting')
-      $(this).html('really? <a href="#" id="delete_yes">yes</a>/<a href="#" id="delete_no">no</a>')
-      
-      $('#delete_yes').attr('href','${url("/delete/%s" % page["name"])}')
-      $('#delete_yes').click(function(){
-        confirm('Are you sure? All metadata will be lost, as well as the description.')
-      
-      })
-      
-      $('#delete_no').click(function(){
-        $('#delete_link').removeClass()
-        $('#delete_link').html('delete')
-      })
-      
+      $(this).hide()
+      $('#delete_prompt').show()
+    })
+    $('#delete_no').click(function(){
+      $('#delete_prompt').hide()
+      $('#delete_link').show()
+    })
+    $('#delete_yes').click(function(){
+      confirm('Are you sure? The description and metadata will be lost.')
     })
 
   })

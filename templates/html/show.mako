@@ -33,6 +33,11 @@
 <span class="sidebar_heading">This Page:</span>
 <ul>
   <li><a href="#" id="rename_link">rename</a></li>
-  <li><a href="#" id="delete_link">delete</a></li>
+  <li>
+    <a href="#" id="delete_link">delete</a>
+    <span id="delete_prompt" style="display: none">
+      really? <a href="${url('/delete/%s' % page['name'])}" id="delete_yes">yes</a>/<a href="#" id="delete_no">no</a>
+    </span>
+  </li>
 </ul>
 </%def>

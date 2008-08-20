@@ -59,3 +59,6 @@ a.control {
 #metadata_list, #backlinks_list {
   margin: 5px 5px 5px 0px;
 }
+textarea {
+  font: inherit;
+}
