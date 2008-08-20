@@ -1,6 +1,8 @@
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function(){
-
+    
+    // edit metadata
+    
     $('#edit_metadata_link').click(function(){
       if($('#metadata').hasClass('currently_editing')) {
         // save metadata
@@ -22,6 +24,8 @@
       }
     })
     
+    // edit description
+    
     $('#edit_description_link').click(function(){
       if($('#description').hasClass('currently_editing')) {
         // save description
@@ -42,9 +46,28 @@
                                })
       }
     })
+    
+    // delete
+
+    $('#delete_link').click(function(){
+      $(this).addClass('currently_prompting')
+      $(this).html('really? <a href="#" id="delete_yes">yes</a>/<a href="#" id="delete_no">no</a>')
+      
+      $('#delete_yes').attr('href','${url("/delete/%s" % page["name"])}')
+      $('#delete_yes').click(function(){
+        confirm('Are you sure? All metadata will be lost, as well as the description.')
+      
+      })
+      
+      $('#delete_no').click(function(){
+        $('#delete_link').removeClass()
+        $('#delete_link').html('delete')
+      })
+      
+    })
 
   })
   
-  // TODO: script rename and delete buttons
+  // TODO: script rename button
   
 </script>

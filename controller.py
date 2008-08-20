@@ -56,6 +56,12 @@ class Main:
     return render('description-html',page=dict(description=description))
   save_description.exposed = True
   
+  def delete(self, page):
+    cherrypy.thread_data.graph.unset(page)
+    cherrypy.thread_data.graph.describe(page,'')
+    redirect('/')
+  delete.exposed = True
+  
   def goto(self, page):
     redirect('show/%s' % page)
   goto.exposed = True
