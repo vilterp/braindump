@@ -51,7 +51,6 @@ class Main:
   save_metadata.exposed = True
   
   def save_description(self, page, description=None):
-    print description
     if description.strip():
       cherrypy.thread_data.graph.describe(page,description)
     return render('description-html',page=dict(description=description))
