@@ -32,7 +32,14 @@
 <%def name="sidebar_actions()">
 <span class="sidebar_heading">This Page:</span>
 <ul>
-  <li><a href="#" id="rename_link">rename</a></li>
+  <li>
+    <a href="#" id="rename_link">rename</a>
+    <form id="rename_form" action="${url('/rename/%s' % page['name'])}" style="display: none">
+      <input name="newname" type="text" size="15"/>
+      <input type="submit" value="Go"/>
+      <a href="#" id="rename_cancel">cancel</a>
+    </form>
+  </li>
   <li>
     <a href="#" id="delete_link">delete</a>
     <span id="delete_prompt" style="display: none">

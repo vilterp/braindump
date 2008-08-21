@@ -62,9 +62,19 @@
     $('#delete_yes').click(function(){
       confirm('Are you sure? The description and metadata will be lost.')
     })
+    
+    // rename link
+  
+    $('#rename_link').click(function(){
+      $(this).hide()
+      $('#rename_form').show()
+      $("input[name='newname']").focus()
+    })
+    $('#rename_cancel').click(function(){
+      $("input[name='newname']").blur()
+      $('#rename_form').hide()
+      $('#rename_link').show()
+    })
 
-  })
-  
-  // TODO: script rename button
-  
+})
 </script>

@@ -62,3 +62,12 @@ a.control {
 textarea {
   font: inherit;
 }
+/* sidebar */
+#sidebar ul {
+  list-style-type: none;
+}
+/*
+#sidebar li {
+  argh!! how do I un-indent this?!
+}
+*/

@@ -62,6 +62,12 @@ class Main:
     redirect('/')
   delete.exposed = True
   
+  def rename(self, page, newname):
+    cherrypy.thread_data.graph.rename(page,newname)
+    redirect('/show/%s' % newname)
+    # flash something? "page renamed"..?
+  rename.exposed = True
+    
   def goto(self, page):
     redirect('show/%s' % page)
   goto.exposed = True
