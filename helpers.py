@@ -5,23 +5,25 @@ import re
 
 # let's see if enough helpers are necessary to make this page worth it
 
-# humanize helpers. FIXME: better place for these?
-# def list_to_human(thelist):
-#   final = ''
-#   for item in thelist[:-1]:
-#     final += item + ', '
-#   return final + 'and ' + thelist[-1]
-# 
-# def human_to_list(thestr):
-#   return flatten(re.split(', |and ',thestr))
-# 
-# def flatten(thelist):
-#   # is this in the std lib somewhere..?
-#   final = []
-#   for item in thelist:
-#     if item: final.append(item)
-#   return final
-# 
+def list_to_human(thelist):
+  # this can def be refactored
+  # don't forget the oxford comma! (but not for 2-len lists)
+  if isinstance(thelist,unicode): return thelist
+  final = ''
+  for item in thelist[:-2]:
+    final += item + ', '
+  return final + thelist[-2] + ' and ' + thelist[-1]
+
+def human_to_list(thestr):
+  return flatten(re.split(', |and ',thestr))
+
+def flatten(thelist):
+  # is this in the std lib somewhere..?
+  final = []
+  for item in thelist:
+    if item: final.append(item)
+  return final
+
 def htmloptions(**options):
   if options is None:
     return ''

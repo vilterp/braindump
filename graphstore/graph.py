@@ -36,6 +36,9 @@ class Graph:
                                           object_id numeric)""")
   
   def query(self, query, replacements=()):
+    log = open('log.txt','a')
+    log.write((query,replacements).__str__() + '\n')
+    log.close()
     self.queries.append((query,replacements)) # for debugging
     return self.cursor.execute(query,replacements)
   
@@ -157,33 +160,27 @@ class Graph:
       else:
         return None
   
-  def set(self, subject, predicate, objekt, allow_multiple_values=False):
+  def set(self, subject, predicate, objekt):
+    subject_id = self.id_from_name(subject,True)
     if is_plural(predicate) and isinstance(objekt,list):
-      for value in objekt:
-        self.set(subject,singularize(predicate),value,True)
+      predicate_id = self.id_from_name(singularize(predicate),True)
     else:
-      subject_id = self.id_from_name(subject,True)
       predicate_id = self.id_from_name(predicate,True)
-      object_id = self.id_from_name(objekt,True)
-      
-      if allow_multiple_values: # e.g. languages: [php, python]
-        # delete any existing value(s)
-        self.execute("""DELETE FROM triples WHERE 
-                        subject_id = ? AND predicate_id = ?""",
-                                       (subject_id,predicate_id))
+    # delete any existing value(s)
+    self.execute("""DELETE FROM triples WHERE 
+                    subject_id = ? AND predicate_id = ?""",
+                                   (subject_id,predicate_id))
+    if is_plural(predicate) and isinstance(objekt,list): # set multiple values
+      predicate_id = self.id_from_name(singularize(predicate),True)
+      for value in objekt:
+        object_id = self.id_from_name(value,True)
         # set new value
         self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                 (subject_id,predicate_id,object_id))
-      else:
-        if self.triple_exists(subject_id,predicate_id,object_id):
-          # update current value
-          self.execute("""UPDATE triples SET object_id = ? WHERE
-                          subject_id = ? AND predicate_id = ?""",
-                               (object_id,subject_id,predicate_id))
-        else:
-          # set new value
-          self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
-                                  (subject_id,predicate_id,object_id))
+    else: # set one value
+      object_id = self.id_from_name(objekt,True)
+      self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
+                              (subject_id,predicate_id,object_id))
   
   def unset(self, page, attribute=None):
     subject_id = self.id_from_name(page)

@@ -27,10 +27,8 @@ class Main:
     # render metadata and description sections in alt. formats?
     # apply filters?!?
     if section == 'metadata':
-      content_type('text/plain')
       return render('edit-metadata',page=page)
     elif section == 'description':
-      content_type('text/plain')
       return render('edit-description',page=page)
     else:
       return render('show',format,page=page)
@@ -43,7 +41,8 @@ class Main:
       item = line.split(':')
       if len(item) is 2: # check agains blank lines
         attribute = item[0].strip()
-        value = item[1].strip()
+        value = helpers.human_to_list(item[1].strip())
+        if len(value) == 1: value = value[0]
         if attribute and item: # check against blank attrs/values
           cherrypy.thread_data.graph.set(page,attribute,value) # save to db
           pagedata[attribute] = value

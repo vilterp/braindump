@@ -1,4 +1,7 @@
 <script type="text/javascript" charset="utf-8">
+
+  // TODO: error messages! things will go wrong!
+
   $(document).ready(function(){
     
     // edit metadata
