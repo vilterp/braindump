@@ -1,8 +1,14 @@
-import cherrypy, graphstore, re, os, urllib, mimetypes
+import cherrypy, graphstore, re, os, urllib, types
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
-import helpers, hooks, filters
+import helpers
+
+mime_types = {
+  'html': 'text/html',
+  'json': 'application/json',
+  'yaml': 'text/yaml'
+}
 
 def redirect(url):
   """redirect the browser to url"""
@@ -10,7 +16,6 @@ def redirect(url):
   cherrypy.response.headers['Location'] = cherrypy.url(url)
 
 def content_type(type):
-  print 'setting content type to ', type
   cherrypy.response.headers['Content-type'] = type
 
 def init_graph(thread_index):
@@ -26,7 +31,8 @@ cherrypy.engine.subscribe('start_thread',init_graph)
 lookups = {}
 for format in os.listdir('templates'):
   if not '.' in format:
-    lookups[format] = TemplateLookup(directories=['templates/%s' % format])
+    lookups[format] = TemplateLookup(directories=['templates/%s' % format],
+                                     imports=['from textile import textile'])
 
 def register_to_context(context, themodule):
   for function in dir(themodule):
@@ -35,13 +41,11 @@ def register_to_context(context, themodule):
 
 def render(template,format='html',**context):
   """render templates/[format]/[template].mako and return result"""
-  content_type(mimetypes.guess_type('.' + format)[0])
+  content_type(mime_types[format])
   template = lookups[format].get_template('%s.mako' % template)
   
   # TODO: save all this in a permanent context object?
   # TODO: automate additions to context?
   register_to_context(context,helpers)
-  context['filters'] = filters
-  context['hooks'] = hooks
   
   return template.render(**context)
