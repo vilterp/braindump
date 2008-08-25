@@ -1,14 +1,8 @@
-import cherrypy, graphstore, re, os, urllib, types
+import cherrypy, graphstore, re, os, urllib, mimetypes, more_mime_types
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako.runtime import Context
 import helpers
-
-mime_types = {
-  'html': 'text/html',
-  'json': 'application/json',
-  'yaml': 'text/yaml'
-}
 
 def redirect(url):
   """redirect the browser to url"""
@@ -41,7 +35,7 @@ def register_to_context(context, themodule):
 
 def render(template,format='html',**context):
   """render templates/[format]/[template].mako and return result"""
-  content_type(mime_types[format])
+  content_type(mimetypes.guess_type('.' + format)[0])
   template = lookups[format].get_template('%s.mako' % template)
   
   # TODO: save all this in a permanent context object?

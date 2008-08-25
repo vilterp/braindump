@@ -1,5 +1,5 @@
 % if page['description']:
-  ${page['description']}  <!-- ahhh textile!! -->
+  ${page['description'] | smart_str, textile}
 % else:
   <p class="notice">No description.</p>
 % endif
