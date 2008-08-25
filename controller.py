@@ -23,7 +23,7 @@ class Main:
                   description=graph.describe(pagename),
                   backlinks=graph.backlinks(pagename))
     except:
-      page = dict()
+      page = dict(name=pagename)
     # render metadata and description sections in alt. formats?
     # apply filters?!?
     if section == 'metadata':

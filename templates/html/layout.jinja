@@ -1,31 +1,30 @@
 <!DOCTYPE html>
-<!-- TODO: validate & correctly indent everything -->
 <html>
   <head>
-    <title>braindump${self.title()}</title>
-    ${load_css('braindump')}
-    ${load_js('jquery')}
-    ${load_js('placeholders')}
-    ${self.head()}
+    <title>braindump{% block title %}{% endblock %}<title>
+    {{ load_css('braindump') }}
+    {{ load_js('jquery') }}
+    {{ load_js('placeholders') }}
+    {% block head %}{% endblock %}
   </head>
   <body>
     
     <div id="heading">
-      <h1>${link('braindump','/')}${self.heading()}</h1>
+      <h1>{{ link('braindump','/') }}{% block heading %}{% endblock %}</h1>
     </div>
     
     <!-- round this and just have it float there? -->
     <div id="sidebar">
-      <form method="GET" action="${url('/goto')}">
+      <form method="GET" action="{{ url('/goto') }}">
         <input type="text" value="Go To" id="goto_box" name="page" class="placeholder"/>
       </form>
       <div id="sidebar_actions">
-        ${self.sidebar_actions()}
+        {% block sidebar_actions %}{% endblock %}
       </div>
     </div>
     
     <div id="content">
-      ${self.content()}
+      {% block content %}{% endblock %}
     </div>
     
     <div id="footer">

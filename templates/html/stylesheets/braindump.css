@@ -11,7 +11,7 @@ a {
 a:hover {
   color: green;
 }
-p.notice {
+.notice {
   font-style: italic;
 }
 input.placeholder {

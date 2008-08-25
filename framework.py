@@ -1,8 +1,4 @@
-import cherrypy, graphstore, re, os, urllib, mimetypes, more_mime_types
-from mako.template import Template
-from mako.lookup import TemplateLookup
-from mako.runtime import Context
-import helpers
+import cherrypy, jinja2, graphstore, re, os, mimetypes, more_mime_types, helpers
 
 def redirect(url):
   """redirect the browser to url"""
@@ -20,26 +16,26 @@ def init_graph(thread_index):
 
 cherrypy.engine.subscribe('start_thread',init_graph)
 
-# lookup objects needed by mako to find inherited templates, etc
-# one per format folder
-lookups = {}
-for format in os.listdir('templates'):
-  if not '.' in format:
-    lookups[format] = TemplateLookup(directories=['templates/%s' % format],
-                                     imports=['from textile import textile'])
+template_environment = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
+import simplejson, yaml, textile
+template_environment.filters['smart_str'] = helpers.smart_str
+template_environment.filters['textilize'] = textile.textile
+template_environment.filters['yamlize'] = yaml.dump
+template_environment.filters['jsonify'] = simplejson.dump
 
-def register_to_context(context, themodule):
+def add_to_context(context, themodule):
   for function in dir(themodule):
     context[function] = getattr(themodule,function)
   return context
 
 def render(template,format='html',**context):
-  """render templates/[format]/[template].mako and return result"""
-  content_type(mimetypes.guess_type('.' + format)[0])
-  template = lookups[format].get_template('%s.mako' % template)
+  """render templates/[format]/[template].jinja and return result"""
+  content_type(mimetypes.guess_type('.'+format)[0])
+  print '%s/%s.jinja' % (format, template)
+  template = template_environment.get_template('%s/%s.jinja' % (format, template))
   
   # TODO: save all this in a permanent context object?
   # TODO: automate additions to context?
-  register_to_context(context,helpers)
+  add_to_context(context,helpers)
   
   return template.render(**context)

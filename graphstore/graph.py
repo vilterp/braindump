@@ -13,7 +13,6 @@ class Graph:
     self.lazy_lookup = lazy_lookup
     self.connection = sqlite3.connect(database_path)
     self.cursor = self.connection.cursor()
-    self.queries = []
   
   def __repr__(self):
     return "<Graph source: %s/%s>" % (os.getcwd(), self.database_path)
@@ -36,10 +35,9 @@ class Graph:
                                           object_id numeric)""")
   
   def query(self, query, replacements=()):
-    log = open('log.txt','a')
-    log.write((query,replacements).__str__() + '\n')
-    log.close()
-    self.queries.append((query,replacements)) # for debugging
+    # log = open('log.txt','a')
+    # log.write((query,replacements).__str__() + '\n')
+    # log.close()
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):
@@ -160,9 +158,9 @@ class Graph:
       else:
         return None
   
-  def set(self, subject, predicate, objekt):
+  def set(self, subject, predicate, object):
     subject_id = self.id_from_name(subject,True)
-    if is_plural(predicate) and isinstance(objekt,list):
+    if is_plural(predicate) and isinstance(object,list):
       predicate_id = self.id_from_name(singularize(predicate),True)
     else:
       predicate_id = self.id_from_name(predicate,True)
@@ -170,15 +168,15 @@ class Graph:
     self.execute("""DELETE FROM triples WHERE 
                     subject_id = ? AND predicate_id = ?""",
                                    (subject_id,predicate_id))
-    if is_plural(predicate) and isinstance(objekt,list): # set multiple values
+    if is_plural(predicate) and isinstance(object,list): # set multiple values
       predicate_id = self.id_from_name(singularize(predicate),True)
-      for value in objekt:
+      for value in object:
         object_id = self.id_from_name(value,True)
         # set new value
         self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                 (subject_id,predicate_id,object_id))
     else: # set one value
-      object_id = self.id_from_name(objekt,True)
+      object_id = self.id_from_name(object,True)
       self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                               (subject_id,predicate_id,object_id))
   

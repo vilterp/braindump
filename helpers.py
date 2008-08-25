@@ -1,7 +1,7 @@
+import re, mimetypes, more_mime_types
 from urllib import quote_plus as escape
 from cherrypy import url
 from graphstore.page import Page
-import re
 
 # let's see if enough helpers are necessary to make this page worth it
 
@@ -17,12 +17,9 @@ def list_to_human(thelist):
 def human_to_list(thestr):
   return flatten(re.split(', |and ',thestr))
 
-def flatten(thelist):
+def flatten(list):
   # is this in the std lib somewhere..?
-  final = []
-  for item in thelist:
-    if item: final.append(item)
-  return final
+  return [item for item in list if item]
 
 def htmloptions(**options):
   if options is None:
@@ -52,10 +49,11 @@ def load_js(source):
   if '.js' not in source: source += '.js'
   return '<script type="text/javascript" src="%s"></script>' % url('/javascripts/'+source)
 
-def autodiscover_link(source, title, type="atom"):
+def autodiscovery_link(source, title, type="atom"):
   # TODO: opensearch
-  mimetypes = {'atom': 'application/atom+xml', 'rss': 'application/rss+xml'}
-  return '<link rel="alternate" title="%s" type="%s" href="%s"/>' % (title,mimetypes[type],url(source))
+  mimetype = mimetypes.guess_type('.' + type)[0]
+  return '<link rel="alternate" title="%s" type="%s" href="%s"/>' % \
+                                                          (title,mimetype,url(source))
 
 # from django: http://code.djangoproject.com/browser/django/trunk/django/utils/encoding.py
 def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
