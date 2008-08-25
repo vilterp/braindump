@@ -1,0 +1,7 @@
+<ul>
+  {% for page in pages %}
+    <li>{{ pagelink(page) }}</li>
+  {% else %}
+    <p class="notice">No pages match your criteria.</p>
+  {% endfor %}
+</ul>

@@ -1,0 +1,31 @@
+{% extends 'html/layout.jinja' %}
+{% block title %}{% endblock %}
+{% block heading %}{% endblock %}
+{% block head %}{{ load_js('filter_interface') }}{% endblock %}
+{% block content %}
+  {% if pages %}
+    <div id="filter_interface">
+      <a href="#" id="visibility_toggle" accesskey="f">{{ 'Hide' if criteria else 'Filter' }}</a>
+      <form id="criteria_form"{{ ' style="display:none"' if not criteria }}>
+        list pages where
+        <input type="text" name="criteria" value="{{ criteria if criteria }}" size="30" id="criteria_input"/>
+        <input type="submit" value="Update"/>
+        <a href="#" id="clear_link"{{ ' style="display: none"' if not criteria }}>clear</a>
+      </form>
+    </div>
+    
+    <img src="{{ url('/images/spinner.gif') }}" id="spinner" style="display: none"/>
+    <div id="pages_list">
+      {% include 'html/list.jinja' %}
+    </div>
+  {% else %}
+    <p class="notice">There are no pages. Type the name of a new page in the 'Go To' box to get started &raquo;</p>
+  {% endif %}
+{% endblock %}
+{% block sidebar_actions %}
+  <span class="sidebar_heading">This List:</span>
+  <ul>
+    <li><a href="{{ url('/') }}{{ '?criteria=%s' % escape(criteria) if criteria }}" id="permalink">permalink</a></li>
+    <li><a href="{{ url('/?format=dump') }}{{ '&amp;criteria=%s' % escape(criteria) if criteria }}" id="dump_link">dump &raquo;</a></li>
+  </ul>
+{% endblock %}
