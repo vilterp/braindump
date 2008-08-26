@@ -81,3 +81,7 @@ class Main:
     redirect('/')
   delete_everything.exposed = True
   
+  def dynamic_javascripts(self, path, **args):
+    return render('javascripts/%s' % path, content_type='text/javascript', **args)
+  dynamic_javascripts.exposed = True
+  

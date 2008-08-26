@@ -1,10 +1,8 @@
 {% extends 'layout.jinja' %}
 {% block title %} &raquo; {{ page.name }}{% endblock %}
 {% block heading %} &raquo; {{ page.name }}{% endblock %}
-<!-- show.js should be loaded with a script tag to keep markup clean -->
 {% block head %}
-  {{ load_js('jeditable.jquery.js') }}
-  {% include 'show.js.jinja' %}
+  {{ load_dynamic_js('show',pagename=page.name) }}
 {% endblock %}
 {% block content %}
   
@@ -16,8 +14,8 @@
   <div id="backlinks">
     {% if page.backlinks %}
       <ul id="backlinks">
-        {% for attribute in page.backlinks.keys() %}
-          <li class="backlink">{{ pagelink(attribute) }} of {{ pagelink(page.backlinks[attribute]) }}</li>
+        {% for backlink in page.backlinks.iteritems() %}
+          <li class="backlink">{{ pagelink(backlink[0]) }} of {{ pagelink(backlink[1]) }}</li>
         {% endfor %}
       </ul>
     {% else %}

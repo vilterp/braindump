@@ -7,6 +7,7 @@ def redirect(url):
   cherrypy.response.headers['Location'] = cherrypy.url(url)
 
 def content_type(type):
+  print 'setting content type to', type
   cherrypy.response.headers['Content-type'] = type
 
 def init_graph(thread_index):
@@ -22,7 +23,7 @@ additional_filters = {
   'smart_str': helpers.smart_str,
   'textilize': textile.textile,
   'yamlize': yaml.dump,
-  'jsonfy': simplejson.dump
+  'jsonify': simplejson.dump
 }
 for format in [format for format in os.listdir('templates') if '.' not in format]:
   environments[format] = jinja2.Environment(loader=jinja2.FileSystemLoader('templates/%s' % format))
@@ -33,9 +34,13 @@ def add_to_context(context, themodule):
     context[function] = getattr(themodule,function)
   return context
 
-def render(template,format='html',**context):
+def render(template, format='html', contenttype=None, **context):
   """render templates/[format]/[template].jinja and return result"""
-  content_type(mimetypes.guess_type('.'+format)[0])
+  if contenttype is not None:
+    content_type(mimetypes.guess_type('.'+format)[0])
+  else:
+    print contenttype
+    content_type(contenttype)
   template = environments[format].get_template('%s.jinja' % template)
   
   # TODO: save all this in a permanent context object?

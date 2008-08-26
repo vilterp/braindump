@@ -1,7 +1,7 @@
 {% if page.metadata %}
   <ul id="metadata">
-    {% for attribute in page.metadata.keys() %}
-      <li class="datum">{{ pagelink(attribute) }}: {{ pagelink(page.metadata[attribute]) }}</li>
+    {% for datum in page.metadata.iteritems() %}{# lol 'datum' #}
+      <li class="datum">{{ pagelink(datum[0]) }}: {{ pagelink(datum[1]) }}</li>
     {% endfor %}
   </ul>
 {% else %}

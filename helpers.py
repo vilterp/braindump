@@ -1,7 +1,6 @@
 import re, mimetypes, more_mime_types
 from urllib import quote_plus as escape
-from cherrypy import url
-from graphstore.page import Page
+from cherrypy import url as cherrypy_url
 
 # let's see if enough helpers are necessary to make this page worth it
 
@@ -36,8 +35,6 @@ def link(text, href, **options):
 def pagelink(page, **options):
   if isinstance(page,list):
     return list_to_human([pagelink(ind_page,**options) for ind_page in page])
-  elif isinstance(page,Page):
-    return pagelink(page.name **options)
   else:
     return link(page,'/show/%s' % page, **options)
 
@@ -49,11 +46,30 @@ def load_js(source):
   if '.js' not in source: source += '.js'
   return '<script type="text/javascript" src="%s"></script>' % url('/javascripts/'+source)
 
+def load_dynamic_js(source, **args):
+  if '.js' not in source: source += '.js'
+  return '<script type="text/javascript" src="%s"></script>' % url('/dynamic_javascripts/'+source)
+
 def autodiscovery_link(source, title, type="atom"):
   # TODO: opensearch
   mimetype = mimetypes.guess_type('.' + type)[0]
   return '<link rel="alternate" title="%s" type="%s" href="%s"/>' % \
                                                           (title,mimetype,url(source))
+
+# this is probably in the stdlib somewhere...
+def GET_params(**params):
+  final = ''
+  first = True
+  for param in params.iteritems():
+    if first: 
+      final += '?'
+      first = False
+    else: final += '&'
+    final += '%s=%s' % (escape(param[0]),escape(param[1]))
+  return final
+
+def url(path, **params):
+  return cherrypy_url(path) + GET_params(**params)
 
 # from django: http://code.djangoproject.com/browser/django/trunk/django/utils/encoding.py
 def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
