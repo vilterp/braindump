@@ -1,0 +1,5 @@
+{% if page.description %}
+  {{ page.description | smart_str | textilize }}
+{% else %}
+  <p class="notice">No description. Double-click to edit.</p>
+{% endif %}

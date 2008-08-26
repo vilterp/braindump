@@ -11,11 +11,14 @@ class Main:
   
   def list(self, criteria=None, **params):
     """for index's ajax interface: returns a simple <ul>"""
-    pages = cherrypy.thread_data.graph.list(criteria)
+    try:
+      pages = cherrypy.thread_data.graph.list(criteria)
+    except:
+      pages = []
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
-  def show(self, pagename, section=None, format='html'):
+  def show(self, pagename, section=None, format='html', **junk):
     graph = cherrypy.thread_data.graph
     try:
       page = dict(name=pagename,
@@ -29,7 +32,7 @@ class Main:
     if section == 'metadata':
       return render('edit-metadata',page=page)
     elif section == 'description':
-      return render('edit-description',page=page)
+      return page['description']
     else:
       return render('show',format,page=page)
   show.exposed = True

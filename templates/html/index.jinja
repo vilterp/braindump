@@ -1,4 +1,4 @@
-{% extends 'html/layout.jinja' %}
+{% extends 'layout.jinja' %}
 {% block title %}{% endblock %}
 {% block heading %}{% endblock %}
 {% block head %}{{ load_js('filter_interface') }}{% endblock %}
@@ -16,7 +16,7 @@
     
     <img src="{{ url('/images/spinner.gif') }}" id="spinner" style="display: none"/>
     <div id="pages_list">
-      {% include 'html/list.jinja' %}
+      {% include 'list.jinja' %}
     </div>
   {% else %}
     <p class="notice">There are no pages. Type the name of a new page in the 'Go To' box to get started &raquo;</p>

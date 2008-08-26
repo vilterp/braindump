@@ -1,0 +1,9 @@
+{% if page.metadata %}
+  <ul id="metadata">
+    {% for attribute in page.metadata.keys() %}
+      <li class="datum">{{ pagelink(attribute) }}: {{ pagelink(page.metadata[attribute]) }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="notice">No metadata.</p>
+{% endif %}

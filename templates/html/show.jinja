@@ -1,21 +1,16 @@
-{% extends 'html/layout.jinja' %}
+{% extends 'layout.jinja' %}
 {% block title %} &raquo; {{ page.name }}{% endblock %}
 {% block heading %} &raquo; {{ page.name }}{% endblock %}
 <!-- show.js should be loaded with a script tag to keep markup clean -->
-{% block head %}{% include 'html/show.js.jinja' %}{% endblock %}
+{% block head %}
+  {{ load_js('jeditable.jquery.js') }}
+  {% include 'show.js.jinja' %}
+{% endblock %}
 {% block content %}
   
   <a href="#" id="edit_metadata_link" class="control" accesskey="m">Edit</a>
   <div id="metadata">
-    {% if page.metadata %}
-      <ul id="metadata">
-        {% for attribute in page.metadata.keys() %}
-          <li class="datum">{{ pagelink(attribute) }}: {{ pagelink(page.metadata[attribute]) }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="notice">No metadata.</p>
-    {% endif %}
+    {% include 'metadata-html.jinja' %}
   </div>
 
   <div id="backlinks">
@@ -30,13 +25,8 @@
     {% endif %}
   </div>
 
-  <a href="#" id="edit_description_link" class="control">Edit</a>
-  <div id="description">
-    {% if page.description %}
-      {{ page.description | smart_str | textilize }}
-    {% else %}
-      <p class="notice">No description.</p>
-    {% endif %}
+  <div id="description" title="double-click to edit">
+    {% include 'description-html.jinja' %}
   </div>
 
   <!-- body...? -->
