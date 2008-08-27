@@ -29,7 +29,7 @@ def htmloptions(**options):
       final += ' %s="%s"' % (option,options[option])
     return final
 
-def link(text, href, **options):
+def link(text, href='#', **options):
   return '<a href="%s"%s>%s</a>' % (url(href),htmloptions(**options),text)
 
 def pagelink(page, **options):
@@ -69,7 +69,11 @@ def GET_params(**params):
   return final
 
 def url(path, **params):
+  if path is '#': return path
   return cherrypy_url(path) + GET_params(**params)
+
+def image(path, **options):
+  return '<img src="%s"%s/>' % (url('/images/%s' % path),htmloptions(**options))
 
 # from django: http://code.djangoproject.com/browser/django/trunk/django/utils/encoding.py
 def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):

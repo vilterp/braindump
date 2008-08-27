@@ -37,9 +37,15 @@ class Main:
       return render('show',format,page=page)
   show.exposed = True
   
-  def save_metadata(self, subject, object, predicate):
-    cherrypy.thread_data.graph.set(subject, object, predicate)
+  def save_metadata(self, subject, object=None, predicate=None):
+    print subject, predicate, object
+    cherrypy.thread_data.graph.set(subject, predicate, object)
+    return render('datum',datum=(predicate,object))
   save_metadata.exposed = True
+  
+  def unset_metadata(self, subject, predicate=None):
+    cherrypy.thread_data.graph.unset(subject,predicate)
+  unset_metadata.exposed = True
   
   def edit_description(self, page):
     description = cherrypy.thread_data.graph.describe(page)

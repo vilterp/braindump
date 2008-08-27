@@ -66,6 +66,12 @@ textarea {
 #sidebar ul {
   list-style-type: none;
 }
+a img {
+  border: none;
+}
+img.control:hover {
+  cursor: pointer;
+}
 /*
 #sidebar li {
   argh!! how do I un-indent this?!

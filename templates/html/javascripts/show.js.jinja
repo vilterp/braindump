@@ -4,28 +4,47 @@ $(document).ready(function(){
   
   // edit metadata
   
-  // yeah... redesign this interface.
-  $('#edit_metadata_link').click(function(){
-    if($('#metadata').hasClass('currently_editing')) {
-      // save metadata
-      this.innerHTML = 'Saving...' // spinner would be nice
-      $('#metadata').load('{{ url("/save_metadata/%s" % escape(pagename)) }}',
-        $("textarea[name='metadata']").serializeArray(),
-        function(){
-          $('#edit_metadata_link').html('Edit')
-          $('#metadata').removeClass()
-        })
-    } else {
-      // swap metadata area for textarea
-      this.innerHTML = 'Loading...'
-      $('#metadata').addClass('currently_editing')
-      $('#metadata').load('{{ url("/show/%s/metadata" % escape(pagename)) }}',
-        function(){
-          $('#edit_metadata_link').html('Save')
-          $("textarea[name='metadata']").focus()
-        })
-    }
+  $('#add_metadata_link').click(function(){
+    $('#edit_metadata').clone().show().insertBefore('#edit_metadata').attr('id','adding_metadata')
+    $('#adding_metadata input[name="predicate"]').focus()
+    $('#save_metadata_image').click(save_metadata)
   })
+  $('li.datum').each(function(){
+    $(this).append($('#metadata_controls').clone())
+  })
+  $('li.datum').mouseover(function(){
+    $(this).children('#metadata_controls').show()
+  })
+  $('li.datum').mouseout(function(){
+    $(this).children('#metadata_controls').hide()
+  })
+  $('#edit_metadata_image').click(function(){
+    predicate = $(this).parent().parent().children('.predicate').html()
+    object = $(this).parent().parent().children('.object').html()
+    $(this).parent().parent().html($('#edit_metadata').clone().show().attr('id','editing_metadata'))
+    $('#editing_metadata input[name="predicate"]').val(predicate)
+    $('#editing_metadata input[name="object"]').val(object)
+    $('#editing_metadata input[name="predicate"]').focus()
+    $('#save_metadata_image').click(save_metadata)
+  })
+  function save_metadata() {
+    $.ajax({
+      url: '{{ url("/save_metadata/%s" % pagename) }}',
+      data: $('#adding_metadata #metadata_form, #editing_metadata #metadata_form').serialize(),
+      success: function(data){
+        $('#adding_metadata, #editing_metadata').replaceWith(data)
+      }
+    })
+  }
+  function unset_metadata(predicate) {
+    $.ajax({
+      url: '{{ url("/unset_metadata/%s" % pagename) }}',
+      data: {predicate: predicate},
+      success: function(){
+        return true
+      }
+    })
+  }
   
   // edit description
   
@@ -57,9 +76,6 @@ $(document).ready(function(){
   $('#delete_no').click(function(){
     $('#delete_prompt').hide()
     $('#delete_link').show()
-  })
-  $('#delete_yes').click(function(){
-    confirm('Are you sure? The description and metadata will be lost.')
   })
   
   // rename link
