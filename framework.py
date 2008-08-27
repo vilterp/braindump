@@ -7,7 +7,6 @@ def redirect(url):
   cherrypy.response.headers['Location'] = cherrypy.url(url)
 
 def content_type(type):
-  print 'setting content type to', type
   cherrypy.response.headers['Content-type'] = type
 
 def init_graph(thread_index):
@@ -34,17 +33,11 @@ def add_to_context(context, themodule):
     context[function] = getattr(themodule,function)
   return context
 
-def render(template, format='html', contenttype=None, **context):
+def render(template, format='html', **context):
   """render templates/[format]/[template].jinja and return result"""
-  if contenttype is not None:
-    content_type(mimetypes.guess_type('.'+format)[0])
-  else:
-    print contenttype
-    content_type(contenttype)
+  content_type(mimetypes.guess_type('.'+format)[0])
   template = environments[format].get_template('%s.jinja' % template)
   
-  # TODO: save all this in a permanent context object?
-  # TODO: automate additions to context?
   add_to_context(context,helpers)
   
   return template.render(**context)

@@ -1,9 +1,7 @@
 {% extends 'layout.jinja' %}
 {% block title %} &raquo; {{ page.name }}{% endblock %}
 {% block heading %} &raquo; {{ page.name }}{% endblock %}
-{% block head %}
-  {{ load_dynamic_js('show',pagename=page.name) }}
-{% endblock %}
+{% block head %}{{ load_dynamic_js('show',pagename=page.name) }}{% endblock %}
 {% block content %}
   
   <a href="#" id="edit_metadata_link" class="control" accesskey="m">Edit</a>

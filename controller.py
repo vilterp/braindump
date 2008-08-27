@@ -37,24 +37,20 @@ class Main:
       return render('show',format,page=page)
   show.exposed = True
   
-  def save_metadata(self, page, metadata):
-    # save inferred types either here or in Graph.save()
-    pagedata = {}
-    for line in metadata.split("\n"):
-      item = line.split(':')
-      if len(item) is 2: # check agains blank lines
-        attribute = item[0].strip()
-        value = helpers.human_to_list(item[1].strip())
-        if len(value) == 1: value = value[0]
-        if attribute and item: # check against blank attrs/values
-          cherrypy.thread_data.graph.set(page,attribute,value) # save to db
-          pagedata[attribute] = value
-    return render('metadata-html',page=dict(metadata=pagedata))
+  def save_metadata(self, subject, object, predicate):
+    cherrypy.thread_data.graph.set(subject, object, predicate)
   save_metadata.exposed = True
   
+  def edit_description(self, page):
+    description = cherrypy.thread_data.graph.describe(page)
+    return render('edit-description',page=dict(description=description))
+  edit_description.exposed = True
+  
   def save_description(self, page, description=None):
-    if description.strip():
+    if description and description.strip():
       cherrypy.thread_data.graph.describe(page,description)
+    else:
+      description = cherrypy.thread_data.graph.describe(page)
     return render('description-html',page=dict(description=description))
   save_description.exposed = True
   
@@ -82,6 +78,9 @@ class Main:
   delete_everything.exposed = True
   
   def dynamic_javascripts(self, path, **args):
-    return render('javascripts/%s' % path, content_type='text/javascript', **args)
+    content_type('text/javascript')
+    template = jinja2.Template(open('templates/html/javascripts/%s.jinja' % path).read())
+    add_to_context(args,helpers)
+    return template.render(**args)
   dynamic_javascripts.exposed = True
   
