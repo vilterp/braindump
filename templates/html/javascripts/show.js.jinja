@@ -8,13 +8,29 @@ $(document).ready(function(){
     $('#edit_metadata').clone().show().insertBefore('#edit_metadata').attr('id','adding_metadata')
     $('#adding_metadata input[name="predicate"]').focus()
     $('#save_metadata_image').click(save_metadata)
+    $('#cancel_metadata_link').click(cancel_edit)
   })
   $('li.datum').each(function(){
     $(this).append($('#metadata_controls').clone())
   })
-  $('li.datum').mouseover(function(){
+  function mouse_over() {
     $(this).children('#metadata_controls').show()
-    $(this).children('#metadata_controls').children('#edit_metadata_image').click(mouse_over)
+    $(this).children('#metadata_controls').children('#edit_metadata_image').click(function(){
+      // get values, swap for edit interface, fill with values
+      datum = $(this).parent().parent()
+      original = datum.html()
+      predicate = datum.children('.predicate').html()
+      object = datum.children('.object').html()
+      datum.replaceWith($('#edit_metadata').clone().show().attr('id','editing_metadata'))
+      $('#editing_metadata input[name="predicate"]').val(predicate)
+      $('#editing_metadata input[name="object"]').val(object)
+      $('#editing_metadata input[name="predicate"]').focus()
+      // save and cancel controls
+      $('#save_metadata_image').click(save_metadata)
+      $('#cancel_metadata_link').click(function(){
+        cancel_edit(this,original)
+      })
+    })
     $(this).children('#metadata_controls').children('#delete_metadata_image').click(function(){
       console.log('clicked delete!')
       // console.log($(this).parent().parent().children())
@@ -26,33 +42,27 @@ $(document).ready(function(){
       //         }
       //       })
     })
-  })
-  function mouse_over() {
-    // get values, swap for edit interface, fill with values
-    datum = $(this).parent().parent()
-    original = datum.html()
-    predicate = datum.children('.predicate').html()
-    object = datum.children('.object').html()
-    datum.replaceWith($('#edit_metadata').clone().show().attr('id','editing_metadata'))
-    $('#editing_metadata input[name="predicate"]').val(predicate)
-    $('#editing_metadata input[name="object"]').val(object)
-    $('#editing_metadata input[name="predicate"]').focus()
-    // save and cancel controls
-    $('#save_metadata_image').click(save_metadata)
-    $('#cancel_metadata_link').click(function(){
-      datum.html(original) // why does this not work??!!!!!
-    })
   }
-  $('li.datum').mouseout(function(){
+  function cancel_edit(element,original) {
+    datum = $(this).parent().parent()
+    if(datum.attr('id') == 'adding_metadata') {
+      datum.remove()
+    } else {
+      $(element).parent().html($(original)).mouseover(mouse_over).mouseout(mouse_out).removeAttr('id')
+    }
+  }
+  function mouse_out() {
     $(this).children('#metadata_controls').hide()
-  })
+  }
+  $('li.datum').mouseover(mouse_over)
+  $('li.datum').mouseout(mouse_out)
   function save_metadata() {
     $.ajax({
       url: '{{ url("/save_metadata/%s" % pagename) }}',
       data: $('#editing_metadata, #adding_metadata').children('#metadata_form').serialize(),
       success: function(response){
         $('#adding_metadata, #editing_metadata').replaceWith(response)
-        $('li.datum').mouseover(mouse_over) // why does this break it!???!!!??!!
+        $('#just_edited').mouseover(mouse_over).mouseout(mouse_out).removeAttr('id')
       }
     })
   }
