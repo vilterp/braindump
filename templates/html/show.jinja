@@ -1,35 +1,42 @@
 {% extends 'layout.jinja' %}
+{% from 'datum.jinja' import datum with context %}
 {% block title %} &raquo; {{ page.name }}{% endblock %}
-{% block heading %} &raquo; {{ page.name }}{% endblock %}
-{% block head %}{{ load_dynamic_js('show',pagename=page.name) }}{% endblock %}
+{% block heading %} &raquo; <span id="page_name">{{ page.name }}</span>{% endblock %}
+{% block head %}{{ load_js('show') }}{% endblock %}
 {% block content %}
 
 <div id="metadata">
-  {% if page.metadata %}
-    <ul>
-      {% for datum in page.metadata.iteritems() %}
-        <li class="datum">
-          {{ pagelink(datum[0],class='predicate') }}:
-          {{ pagelink(datum[1],class='object') }}
-        </li>
-      {% endfor %}
-      <li id="edit_metadata" style="display: none">
-        <form id="metadata_form">
-          <input type="text" name="predicate" autocomplete="off"/>:
-          <input type="text" name="object" autocomplete="off"/>
-          {{ image('save.png',alt='Save',title='Save',id='save_metadata_image') }}
+
+  <ul{{ ' style="display: none"' if not page.metadata }} id="metadata_list">
+    {% for datum_tuple in page.metadata.iteritems() if page.metadata %}
+      {{ datum(datum_tuple) }}
+    {% endfor %}
+    <li id="edit_metadata" style="display: none">
+      <form id="metadata_form">
+        <input type="text" name="predicate" autocomplete="off"/>:
+        <input type="text" name="object" autocomplete="off"/>
+        <span id="edit_controls">
+          {{ image('save.png',class='control',alt='Save',title='Save',id='save_metadata_image') }}
           {{ link('cancel',class='control',id='cancel_metadata_link') }}
-        </form>
-      </li>
-      <li>{{ link('Add '+image('add.png'),id='add_metadata_link') }}</li>
-    </ul>
-    <span style="display: none" id="metadata_controls">
-      {{ image("edit.png",alt='Edit',title='Edit',id='edit_metadata_image',class='control') }}
-      {{ image("delete.png",alt='Delete',title='Delete',id='unset_metadata_image',class='control')}}
-    </span>
-  {% else %}
+        </span>
+      </form>
+    </li>
+    <li id="add_metadata" {{ 'style="display: none"' if not page.metadata }}>
+      {{ link('Add '+image('add.png'),id='add_metadata_link') }}
+    </li>
+  </ul>
+  <span style="display: none" id="metadata_controls">
+    {{ image("edit.png",alt='Edit',title='Edit',id='edit_metadata_image',class='control') }}
+    {{ image("delete.png",alt='Delete',title='Delete',id='unset_metadata_image',class='control')}}
+  </span>
+  <span style="display: none" id="saving_indicator" class="control">
+    Saving&hellip;{{ image('spinner.gif') }} 
+  </span>
+    
+  {% if not page.metadata %}
     <p class="notice">No metadata. {{ link('Add '+image('add.png'),id='add_first_metadata_link') }}</p>
-  {% endif %}
+  {% endif %}  
+    
 </div>
 
 <div id="backlinks">

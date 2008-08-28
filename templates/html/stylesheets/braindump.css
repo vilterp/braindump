@@ -53,7 +53,7 @@ input.placeholder {
   margin: 0px 0px 10px 10px;
 }
 /* show page */
-a.control {
+.control {
   font-size: small;
 }
 #metadata_list, #backlinks_list {
@@ -71,6 +71,7 @@ a img {
 }
 img.control:hover {
   cursor: pointer;
+  /* change color on rollover would be good... */
 }
 /*
 #sidebar li {

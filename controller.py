@@ -60,6 +60,15 @@ class Main:
     return render('description-html',page=dict(description=description))
   save_description.exposed = True
   
+  def save(self, page, predicate=None, object=None, description=None):
+    if description is not None: #save description
+      cherrypy.thread_data.graph.describe(page,description)
+      return render('description-html',page=dict(description=description))
+    elif object is not None and predicate is not None:
+      cherrypy.thread_data.graph.set(page, predicate, object)
+      return render('datum',datum_tuple=(predicate,object))
+  save.exposed = True
+  
   def delete(self, page):
     cherrypy.thread_data.graph.unset(page)
     cherrypy.thread_data.graph.describe(page,'')

@@ -8,7 +8,7 @@ def list_to_human(thelist):
   # this can def be refactored
   # don't forget the oxford comma! (but not for 2-len lists)
   if isinstance(thelist,unicode): return thelist
-  if len(thelist) is 2: return '%s and %s' (thelist[0],thelist[1])
+  if len(thelist) is 2: return '%s and %s' % (thelist[0],thelist[1])
   final = ''
   for item in thelist[:-2]: final += item + ', '
   return final + thelist[-2] + ' and ' + thelist[-1]
