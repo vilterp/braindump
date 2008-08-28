@@ -39,6 +39,7 @@ $(document).ready(function(){
     $('#permalink').attr('href','?'+$('#criteria_form').serialize())
     $('#dump_link').attr('href','?format=dump&'+$('#criteria_form').serialize())
     
+    // TODO: load with GET, add fail callback
     $('#pages_list').load('/list',$('#criteria_form').serializeArray(),function(){
       $('#spinner').hide()
       $('#pages_list').show()
