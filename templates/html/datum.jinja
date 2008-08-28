@@ -1,4 +1,8 @@
-<li class="datum">
+<li class="datum" id="just_edited">
   {{ pagelink(datum[0],class='predicate') }}:
   {{ pagelink(datum[1],class='object') }}
+  <span id="metadata_controls" style="display: none">
+    {{ image("edit.png",alt='Edit',title='Edit',id='edit_metadata_image',class='control') }}
+    {{ image("delete.png",alt='Delete',title='Delete',id='unset_metadata_image',class='control')}}
+  </span>
 </li>
