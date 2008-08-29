@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Braindump{{ ' &raquo; %s' % criteria if criteria }}</title>
+	<subtitle>dum de dum dum...</subtitle>
+	{#<id>http://thinking-chair.com/notebook/feed</id>#}
+	{#<updated>2008-08-23T22:16:05-04:00</updated>#}
+	{#<link href="http://thinking-chair.com/notebook/feed" rel="self" type="application/atom+xml" />#}
+	{#<link href="http://thinking-chair.com/notebook" />#}
+	<generator uri="http://code.google.com/p/brain-dump/" version="0.4">Braindump</generator>
+	{% for page in pages %}
+	<entry>
+		<title type="html">{{ page }}</title>
+		{#<id>tag:thinking-chair.com,2008-08-23:/notebook/id/287/</id>#}
+		{#<updated>2008-08-23T22:16:05-04:00</updated>#}
+		{#<published>2008-08-23T22:16:05-04:00</published>#}
+		<link rel="alternate" type="text/html" href="{{ pageurl(page) }}" />
+		{#<author>
+			<name>Pete Vilter</name>
+			<uri>http://thinking-chair.com/notebook/</uri>
+		</author>#}
+		<content type="html">
+		  {% filter escape %}
+		    <div id="metadata">
+  		    {% if pages[page].metadata %}
+  		      <ul>
+  		        {% for datum in pages[page].metadata.iteritems() %}
+  		          <li>{{ pagelink(datum[0]) }}: {{ pagelink(datum[1]) }}</li>
+  		        {% endfor %}
+  		      </ul>
+  		    {% else %}
+  		      <p><em>No metadata.</em></p>
+  		    {% endif %}
+  		  </div>
+  		  <div id="description">
+  		    {% if pages[page].description %}
+  		      {{ pages[page].description | smartstr | textilize }}
+  		    {% else %}
+  		      <p><em>No description.</em></p>
+  		    {% endif %}
+  		  </div>
+  		  <div id="backlinks">
+  		    {% if pages[page].backlinks %}
+  		      <ul>
+  		        {% for backlink in pages[page].backlinks.iteritems() %}
+                <li>{{ pagelink(backlink[0]) }} of {{ pagelink(backlink[1]) }}</li>
+    		      {% endfor %}
+  		      </ul>
+  		    {% else %}
+  		      <p><em>No backlinks.</em></p>
+  		    {% endif %}
+  		  </div>
+		  {% endfilter %}
+		</content>
+	</entry>  
+	{% endfor %}
+</feed>

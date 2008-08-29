@@ -1,11 +1,20 @@
 from framework import *
 
-# todo: gzip static assets
+# TODO: RESTify
 
 class Main:
   
   def index(self, criteria=None, format='html'):
-    pages = cherrypy.thread_data.graph.list(criteria)
+    """main api."""
+    graph = cherrypy.thread_data.graph
+    pages = {}
+    pageslist = graph.list(criteria)
+    if pageslist:
+      for page in pageslist:
+        pages[page] = dict(name=page,
+                           metadata=graph.get(page),
+                           description=graph.describe(page),
+                           backlinks=graph.backlinks(page))
     return render('index',format,pages=pages,criteria=criteria)
   index.exposed = True
   

@@ -1,5 +1,3 @@
-// FIXME: rename to list.js?
-
 $(document).ready(function(){
   
   // toggle visibility of form when 'Filter|Hide' link clicked
@@ -39,10 +37,15 @@ $(document).ready(function(){
     $('#permalink').attr('href','?'+$('#criteria_form').serialize())
     $('#dump_link').attr('href','?format=dump&'+$('#criteria_form').serialize())
     
-    // TODO: load with GET, add fail callback
-    $('#pages_list').load('/list',$('#criteria_form').serializeArray(),function(){
-      $('#spinner').hide()
-      $('#pages_list').show()
+    // TODO: add fail callback
+    $.ajax({
+      url: '/list',
+      data: $('#criteria_form').serialize(),
+      success: function(response){
+        $('#spinner').hide()
+        $('#pages_list').html(response)
+        $('#pages_list').show()
+      }
     })
     return false
   })

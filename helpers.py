@@ -38,6 +38,9 @@ def pagelink(page, **options):
   else:
     return link(page,'/show/%s' % page, **options)
 
+def pageurl(page, **params):
+  return url('/show/%s' % page, **params)
+
 def load_css(source):
   if '.css' not in source: source += '.css'
   return '<link rel="stylesheet" type="text/css" href="%s"/>' % url('/stylesheets/'+source)

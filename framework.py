@@ -19,10 +19,10 @@ cherrypy.engine.subscribe('start_thread',init_graph)
 
 environments = {}
 additional_filters = {
-  'smart_str': helpers.smart_str,
+  'smartstr': helpers.smart_str,
   'textilize': textile.textile,
-  'yamlize': yaml.dump,
-  'jsonify': simplejson.dump
+  'yamlize': lambda obj: yaml.dump(obj,default_flow_style=False),
+  'jsonify': simplejson.dumps
 }
 for format in [format for format in os.listdir('templates') if '.' not in format]:
   environments[format] = jinja2.Environment(loader=jinja2.FileSystemLoader('templates/%s' % format))
