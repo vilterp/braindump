@@ -2,7 +2,8 @@ import sqlite3, re, os
 from util import *
 from page import Page
 
-# TODO: refactor a bit w/ list comprehensions
+# TODO: more comparison operators (before, after, >, <, etc)
+# TODO: change schema - text names in triples table
 
 class Graph:
   
