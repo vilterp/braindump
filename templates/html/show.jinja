@@ -8,9 +8,11 @@
 <div id="metadata">
 
   <ul{{ ' style="display: none"' if not page.metadata }} id="metadata_list">
-    {% for datum_tuple in page.metadata.iteritems() if page.metadata %}
-      {{ datum(datum_tuple) }}
-    {% endfor %}
+    {% if page.metadata %}
+      {% for datum_tuple in page.metadata.iteritems() %}
+        {{ datum(datum_tuple) }}
+      {% endfor %}
+    {% endif %}
     <li id="edit_metadata" style="display: none">
       <form id="metadata_form">
         <input type="text" name="predicate" autocomplete="off"/>:

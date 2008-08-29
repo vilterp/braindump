@@ -36,9 +36,9 @@ class Graph:
                                           object_id numeric)""")
   
   def query(self, query, replacements=()):
-    # log = open('log.txt','a')
-    # log.write((query,replacements).__str__() + '\n')
-    # log.close()
+    log = open('log.txt','a')
+    log.write((query,replacements).__str__() + '\n')
+    log.close()
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):

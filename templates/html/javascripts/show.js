@@ -1,7 +1,6 @@
 // TODO: error callbacks
-// TODO: only allow editing one at a time
 // TODO: autocomplete
-// TODO: saving indicator (spinner)
+// FIXME: if predicate is changed while editing, unset old predicate, then save new predicate & value
 
 $(document).ready(function(){
   
