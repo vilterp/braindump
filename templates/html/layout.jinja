@@ -16,7 +16,7 @@
     <!-- round this and just have it float there? -->
     <div id="sidebar">
       <form method="GET" action="{{ url('/goto') }}">
-        <input type="text" value="Go To" id="goto_box" name="page" class="placeholder"/>
+        <input type="text" value="Go To" id="goto_box" name="page" class="placeholder" accesskey="g"/>
       </form>
       <div id="sidebar_actions">
         {% block sidebar_actions %}{% endblock %}

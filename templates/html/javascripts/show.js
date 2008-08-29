@@ -17,8 +17,6 @@ $(document).ready(function(){
       data: $('#editing_metadata, #adding_metadata').children('#metadata_form').serialize(),
       success: function(response){
         $('#adding_metadata, #editing_metadata').replaceWith($(response).attr('id','just_edited'))
-        // any way to extend chain to multiple lines?
-        // don't want one super-long line; don't want multiple selections of same thing
         $('#just_edited').mouseover(mouse_over).mouseout(mouse_out)
         $('#just_edited').append($('#metadata_controls').clone())
         $('#just_edited').removeAttr('id')
@@ -26,26 +24,39 @@ $(document).ready(function(){
     })
   }
   function unset_metadata() {
-    // console.log($(this).parent().parent().children())
-    // $.ajax({
-    //         url: '/unset_metadata/' + pagename,
-    //         data: {predicate: $(this).parent().parent().children('.predicate').html()},
-    //         success: function(){
-    //           $(this).parent().parent().remove()
-    //         }
-    //       })
+    datum = $(this).parent().parent()
+    $.ajax({
+      url: '/unset/' + pagename,
+      data: {predicate: datum.children('.predicate').html()},
+      success: function(){
+        datum.remove()
+      }
+    })
+  }
+  function save_on_enter(event) {
+    if(event.which == 13) {
+      save_metadata()
+    }
   }
   function cancel_edit(element,original) {
     datum = $(this).parent().parent().parent()
     if(datum.attr('id') == 'adding_metadata') {
       datum.remove()
     } else {
-      $(element).parent().parent().html($(original)).mouseover(mouse_over).mouseout(mouse_out).removeAttr('id')
+      datum = $(element).parent().parent()
+      datum.html(original).mouseover(mouse_over).mouseout(mouse_out).removeAttr('id').addClass('datum')
+      datum.children('#metadata_controls').hide()
     }
+  }
+  function cancel_any_edits() {
+    currently_editing = $('#adding_metadata, #editing_metadata')
+    currently_editing.children('#metadata_form').children('#edit_controls').children('#cancel_edit_link').click()
+    $('#cancel_description_link').click()
   }
   function mouse_over() {
     $(this).children('#metadata_controls').show()
     $(this).children('#metadata_controls').children('#edit_metadata_image').click(function(){
+      cancel_any_edits()
       // get values, swap for edit interface, fill with values
       datum = $(this).parent().parent()
       original = datum.html()
@@ -54,18 +65,24 @@ $(document).ready(function(){
       datum.replaceWith($('#edit_metadata').clone().show().attr('id','editing_metadata'))
       $('#editing_metadata input[name="predicate"]').val(predicate)
       $('#editing_metadata input[name="object"]').val(object).focus()
+      $('#editing_metadata input[name="predicate"], #editing_metadata input[name="object"]').keypress(function(e){
+        save_on_enter(e)
+      })
       // save and cancel controls
       $('#save_metadata_image').click(save_metadata)
-      $('#cancel_metadata_link').click(function(){
+      $('#cancel_edit_link').click(function(){
         cancel_edit(this,original)
       })
     })
-    $(this).children('#metadata_controls').children('#delete_metadata_image').click(unset_metadata)
+    $(this).children('#metadata_controls').children('#unset_metadata_image').click(unset_metadata)
   }
   function mouse_out() {
     $(this).children('#metadata_controls').hide()
   }
   
+  $('li.datum').mouseover(mouse_over).mouseout(mouse_out).each(function(){
+    $(this).append($('#metadata_controls').clone())
+  })
   $('#add_first_metadata_link').click(function(){
     $(this).parent().hide()
     $('ul#metadata_list').show()
@@ -73,21 +90,25 @@ $(document).ready(function(){
     $('#add_metadata_link').click()
   })
   $('#add_metadata_link').click(function(){
+    cancel_any_edits()
     $('#edit_metadata').clone().show().insertBefore('#edit_metadata').attr('id','adding_metadata')
     $('#adding_metadata input[name="predicate"]').focus()
+    $('#adding_metadata input[name="object"], #adding_metadata input[name="predicate"]').keypress(function(e){
+      save_on_enter(e)
+    })
     $('#save_metadata_image').click(save_metadata)
-    $('#cancel_metadata_link').click(cancel_edit)
-  })
-  $('li.datum').mouseover(mouse_over).mouseout(mouse_out).each(function(){
-    $(this).append($('#metadata_controls').clone())
+    $('#cancel_edit_link').click(cancel_edit)
   })
   
   // edit description
   
   $('#description').dblclick(function(){
+    $('#adding_metadata, #editing_metadata').children('#metadata_controls').children('#cancel_description_link').click()
+    cancel_any_edits()
     original = $(this).html()
     $(this).removeAttr('title')
     $(this).load('/edit_description/' + pagename,function(){
+      $('textarea[name="description"]').focus()
       $('#save_description_button').click(function(){
         $('#description').load('/save/' + pagename,
           $('textarea[name="description"]').serializeArray(),
@@ -96,8 +117,8 @@ $(document).ready(function(){
           })
       })
       $('#cancel_description_link').click(function(){
-        $(this).html(original)
-        $(this).attr('title','double-click to edit')
+        $(this).parent().html(original)
+        $(this).parent().attr('title','double-click to edit')
       })
     })
   })

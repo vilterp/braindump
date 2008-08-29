@@ -46,28 +46,10 @@ class Main:
       return render('show',format,page=page)
   show.exposed = True
   
-  def save_metadata(self, subject, object=None, predicate=None):
-    print subject, predicate, object
-    cherrypy.thread_data.graph.set(subject, predicate, object)
-    return render('datum',datum=(predicate,object))
-  save_metadata.exposed = True
-  
-  def unset_metadata(self, subject, predicate=None):
-    cherrypy.thread_data.graph.unset(subject,predicate)
-  unset_metadata.exposed = True
-  
   def edit_description(self, page):
     description = cherrypy.thread_data.graph.describe(page)
     return render('edit-description',page=dict(description=description))
   edit_description.exposed = True
-  
-  def save_description(self, page, description=None):
-    if description and description.strip():
-      cherrypy.thread_data.graph.describe(page,description)
-    else:
-      description = cherrypy.thread_data.graph.describe(page)
-    return render('description-html',page=dict(description=description))
-  save_description.exposed = True
   
   def save(self, page, predicate=None, object=None, description=None):
     if description is not None: #save description
@@ -77,6 +59,10 @@ class Main:
       cherrypy.thread_data.graph.set(page, predicate, object)
       return render('datum',datum_tuple=(predicate,object))
   save.exposed = True
+  
+  def unset(self, subject, predicate=None):
+    cherrypy.thread_data.graph.unset(subject,predicate)
+  unset.exposed = True
   
   def delete(self, page):
     cherrypy.thread_data.graph.unset(page)

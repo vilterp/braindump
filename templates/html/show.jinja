@@ -17,12 +17,12 @@
         <input type="text" name="object" autocomplete="off"/>
         <span id="edit_controls">
           {{ image('save.png',class='control',alt='Save',title='Save',id='save_metadata_image') }}
-          {{ link('cancel',class='control',id='cancel_metadata_link') }}
+          {{ link('cancel',class='control',id='cancel_edit_link',accesskey='c') }}
         </span>
       </form>
     </li>
     <li id="add_metadata" {{ 'style="display: none"' if not page.metadata }}>
-      {{ link('Add '+image('add.png'),id='add_metadata_link') }}
+      {{ link('Add '+image('add.png'),id='add_metadata_link',accesskey='a') }}
     </li>
   </ul>
   <span style="display: none" id="metadata_controls">
@@ -34,7 +34,10 @@
   </span>
     
   {% if not page.metadata %}
-    <p class="notice">No metadata. {{ link('Add '+image('add.png'),id='add_first_metadata_link') }}</p>
+    <p class="notice">
+      No metadata.
+      {{ link('Add '+image('add.png'),id='add_first_metadata_link',accesskey='a') }}
+    </p>
   {% endif %}  
     
 </div>
