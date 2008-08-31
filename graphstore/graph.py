@@ -10,10 +10,11 @@ class Graph:
   
   id_cache = {}
   
-  def __init__(self, database_path, lazy_lookup=True):
+  def __init__(self, database_path):
     self.database_path = database_path
-    self.lazy_lookup = lazy_lookup
     self.connection = sqlite3.connect(database_path)
+    self.connection.create_function('idfromname',1,self.id_from_name)
+    self.connection.create_function('namefromid',1,self.name_from_id)
     self.cursor = self.connection.cursor()
   
   def __repr__(self):
@@ -27,8 +28,8 @@ class Graph:
   
   def create_schema(self):
     self.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                       name text, 
-                                       description text)""")
+                                        name text, 
+                                        description text)""")
     self.execute("""CREATE TABLE triples (subject_id numeric,
                                           predicat_id numeric,
                                           object_id numeric)""")
@@ -37,6 +38,7 @@ class Graph:
     # log = open('log.txt','a')
     # log.write((query,replacements).__str__() + '\n')
     # log.close()
+    print query, replacements
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):
@@ -119,13 +121,12 @@ class Graph:
       
       # match one condition - all queries eventually come down to this
       attr, value = re.split(' is | IS ',criteria)
-      attr_id = self.id_from_name(attr)
-      value_id = self.id_from_name(value)
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
-                             triples.predicate_id = ? AND
-                             triples.object_id = ?""",
-                             (attr_id,value_id)).fetchall()
+                             triples.predicate_id = idfromname(?) AND
+                             triples.object_id = idfromname(?)""",
+                             (attr,value)).fetchall()
+      print 'hello'
     pages = [row[0] for row in result]
     pages.sort()
     return pages
