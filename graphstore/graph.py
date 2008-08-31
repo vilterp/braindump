@@ -1,9 +1,10 @@
 import sqlite3, re, os
 from util import *
-from page import Page
 
 # TODO: more comparison operators (before, after, >, <, etc)
 # TODO: change schema - text names in triples table
+# FIXME: id cache must be flushed on rename()!
+# FIXME: id cache making everything lowercase
 
 class Graph:
   
@@ -16,7 +17,7 @@ class Graph:
     self.cursor = self.connection.cursor()
   
   def __repr__(self):
-    return "<Graph source: %s/%s>" % (os.getcwd(), self.database_path)
+    return "<Graph source:%s>" % self.database_path
   
   def __iter__(self):
     return self.list().__iter__()
@@ -25,20 +26,17 @@ class Graph:
     return len(self.list())
   
   def create_schema(self):
-    # pages
     self.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                        name text, 
                                        description text)""")
-    
-    # triples
     self.execute("""CREATE TABLE triples (subject_id numeric,
                                           predicat_id numeric,
                                           object_id numeric)""")
   
   def query(self, query, replacements=()):
-    log = open('log.txt','a')
-    log.write((query,replacements).__str__() + '\n')
-    log.close()
+    # log = open('log.txt','a')
+    # log.write((query,replacements).__str__() + '\n')
+    # log.close()
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):
@@ -95,13 +93,15 @@ class Graph:
     
     else: # the magic of braindump
       
+      # this syntax is a little fragile -- what if page values contain 'is' or 'or' or 'and'?
+      
       # parenthesized arguments: split but not in parens, recurse until
       #                          (condition) received
       
       # more sophisticated ordering? (by attributes, SQL style?)
       
       expressions = re.split(' or | OR ',criteria,1)
-      if len(expressions) is 2: # match both connections, return union
+      if len(expressions) is 2: # match both conditions, return union
         results1 = self.list(expressions[0])
         results2 = self.list(expressions[1])
         results1.extend(results2)
@@ -153,33 +153,35 @@ class Graph:
       if len(result) is 1:
         return self.name_from_id(result[0][0])
       elif len(result) > 1:
-        answers = []
-        for row in result: answers.append(self.name_from_id(row[0]))
-        return answers
+        return [self.name_from_id(row[0]) for row in result]
       else:
         return None
   
-  def set(self, subject, predicate, object):
+  def set(self, subject, predicate, object=None):
     subject_id = self.id_from_name(subject,True)
-    if is_plural(predicate) and isinstance(object,list):
-      predicate_id = self.id_from_name(singularize(predicate),True)
+    if object is None and isinstance(predicate,dict):
+      for item in predicate.iteritems():
+        self.set(subject,item[0],item[1])
     else:
-      predicate_id = self.id_from_name(predicate,True)
-    # delete any existing value(s)
-    self.execute("""DELETE FROM triples WHERE 
-                    subject_id = ? AND predicate_id = ?""",
-                                   (subject_id,predicate_id))
-    if is_plural(predicate) and isinstance(object,list): # set multiple values
-      predicate_id = self.id_from_name(singularize(predicate),True)
-      for value in object:
-        object_id = self.id_from_name(value,True)
-        # set new value
+      if is_plural(predicate) and isinstance(object,list):
+        predicate_id = self.id_from_name(singularize(predicate),True)
+      else:
+        predicate_id = self.id_from_name(predicate,True)
+      # delete any existing value(s)
+      self.execute("""DELETE FROM triples WHERE 
+                      subject_id = ? AND predicate_id = ?""",
+                                     (subject_id,predicate_id))
+      if is_plural(predicate) and isinstance(object,list): # set multiple values
+        predicate_id = self.id_from_name(singularize(predicate),True)
+        for value in object:
+          object_id = self.id_from_name(value,True)
+          # set new value
+          self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
+                                  (subject_id,predicate_id,object_id))
+      else: # set one value
+        object_id = self.id_from_name(object,True)
         self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                                 (subject_id,predicate_id,object_id))
-    else: # set one value
-      object_id = self.id_from_name(object,True)
-      self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
-                              (subject_id,predicate_id,object_id))
   
   def unset(self, page, attribute=None):
     subject_id = self.id_from_name(page)
@@ -215,9 +217,9 @@ class Graph:
                            OR
                            (triples.subject_id = ? AND
                            triples.object_id = ?))""",
-                           (id1,id2,id2,id1)).fetchone()
+                           (id1,id2,id2,id1)).fetchall()
     if result:
-      return result[0]
+      return [row[0] for row in result]
     else:
       return None # would be cool to find shortest distance between two pages not directly linked
   
@@ -237,7 +239,7 @@ class Graph:
   def rename(self, old, new):
     self.execute('UPDATE pages SET name = ? WHERE name = ?',(new,old))
   
-  # is this necessary with unset?
+  # is this necessary?
   def delete(self, page):
     page_id = self.id_from_name(page)
     # delete triples containing page
