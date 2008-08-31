@@ -158,11 +158,11 @@ class Graph:
         return None
   
   def set(self, subject, predicate, object=None):
-    subject_id = self.id_from_name(subject,True)
     if object is None and isinstance(predicate,dict):
       for item in predicate.iteritems():
         self.set(subject,item[0],item[1])
     else:
+      subject_id = self.id_from_name(subject,True)
       if is_plural(predicate) and isinstance(object,list):
         predicate_id = self.id_from_name(singularize(predicate),True)
       else:
