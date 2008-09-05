@@ -34,16 +34,9 @@ class Main:
                   metadata=graph.get(pagename),
                   description=graph.describe(pagename),
                   backlinks=graph.backlinks(pagename))
-    except:
+    except: # page doesn't exist
       page = dict(name=pagename)
-    # render metadata and description sections in alt. formats?
-    # apply filters?!?
-    if section == 'metadata':
-      return render('edit-metadata',page=page)
-    elif section == 'description':
-      return page['description']
-    else:
-      return render('show',format,page=page)
+    return render('show',format,page=page)
   show.exposed = True
   
   def edit_description(self, page):
