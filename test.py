@@ -3,4 +3,4 @@ import sqlite3
 
 g = Graph('graph.db')
 
-print g.describe('asdf')
+print g.list('running mate regexp .ah.')

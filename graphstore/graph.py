@@ -1,4 +1,4 @@
-import sqlite3, re, os
+import sqlite3, re, os, comparisonoperators
 from util import *
 
 # TODO: more comparison operators (before, after, >, <, etc)
@@ -9,12 +9,22 @@ from util import *
 class Graph:
   
   id_cache = {}
+  comparison_operators = ['=','>','<','!=']
   
   def __init__(self, database_path):
     self.database_path = database_path
     self.connection = sqlite3.connect(database_path)
     self.connection.create_function('idfromname',1,self.id_from_name)
     self.connection.create_function('namefromid',1,self.name_from_id)
+    # register comparison operators
+    for operator in dir(comparisonoperators):
+      obj = comparisonoperators.__dict__[operator]
+      if type(obj) == type(pluralize):
+        reversed_func = lambda one,two: obj(two,one)
+        self.connection.create_function(obj.name.replace(' ','_'),2,reversed_func)
+        self.comparison_operators.append(obj.name)
+    self.comparison_operators.sort()
+    self.comparison_operators.reverse()
     self.cursor = self.connection.cursor()
     # need another connection & cursor for UDFs...
     self.connection2 = sqlite3.connect(database_path)
@@ -41,6 +51,7 @@ class Graph:
     # log = open('log.txt','a')
     # log.write((query,replacements).__str__() + '\n')
     # log.close()
+    # print query, replacements
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):
@@ -119,11 +130,17 @@ class Graph:
         return listified
       
       # match one condition - all queries eventually come down to this
-      attr, value = re.split(' is | IS ',criteria)
+      for operator in self.comparison_operators:
+        split = re.split(' %s ' % operator,criteria)
+        if len(split) is 2:
+          attr, value = split
+          current_operator = operator
+          break
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = idfromname(?) AND
-                             triples.object_id = idfromname(?)""",
+                             namefromid(triples.object_id) %s ?""" % 
+                             current_operator.replace(' ','_'),
                              (attr,value)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()
