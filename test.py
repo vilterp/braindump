@@ -1,6 +1,7 @@
 from graphstore import *
-import sqlite3
 
 g = Graph('graph.db')
 
-print g.list('running mate regexp .ah.')
+g.set('United States of America','capital city','Washington, D.C.')
+
+print g.list('capital city is south of canada')

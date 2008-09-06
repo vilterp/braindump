@@ -20,8 +20,7 @@ class Graph:
     for operator in dir(comparisonoperators):
       obj = comparisonoperators.__dict__[operator]
       if type(obj) == type(pluralize):
-        reversed_func = lambda one,two: obj(two,one)
-        self.connection.create_function(obj.name.replace(' ','_'),2,reversed_func)
+        self.connection.create_function(obj.name.replace(' ','_'),2,obj)
         self.comparison_operators.append(obj.name)
     self.comparison_operators.sort()
     self.comparison_operators.reverse()
@@ -51,7 +50,7 @@ class Graph:
     # log = open('log.txt','a')
     # log.write((query,replacements).__str__() + '\n')
     # log.close()
-    # print query, replacements
+    print query, replacements
     return self.cursor.execute(query,replacements)
   
   def execute(self, query, replacements=()):
@@ -139,7 +138,7 @@ class Graph:
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = idfromname(?) AND
-                             namefromid(triples.object_id) %s ?""" % 
+                             %s(namefromid(triples.object_id),?)""" % 
                              current_operator.replace(' ','_'),
                              (attr,value)).fetchall()
       pages = [row[0] for row in result]
@@ -266,7 +265,8 @@ class Graph:
   def rename(self, old, new):
     self.execute('UPDATE pages SET name = ? WHERE name = ?',(new,old))
     # update id cache
-    self.id_cache[new] = self.id_cache[old]
-    del self.id_cache[old]
+    if old in self.id_cache:
+      self.id_cache[new] = self.id_cache[old]
+      del self.id_cache[old]
   
 
