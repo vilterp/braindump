@@ -9,7 +9,7 @@ from util import *
 class Graph:
   
   id_cache = {}
-  comparison_operators = ['=','>','<','!=']
+  comparison_operators = {}
   
   def __init__(self, database_path):
     self.database_path = database_path
@@ -19,11 +19,10 @@ class Graph:
     # register comparison operators
     for operator in dir(comparisonoperators):
       obj = comparisonoperators.__dict__[operator]
-      if type(obj) == type(pluralize):
-        self.connection.create_function(obj.name.replace(' ','_'),2,obj)
-        self.comparison_operators.append(obj.name)
-    self.comparison_operators.sort()
-    self.comparison_operators.reverse()
+      if type(obj) == type(pluralize): # just to check if it's a function...
+        op = lambda one, two: obj(one, two, extraparam, graph=self)
+        self.connection.create_function(operator,3,op)
+        self.comparison_operators[obj.pattern] = operator
     self.cursor = self.connection.cursor()
     # need another connection & cursor for UDFs...
     self.connection2 = sqlite3.connect(database_path)
@@ -129,18 +128,25 @@ class Graph:
         return listified
       
       # match one condition - all queries eventually come down to this
-      for operator in self.comparison_operators:
-        split = re.split(' %s ' % operator,criteria)
-        if len(split) is 2:
-          attr, value = split
-          current_operator = operator
-          break
+      operators = self.comparison_operators.keys()
+      operators.reverse()
+      print operators
+      for operator in operators:
+        match = re.search(' %s ' % operator,criteria)
+        if match is not None:
+          current_operator = self.comparison_operators[operator]
+          if len(match.groups()) > 0:
+            extraparam = match.groups()[0]
+          else:
+            extraparam = None
+          params = re.search('(.*) %s (.*)' % operator, criteria).groups()
+          attr, value = params[0], params[-1]
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = idfromname(?) AND
-                             %s(namefromid(triples.object_id),?)""" % 
-                             current_operator.replace(' ','_'),
-                             (attr,value)).fetchall()
+                             %s(namefromid(triples.object_id),?,?)""" % 
+                             current_operator,
+                             (attr,value,extraparam)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()
       return pages

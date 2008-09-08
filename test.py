@@ -2,6 +2,4 @@ from graphstore import *
 
 g = Graph('graph.db')
 
-g.set('United States of America','capital city','Washington, D.C.')
-
-print g.list('capital city is south of canada')
+print g.list('home state is within 9 miles of Gary, Indiana')

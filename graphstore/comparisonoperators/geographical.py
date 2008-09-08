@@ -10,16 +10,20 @@ def get_coordinates(q):
 
 def north_of(one, two):
   return get_coordinates(one)[0] > get_coordinates(two)[0]
-north_of.name = 'is north of'
+north_of.pattern = 'is north of'
 
 def south_of(one, two):
   return get_coordinates(one)[0] < get_coordinates(two)[0]
-south_of.name = 'is south of'
+south_of.pattern = 'is south of'
 
 def east_of(one, two):
   return get_coordinates(one)[1] > get_coordinates(two)[1]
-east_of.name = 'is east of'
+east_of.pattern = 'is east of'
 
 def west_of(one, two):
   return get_coordinates(one)[1] < get_coordinates(two)[1]
-west_of.name = 'is west of'
+west_of.pattern = 'is west of'
+
+def within_x_miles_of(one, two, miles=None):
+  return True
+within_x_miles_of.pattern = 'is within (\d) miles of'
