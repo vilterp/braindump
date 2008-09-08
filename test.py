@@ -1,5 +1,5 @@
-from graphstore import *
+import graphstore
 
-g = Graph('graph.db')
+g = graphstore.Graph('graph.db')
 
-print g.list('home state is within 9 miles of Gary, Indiana')
+print g.list('hometown is within 30 miles of Gary, Indiana')

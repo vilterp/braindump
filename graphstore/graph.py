@@ -20,8 +20,7 @@ class Graph:
     for operator in dir(comparisonoperators):
       obj = comparisonoperators.__dict__[operator]
       if type(obj) == type(pluralize): # just to check if it's a function...
-        op = lambda one, two: obj(one, two, extraparam, graph=self)
-        self.connection.create_function(operator,3,op)
+        self.connection.create_function(operator,3,obj)
         self.comparison_operators[obj.pattern] = operator
     self.cursor = self.connection.cursor()
     # need another connection & cursor for UDFs...
@@ -130,7 +129,6 @@ class Graph:
       # match one condition - all queries eventually come down to this
       operators = self.comparison_operators.keys()
       operators.reverse()
-      print operators
       for operator in operators:
         match = re.search(' %s ' % operator,criteria)
         if match is not None:
@@ -141,6 +139,7 @@ class Graph:
             extraparam = None
           params = re.search('(.*) %s (.*)' % operator, criteria).groups()
           attr, value = params[0], params[-1]
+          break
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = idfromname(?) AND
@@ -172,7 +171,7 @@ class Graph:
         return result[0][0]
       elif len(result) > 1:
         return [row[0] for row in result]
-      else:
+      elif result is None:
         raise NonexistentPageError(page)
   
   def set(self, subject, predicate, object=None):

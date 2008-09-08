@@ -1,12 +1,18 @@
-import urllib
+import geopy
 
-# uses google maps geocoding API 
-# <http://code.google.com/apis/maps/documentation/services.html#Geocoding_Direct>
-# to fetch coordinates and evaluate positions of addresses
+g = geopy.geocoders.Google('ABQIAAAALF_wPa2EB69uDlWjblEszBR_kaQGh5mwnhfXDI65SHVheIGNsRRpbYi2FMuhVUYnAmYZZJKdy6EOVA')
+
+def log(thing):
+  f = open('/Users/pete/braindump/graphstore/comparisonoperators/log.txt','a')
+  f.write(thing.__repr__()+"\n")
+  f.close()
+  return True
+log.pattern = 'log'
+
 
 def get_coordinates(q):
-  data = urllib.urlopen('http://maps.google.com/maps/geo?q=%s&output=csv' % urllib.quote(q)).read().split(',')
-  return (float(data[2]),float(data[3]))
+  result = g.geocode(q)
+  return result[1][0], result[1][1]
 
 def north_of(one, two):
   return get_coordinates(one)[0] > get_coordinates(two)[0]
@@ -24,6 +30,10 @@ def west_of(one, two):
   return get_coordinates(one)[1] < get_coordinates(two)[1]
 west_of.pattern = 'is west of'
 
-def within_x_miles_of(one, two, miles=None):
-  return True
-within_x_miles_of.pattern = 'is within (\d) miles of'
+def within_x_miles_of(one, two, miles):
+  loc_one = g.geocode(one)
+  loc_two = g.geocode(two)
+  distance = geopy.distance.distance(loc_one[1],loc_two[1]).miles
+  log((one,two,miles,distance,distance <= float(miles)))
+  return distance <= float(miles)
+within_x_miles_of.pattern = 'is within (\d+) miles of'

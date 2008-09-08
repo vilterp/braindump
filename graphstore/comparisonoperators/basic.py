@@ -1,7 +1,7 @@
 import re
 
-def compare_is(one, two):
-  print one, two
+def compare_is(one, two, slag):
+  log((one, two, one.lower() == two.lower()))
   return one.lower() == two.lower()
 compare_is.pattern = 'is'
 
@@ -30,7 +30,6 @@ def less_than_or_equal_to(one, two):
 less_than_or_equal_to.pattern = '<='
 
 def regexp(one, two):
-  print one, two
   result = re.search(two,one,re.I)
   if result:
     return True
