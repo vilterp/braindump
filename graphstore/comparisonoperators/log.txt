@@ -9,3 +9,4 @@
 (u'illinois', u'Gary, Indiana', u'30', 126.52506642472019, False)
 (u'Chicago, Illinois', u'Gary, Indiana', u'30', 24.429344347195602, True)
 (u'Chicago, Illinois', u'Gary, Indiana', u'30', 24.429344347195602, True)
+(u'Chicago, Illinois', u'Gary, Indiana', u'30', 24.429344347195602, True)

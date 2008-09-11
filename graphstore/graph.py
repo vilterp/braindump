@@ -19,9 +19,11 @@ class Graph:
     # register comparison operators
     for operator in dir(comparisonoperators):
       obj = comparisonoperators.__dict__[operator]
-      if type(obj) == type(pluralize): # just to check if it's a function...
+      try:
         self.connection.create_function(operator,3,obj)
         self.comparison_operators[obj.pattern] = operator
+      except AttributeError: # it doesn't have a 'pattern' attribute
+        pass
     self.cursor = self.connection.cursor()
     # need another connection & cursor for UDFs...
     self.connection2 = sqlite3.connect(database_path)
