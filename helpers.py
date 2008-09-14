@@ -2,19 +2,14 @@ import re, mimetypes, more_mime_types
 from urllib import quote_plus as escape
 from cherrypy import url as cherrypy_url
 
-# let's see if enough helpers are necessary to make this page worth it
-
 def list_to_human(thelist):
-  if isinstance(thelist,unicode): return thelist
+  # list_to_human(['eggs','bacon','spam']) => 'eggs, bacon, and spam'
   if len(thelist) is 2: return '%s and %s' % (thelist[0],thelist[1])
-  return ', '.join(thelist[:2]) + ', and ' + thelist[-1]
+  else: return ', '.join(thelist[:2]) + ', and ' + thelist[-1]
 
 def human_to_list(thestr):
-  return flatten(re.split(', |and ',thestr))
-
-def flatten(list):
-  # is this in the std lib somewhere..?
-  return [item for item in list if item]
+  # human_to_list('eggs, bacon, and spam') => ['eggs','bacon','spam']
+  return re.split(', and |, | and ',thestr)
 
 def htmloptions(**options):
   if options is None:
