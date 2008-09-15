@@ -5,3 +5,4 @@
 - beautifulsoup
 - simplejson
 - pyyaml
+- dateutil

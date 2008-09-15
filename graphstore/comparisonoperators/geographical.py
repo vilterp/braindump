@@ -2,12 +2,11 @@ import geopy
 
 g = geopy.geocoders.Google('ABQIAAAALF_wPa2EB69uDlWjblEszBR_kaQGh5mwnhfXDI65SHVheIGNsRRpbYi2FMuhVUYnAmYZZJKdy6EOVA')
 
-def log(thing):
+def log(obj):
   f = open('/Users/pete/braindump/graphstore/comparisonoperators/log.txt','a')
-  f.write(thing.__repr__()+"\n")
+  f.write(obj.__repr__()+"\n")
   f.close()
   return True
-log.pattern = 'log'
 
 
 def get_coordinates(q):

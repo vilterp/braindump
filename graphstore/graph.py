@@ -13,7 +13,11 @@ class Graph:
   
   def __init__(self, database_path):
     self.database_path = database_path
+    if not os.path.exists(database_path) or database_path == ':memory:':
+      print 'creating schema'
+      self.create_schema()
     self.connection = sqlite3.connect(database_path)
+    self.cursor = self.connection.cursor()
     self.connection.create_function('idfromname',1,self.id_from_name)
     self.connection.create_function('namefromid',1,self.name_from_id)
     # register comparison operators
@@ -24,7 +28,6 @@ class Graph:
         self.comparison_operators[obj.pattern] = operator
       except AttributeError: # it doesn't have a 'pattern' attribute
         pass
-    self.cursor = self.connection.cursor()
     # need another connection & cursor for UDFs...
     self.connection2 = sqlite3.connect(database_path)
     self.cursor2 = self.connection2.cursor()
@@ -39,12 +42,18 @@ class Graph:
     return len(self.list())
   
   def create_schema(self):
-    self.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        name text, 
-                                        description text)""")
-    self.execute("""CREATE TABLE triples (subject_id numeric,
-                                          predicat_id numeric,
-                                          object_id numeric)""")
+    connection = sqlite3.connect(self.database_path)
+    # print self.database_path
+    cursor = connection.cursor()
+    cursor.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                          name text, 
+                                          description text)""")
+    connection.commit()
+    cursor.execute("""CREATE TABLE triples (subject_id numeric,
+                                            predicate_id numeric,
+                                            object_id numeric)""")
+    connection.commit()
+    connection.close()
   
   def query(self, query, replacements=()):
     # log = open('log.txt','a')
@@ -130,7 +139,9 @@ class Graph:
       
       # match one condition - all queries eventually come down to this
       operators = self.comparison_operators.keys()
+      operators.sort()
       operators.reverse()
+      print operators
       for operator in operators:
         match = re.search(' %s ' % operator,criteria)
         if match is not None:
@@ -145,8 +156,7 @@ class Graph:
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = idfromname(?) AND
-                             %s(namefromid(triples.object_id),?,?)""" % 
-                             current_operator,
+                             %s(namefromid(triples.object_id),?,?)""" % current_operator,
                              (attr,value,extraparam)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()
