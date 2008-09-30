@@ -52,7 +52,7 @@ class Graph:
     if name.lower() in [key.lower() for key in self.id_cache.keys()]:
       return case_insensitive_lookup(self.id_cache,name)
     else:
-      result = self.query('SELECT id FROM pages WHERE name LIKE ?',(name,)).fetchone()
+      result = self.query('SELECT id, name FROM pages WHERE name LIKE ?',(name,)).fetchone()
       # LIKE: case insensitive
       if not result: # not there
         if create_if_nonexistent: # create it
@@ -62,7 +62,7 @@ class Graph:
         else:
           return None
       else: # is there
-        self.id_cache[name] = result[0]
+        self.id_cache[result[1]] = result[0]
         return result[0]
   
   def namefromid(self, id):
@@ -73,7 +73,7 @@ class Graph:
       if not result:
         raise NonexistentPageError(id) # this wouldn't ever happen... where would the id # come from..
       else:
-        self.id_cache[result[0].lower()] = id
+        self.id_cache[result[0]] = id
         return result[0]
   
   def create_page(self, name):
@@ -207,7 +207,7 @@ class Graph:
     object_id = self.idfromname(page)
     if attribute is None: # return dict of all backlinks
       result = self.query("""SELECT predicate_id, subject_id
-                             FROM triples WHERE object_id = ?""",
+                             FROM triples WHERE object_id LIKE ?""",
                              (object_id,)).fetchall()
       if not result:
         return {}
@@ -219,7 +219,7 @@ class Graph:
     else:
       predicate_id = self.idfromname(attribute)
       result = self.query("""SELECT subject_id FROM triples WHERE
-                             object_id = ? AND predicate_id = ?""",
+                             object_id LIKE ? AND predicate_id LIKE ?""",
                              (object_id,predicate_id)).fetchall()
       if len(result) > 1:
         return [self.namefromid(row[0]) for row in result]

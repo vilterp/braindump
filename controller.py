@@ -27,7 +27,7 @@ class Main:
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
-  def show(self, pagename, section=None, format='html', **junk):
+  def show(self, pagename, format='html'):
     graph = cherrypy.thread_data.graph
     try:
       page = dict(name=pagename,

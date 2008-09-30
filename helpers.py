@@ -1,5 +1,5 @@
 import re, mimetypes, more_mime_types
-from urllib import quote_plus as escape
+from urllib import quote as escape
 from cherrypy import url as cherrypy_url
 
 def list_to_human(thelist):
@@ -27,7 +27,7 @@ def pagelink(page, **options):
   if isinstance(page,list):
     return list_to_human([pagelink(ind_page,**options) for ind_page in page])
   else:
-    return link(page,'/show/%s' % page, **options)
+    return link(page,'/show/%s' % escape(page), **options)
 
 def pageurl(page, **params):
   return url('/show/%s' % page, **params)
