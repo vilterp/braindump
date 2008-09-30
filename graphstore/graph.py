@@ -1,10 +1,7 @@
 import sqlite3, re, os, comparisonoperators
 from util import *
 
-# TODO: more comparison operators (before, after, >, <, etc)
-# TODO: change schema - text names in triples table
-# FIXME: id cache must be flushed on rename()!
-# FIXME: id cache making everything lowercase
+# TODO: don't pass 3rd to comparison operators if they don't take 3 params
 
 class Graph:
   
@@ -12,26 +9,15 @@ class Graph:
     self.id_cache = {}
     self.comparison_operators = {}
     self.database_path = database_path
-    if not os.path.exists(database_path) or database_path == ':memory:':
-      print 'creating schema'
-      self.create_schema()
     self.connection = sqlite3.connect(database_path)
     self.cursor = self.connection.cursor()
-    self.connection.create_function('idfromname',1,self.id_from_name)
-    self.connection.create_function('namefromid',1,self.name_from_id)
     # register comparison operators
     for functionname in dir(comparisonoperators):
       operator = comparisonoperators.__dict__[functionname]
       if hasattr(operator,'pattern'): # to check if it's supposed to be a comp. op.
         self.comparison_operators[operator.pattern] = (functionname,operator)
-    for operator in dir(comparisonoperators):
-      obj = comparisonoperators.__dict__[operator]
-      try:
-        self.connection.create_function(operator,3,obj)
-        self.comparison_operators[obj.pattern] = operator
-      except AttributeError: # it doesn't have a 'pattern' attribute
-        pass
-    if not os.path.exists(database_path): self.create_schema()
+    if not os.path.exists(database_path) or database_path == ':memory:':
+      self.create_schema()
   
   def __repr__(self):
     return "<Graph source:%s>" % self.database_path
@@ -50,18 +36,6 @@ class Graph:
                                           subject_id numeric,
                                           predicate_id numeric,
                                           object_id numeric)""")
-    connection = sqlite3.connect(self.database_path)
-    # print self.database_path
-    cursor = connection.cursor()
-    cursor.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                          name text, 
-                                          description text)""")
-    connection.commit()
-    cursor.execute("""CREATE TABLE triples (subject_id numeric,
-                                            predicate_id numeric,
-                                            object_id numeric)""")
-    connection.commit()
-    connection.close()
   
   def query(self, query, replacements=(), printit=False):
     if printit: print query, replacements
@@ -161,14 +135,11 @@ class Graph:
             extraparam = None
       op = lambda one,two,param: current_func(self.namefromid(one),two,param)
       self.connection.create_function(current_operator,3,op)
-          break
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = ? AND
                              %s(triples.object_id,?,?)""" % 
                              current_operator,
-                             triples.predicate_id = idfromname(?) AND
-                             %s(namefromid(triples.object_id),?,?)""" % current_operator,
                              (self.idfromname(attr),value,extraparam)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()

@@ -2,13 +2,6 @@ import geopy
 
 g = geopy.geocoders.Google('ABQIAAAALF_wPa2EB69uDlWjblEszBR_kaQGh5mwnhfXDI65SHVheIGNsRRpbYi2FMuhVUYnAmYZZJKdy6EOVA')
 
-def log(obj):
-  f = open('/Users/pete/braindump/graphstore/comparisonoperators/log.txt','a')
-  f.write(obj.__repr__()+"\n")
-  f.close()
-  return True
-
-
 def get_coordinates(q):
   result = g.geocode(q)
   return result[1][0], result[1][1]

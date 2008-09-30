@@ -2,7 +2,7 @@
 - jinja2
 - cherrypy
 - geopy
-- beautifulsoup
+  - beautifulsoup
 - simplejson
 - pyyaml
 - dateutil
