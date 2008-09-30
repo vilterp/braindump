@@ -145,6 +145,16 @@ class Graph:
       pages.sort()
       return pages
   
+  def select(self, criteria=None, orderby=None):
+    # TODO: multiple attrs, asc/desc
+    data = [{'name':page,'metadata':self.get(page)} for page in self.list(criteria)]
+    def compare(a,b):
+      try:
+        return cmp(a['metadata'][orderby],b['metadata'][orderby])
+      except: return False
+    data.sort(compare)
+    return data
+  
   def get(self, page, attribute=None):
     if attribute is None: # return dict with all attributes
       result = self.query("""SELECT predicate_id, object_id FROM triples WHERE

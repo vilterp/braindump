@@ -60,45 +60,56 @@ class GraphstoreTest(unittest.TestCase):
     g.set('Barrack Obama','hometown','Chicago')
     self.assertEquals(g.list('hometown is within 50 miles of Gary, Indiana'),['Barrack Obama'])
   
+  def testSelect(self):
+    g = Graph(':memory:')
+    g.set('Car A',{'type':'car','horsepower':'300'})
+    g.set('Car B',{'type':'car','horsepower':'400'})
+    g.set('Car C',{'type':'car','horsepower':'500'})
+    self.assertEquals(g.select('type is car','horsepower'),[
+      {'name': u'Car A', 'metadata': {u'horsepower': u'300', u'type': u'car'}},
+      {'name': u'Car B', 'metadata': {u'horsepower': u'400', u'type': u'car'}},
+      {'name': u'Car C', 'metadata': {u'horsepower': u'500', u'type': u'car'}}
+    ])
+  
   def testSet(self):
     # string
     g = Graph(':memory:')
     g.set('apple','color','red')
     self.assertEquals(g.query('SELECT * FROM pages').fetchall(),[
-                                                                 (1,u'apple',''),
-                                                                 (2,u'color',''),
-                                                                 (3,u'red','')
-                                                                ])
+     (1,u'apple',''),
+     (2,u'color',''),
+     (3,u'red','')
+    ])
     self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[(1,1,2,3)])
     del g
     # list
     g = Graph(':memory:')
     g.set('grocery list','items',['milk','cookies'])
     self.assertEquals(g.query('SELECT * FROM pages').fetchall(),[
-                                                                 (1,u'grocery list',''),
-                                                                 (2,u'item',''),
-                                                                 (3,u'milk',''),
-                                                                 (4,u'cookies','')
-                                                                ])
+      (1,u'grocery list',''),
+      (2,u'item',''),
+      (3,u'milk',''),
+      (4,u'cookies','')
+    ])
     self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[
-                                                                   (1,1,2,3),
-                                                                   (2,1,2,4)
-                                                                  ])
+      (1,1,2,3),
+      (2,1,2,4)
+    ])
     del g
     # dict
     g = Graph(':memory:')
     g.set('apple',{'color':'red','tastiness':'high'})
     self.assertEquals(g.query('SELECT * FROM pages').fetchall(),[
-                                                                 (1,u'apple',''),
-                                                                 (2,u'color',''),
-                                                                 (3,u'red',''),
-                                                                 (4,u'tastiness',''),
-                                                                 (5,u'high','')
-                                                                ])
+      (1,u'apple',''),
+      (2,u'color',''),
+      (3,u'red',''),
+      (4,u'tastiness',''),
+      (5,u'high','')
+    ])
     self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[
-                                                                   (1,1,2,3),
-                                                                   (2,1,4,5)
-                                                                  ])
+      (1,1,2,3),
+      (2,1,4,5)
+    ])
     del g
   
   def testDescribe(self):
