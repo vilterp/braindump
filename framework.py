@@ -17,13 +17,13 @@ def init_graph(thread_index):
 
 cherrypy.engine.subscribe('start_thread',init_graph)
 
-environments = {}
 additional_filters = {
   'smartstr': helpers.smart_str,
   'textilize': textile.textile,
-  'yamlize': lambda obj: yaml.dump(obj,default_flow_style=False),
+  'yamlize': lambda obj: yaml.safe_dump(obj,default_flow_style=False),
   'jsonify': simplejson.dumps
 }
+environments = {}
 for format in [format for format in os.listdir('templates') if '.' not in format]:
   environments[format] = jinja2.Environment(loader=jinja2.FileSystemLoader('templates/%s' % format))
   environments[format].filters.update(additional_filters)
