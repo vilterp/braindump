@@ -4,7 +4,6 @@ from util import *
 # TODO: don't pass 3rd to comparison operators if they don't take 3 params
 # TODO: set('red','type','color') on set('apple','color','red')
 # TODO: delete vs. unset etc...
-# TODO: g.select(criteria[,orderby]) => [{...},{...},{...}]
 
 class Graph:
   
@@ -109,16 +108,14 @@ class Graph:
         results1 = self.list(expressions[0])
         results2 = self.list(expressions[1])
         union = list(set(results1).union(set(results2)))
-        union.sort()
-        return union
+        return sorted(union)
       
       expressions = re.split(' and | AND ',criteria,1)
       if len(expressions) is 2: # match both conditions, return intersection
         results1 = self.list(expressions[0])
         results2 = self.list(expressions[1])
         intersection = list(set(results1).intersection(set(results2)))
-        intersection.sort()
-        return intersection
+        return sorted(intersection)
       
       # match one condition - all queries eventually come down to this
       # bit of a mess
@@ -142,18 +139,12 @@ class Graph:
                              current_operator,
                              (self.idfromname(attr),value)).fetchall()
       pages = [row[0] for row in result]
-      pages.sort()
-      return pages
+      return sorted(pages)
   
   def select(self, criteria=None, orderby=None):
     # TODO: multiple attrs, asc/desc
     data = [{'name':page,'metadata':self.get(page)} for page in self.list(criteria)]
-    def compare(a,b):
-      try:
-        return cmp(a['metadata'][orderby],b['metadata'][orderby])
-      except: return False
-    data.sort(compare)
-    return data
+    return sorted(data,key=lambda a: a['metadata'][orderby])
   
   def get(self, page, attribute=None):
     if attribute is None: # return dict with all attributes
@@ -277,4 +268,3 @@ class Graph:
       self.id_cache[new] = self.id_cache[old]
       del self.id_cache[old]
   
-
