@@ -1,5 +1,7 @@
 from dateutil import parser
 
+# TODO: relative times (today, tommorrow, now, yesterday, last week, two weeks ago, etc)
+
 def compare_before(one, two):
   date_one = parser.parse(one)
   date_two = parser.parse(two)

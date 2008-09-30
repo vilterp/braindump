@@ -1,9 +1,10 @@
-import sqlite3, re, os, comparisonoperators
+import sqlite3, re, os, inspect, comparisonoperators
 from util import *
 
 # TODO: don't pass 3rd to comparison operators if they don't take 3 params
 # TODO: set('red','type','color') on set('apple','color','red')
 # TODO: delete vs. unset etc...
+# TODO: g.select(criteria[,orderby]) => [{...},{...},{...}]
 
 class Graph:
   
@@ -127,21 +128,19 @@ class Graph:
       for operator in operators:
         match = re.search(' %s ' % operator,criteria)
         if match is not None:
+          matches = match.groups()
           current_operator, current_func = self.comparison_operators[operator]
           params = re.search('(.*) %s (.*)' % operator, criteria).groups()
           attr, value = params[0], params[-1]
-          if len(match.groups()) > 0:
-            extraparam = match.groups()[0]
-          else:
-            extraparam = None
-      op = lambda one,two,param: current_func(self.namefromid(one),two,param)
-      self.connection.create_function(current_operator,3,op)
+          break
+      op = lambda one,two: current_func(one,two,*matches)
+      self.connection.create_function(current_operator,2,op)
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = ? AND
-                             %s(triples.object_id,?,?)""" % 
+                             %s((SELECT name FROM pages WHERE id = triples.object_id),?)""" % 
                              current_operator,
-                             (self.idfromname(attr),value,extraparam)).fetchall()
+                             (self.idfromname(attr),value)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()
       return pages

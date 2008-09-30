@@ -1,6 +1,8 @@
 import unittest
 from graph import Graph
 
+# TODO: test comparison operators
+
 class GraphstoreTest(unittest.TestCase):
   
   def setUp(self):
@@ -9,8 +11,8 @@ class GraphstoreTest(unittest.TestCase):
     self.g.set('grocery list','items',['milk','cookies'])
     self.g.set('braindump',{'type':'web app','language':'python'})
     self.g.set('trac','language','python')
-    self.g.set('jim','brother','tim')
-    self.g.set('jim','arch enemy','tim')
+    self.g.set('Jim','brother','Tim')
+    self.g.set('Jim','arch enemy','Tim')
     self.g.create_page('empty page')
   
   def testCreatePage(self):
@@ -29,6 +31,7 @@ class GraphstoreTest(unittest.TestCase):
   def testList(self):
     g = Graph(':memory:')
     g.set('apple','color','red')
+    # basic comparison operators
     self.assertEquals(g.list(),['apple','color','red'])
     self.assertEquals(g.list('color is red'),['apple'])
     g.set('apple','type','fruit')
@@ -40,6 +43,22 @@ class GraphstoreTest(unittest.TestCase):
     g.set('gmail logo','colors',['red','white'])
     # this is how it behaves... is this how it should behave?
     self.assertEquals(g.list('color is red'),['apple','gmail logo'])
+    # temporal
+    g.set('Tim','birthday','6/2/95')
+    g.set('Jim','birthday','10/7/81')
+    self.assertEquals(g.list('birthday is after 1992'),['Tim'])
+    self.assertEquals(g.list('birthday is before 1992'),['Jim'])
+    self.assertEquals(g.list('birthday is after 1992 and birthday is before 2000'),['Tim'])
+    self.assertEquals(g.list('birthday is after 1900'),['Jim','Tim'])
+    # geographical
+    g.set('Barrack Obama','home state','Illinois')
+    g.set('John McCain','home state','Arizona')
+    self.assertEquals(g.list('home state is west of Texas'),['John McCain'])
+    self.assertEquals(g.list('home state is east of Texas'),['Barrack Obama'])
+    self.assertEquals(g.list('home state is north of Mexico'),['Barrack Obama','John McCain'])
+    self.assertEquals(g.list('home state is south of Canada'),['Barrack Obama','John McCain'])
+    g.set('Barrack Obama','hometown','Chicago')
+    self.assertEquals(g.list('hometown is within 50 miles of Gary, Indiana'),['Barrack Obama'])
   
   def testSet(self):
     # string
@@ -55,24 +74,20 @@ class GraphstoreTest(unittest.TestCase):
     # list
     g = Graph(':memory:')
     g.set('grocery list','items',['milk','cookies'])
-    self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[
-                                                                   (1,1,2,3),
-                                                                   (2,1,2,4)
-                                                                  ])
     self.assertEquals(g.query('SELECT * FROM pages').fetchall(),[
                                                                  (1,u'grocery list',''),
                                                                  (2,u'item',''),
                                                                  (3,u'milk',''),
                                                                  (4,u'cookies','')
                                                                 ])
+    self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[
+                                                                   (1,1,2,3),
+                                                                   (2,1,2,4)
+                                                                  ])
     del g
     # dict
     g = Graph(':memory:')
     g.set('apple',{'color':'red','tastiness':'high'})
-    self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[
-                                                                   (1,1,2,3),
-                                                                   (2,1,4,5)
-                                                                  ])
     self.assertEquals(g.query('SELECT * FROM pages').fetchall(),[
                                                                  (1,u'apple',''),
                                                                  (2,u'color',''),
@@ -80,6 +95,10 @@ class GraphstoreTest(unittest.TestCase):
                                                                  (4,u'tastiness',''),
                                                                  (5,u'high','')
                                                                 ])
+    self.assertEquals(g.query('SELECT * FROM triples').fetchall(),[
+                                                                   (1,1,2,3),
+                                                                   (2,1,4,5)
+                                                                  ])
     del g
   
   def testDescribe(self):
@@ -111,13 +130,13 @@ class GraphstoreTest(unittest.TestCase):
   
   def testInferTypes(self):
     self.assertEquals(self.g.infer_types('red'),['color'])
-    self.assertEquals(self.g.infer_types('tim'),['brother','arch enemy'])
+    self.assertEquals(self.g.infer_types('Tim'),['brother','arch enemy'])
   
   def testBetween(self):
     self.assertEquals(self.g.between('apple','red'),'color')
     self.assertEquals(self.g.between('red','apple'),'color')
-    self.assertEquals(self.g.between('jim','tim'),['brother','arch enemy'])
-    self.assertEquals(self.g.between('tim','jim'),['brother','arch enemy'])
+    self.assertEquals(self.g.between('Jim','Tim'),['brother','arch enemy'])
+    self.assertEquals(self.g.between('Tim','Jim'),['brother','arch enemy'])
   
   def testRename(self):
     g = Graph(':memory:')

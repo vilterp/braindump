@@ -1,6 +1,6 @@
 import re
 
-def compare_is(one, two, extraparam):
+def compare_is(one, two):
   return one.lower() == two.lower()
 compare_is.pattern = 'is'
 
@@ -34,4 +34,4 @@ def regexp(one, two):
     return True
   else:
     return False
-regexp.pattern = 'regexp'
+regexp.pattern = 'matches'

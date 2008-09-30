@@ -2,9 +2,15 @@ import geopy
 
 g = geopy.geocoders.Google('ABQIAAAALF_wPa2EB69uDlWjblEszBR_kaQGh5mwnhfXDI65SHVheIGNsRRpbYi2FMuhVUYnAmYZZJKdy6EOVA')
 
+cache = {}
+
 def get_coordinates(q):
-  result = g.geocode(q)
-  return result[1][0], result[1][1]
+  if q in cache:
+    return cache[q]
+  else:
+    lat, long = g.geocode(q)[1]
+    cache[q] = (lat, long)
+    return lat, long
 
 def north_of(one, two):
   return get_coordinates(one)[0] > get_coordinates(two)[0]
@@ -23,9 +29,8 @@ def west_of(one, two):
 west_of.pattern = 'is west of'
 
 def within_x_miles_of(one, two, miles):
-  loc_one = g.geocode(one)
-  loc_two = g.geocode(two)
-  distance = geopy.distance.distance(loc_one[1],loc_two[1]).miles
-  log((one,two,miles,distance,distance <= float(miles)))
+  loc_one = get_coordinates(one)
+  loc_two = get_coordinates(two)
+  distance = geopy.distance.distance(loc_one,loc_two).miles
   return distance <= float(miles)
 within_x_miles_of.pattern = 'is within (\d+) miles of'
