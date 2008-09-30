@@ -119,16 +119,13 @@ class Graph:
       
       # match one condition - all queries eventually come down to this
       # bit of a mess
-      operators = self.comparison_operators.keys()
-      operators.sort()
-      operators.reverse()
-      for operator in operators:
+      for operator in reversed(sorted(self.comparison_operators.keys())):
         match = re.search(' %s ' % operator,criteria)
         if match is not None:
           matches = match.groups()
-          current_operator, current_func = self.comparison_operators[operator]
           params = re.search('(.*) %s (.*)' % operator, criteria).groups()
           attr, value = params[0], params[-1]
+          current_operator, current_func = self.comparison_operators[operator]
           break
       op = lambda one,two: current_func(one,two,*matches)
       self.connection.create_function(current_operator,2,op)
