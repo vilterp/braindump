@@ -33,7 +33,7 @@ $(document).ready(function(){
     })
   }
   function save_on_enter(event) {
-    if(event.which == 13) {
+    if(event.which == 13) { // other enter key?
       save_metadata()
     }
   }

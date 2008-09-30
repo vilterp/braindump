@@ -2,6 +2,8 @@ import sqlite3, re, os, comparisonoperators
 from util import *
 
 # TODO: don't pass 3rd to comparison operators if they don't take 3 params
+# TODO: set('red','type','color') on set('apple','color','red')
+# TODO: delete vs. unset etc...
 
 class Graph:
   
@@ -20,7 +22,7 @@ class Graph:
       self.create_schema()
   
   def __repr__(self):
-    return "<Graph source:%s>" % self.database_path
+    return "<Graph source:%s>" % os.path.abspath(self.database_path)
   
   def __iter__(self):
     return self.list().__iter__()
@@ -47,7 +49,7 @@ class Graph:
   
   def idfromname(self, name, create_if_nonexistent=False, raise_nonexistent=True):
     if name.lower() in [key.lower() for key in self.id_cache.keys()]:
-      return self.id_cache[name.lower()]
+      return case_insensitive_lookup(self.id_cache,name)
     else:
       result = self.query('SELECT id FROM pages WHERE name LIKE ?',(name,)).fetchone()
       # LIKE: case insensitive
@@ -66,7 +68,6 @@ class Graph:
     if id in self.id_cache.values():
       return find_key(self.id_cache,id)
     else:
-      print id
       result = self.query('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
       if not result:
         raise NonexistentPageError(id) # this wouldn't ever happen... where would the id # come from..

@@ -13,8 +13,12 @@ def is_singular(word):
 def is_plural(word):
   return word == pluralize(word)
 
-def find_key(dic, val):
-  return [k for k, v in dic.iteritems() if v == val][0]
+def find_key(dict, val):
+  return [k for k, v in dict.iteritems() if v == val][0]
+
+def case_insensitive_lookup(dict, thekey):
+  for key in dict.keys():
+    if key.lower() == thekey.lower(): return dict[key]
 
 def set_or_append(target, item):
   if target is None:
