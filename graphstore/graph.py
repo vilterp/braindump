@@ -8,29 +8,36 @@ from util import *
 
 class Graph:
   
-  id_cache = {}
-  comparison_operators = {}
-  
   def __init__(self, database_path):
+    self.id_cache = {}
+    self.comparison_operators = {}
     self.database_path = database_path
     if not os.path.exists(database_path) or database_path == ':memory:':
       print 'creating schema'
       self.create_schema()
     self.connection = sqlite3.connect(database_path)
+<<<<<<< .mine
+=======
     self.cursor = self.connection.cursor()
     self.connection.create_function('idfromname',1,self.id_from_name)
     self.connection.create_function('namefromid',1,self.name_from_id)
+>>>>>>> .r229
     # register comparison operators
+<<<<<<< .mine
+    for functionname in dir(comparisonoperators):
+      operator = comparisonoperators.__dict__[functionname]
+      if hasattr(operator,'pattern'): # to check if it's supposed to be a comp. op.
+        self.comparison_operators[operator.pattern] = (functionname,operator)
+=======
     for operator in dir(comparisonoperators):
       obj = comparisonoperators.__dict__[operator]
       try:
         self.connection.create_function(operator,3,obj)
         self.comparison_operators[obj.pattern] = operator
+>>>>>>> .r229
       except AttributeError: # it doesn't have a 'pattern' attribute
         pass
-    # need another connection & cursor for UDFs...
-    self.connection2 = sqlite3.connect(database_path)
-    self.cursor2 = self.connection2.cursor()
+    if not os.path.exists(database_path): self.create_schema()
   
   def __repr__(self):
     return "<Graph source:%s>" % self.database_path
@@ -42,6 +49,15 @@ class Graph:
     return len(self.list())
   
   def create_schema(self):
+<<<<<<< .mine
+    self.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        name text, 
+                                        description text)""")
+    self.execute("""CREATE TABLE triples (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                          subject_id numeric,
+                                          predicate_id numeric,
+                                          object_id numeric)""")
+=======
     connection = sqlite3.connect(self.database_path)
     # print self.database_path
     cursor = connection.cursor()
@@ -54,47 +70,48 @@ class Graph:
                                             object_id numeric)""")
     connection.commit()
     connection.close()
+>>>>>>> .r229
   
-  def query(self, query, replacements=()):
-    # log = open('log.txt','a')
-    # log.write((query,replacements).__str__() + '\n')
-    # log.close()
-    print query, replacements
+  def query(self, query, replacements=(), printit=False):
+    if printit: print query, replacements
     return self.cursor.execute(query,replacements)
   
-  def execute(self, query, replacements=()):
-    self.query(query,replacements)
+  def execute(self, query, replacements=(), printit=False):
+    self.query(query,replacements,printit)
     self.connection.commit()
   
-  def id_from_name(self, name, create_if_nonexistent=False):
-    if name in self.id_cache:
-      return self.id_cache[name]
+  def idfromname(self, name, create_if_nonexistent=False, raise_nonexistent=True):
+    if name.lower() in [key.lower() for key in self.id_cache.keys()]:
+      return self.id_cache[name.lower()]
     else:
-      result = self.cursor2.execute('SELECT id FROM pages WHERE name LIKE ?',(name,)).fetchone()
+      result = self.query('SELECT id FROM pages WHERE name LIKE ?',(name,)).fetchone()
       # LIKE: case insensitive
-      if not result:
-        if create_if_nonexistent:
+      if not result: # not there
+        if create_if_nonexistent: # create it
           return self.create_page(name)
+        elif raise_nonexistent:
+          raise NonexistentPageError(name)
         else:
           return None
-      else:
+      else: # is there
         self.id_cache[name] = result[0]
         return result[0]
   
-  def name_from_id(self, id):
+  def namefromid(self, id):
     if id in self.id_cache.values():
       return find_key(self.id_cache,id)
     else:
-      result = self.cursor2.execute('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
+      print id
+      result = self.query('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
       if not result:
-        raise NonexistentPageError # this wouldn't ever happen... where would the id # come from..
+        raise NonexistentPageError(id) # this wouldn't ever happen... where would the id # come from..
       else:
         self.id_cache[result[0].lower()] = id
         return result[0]
   
   def create_page(self, name):
-    self.execute('INSERT INTO pages (name) VALUES (?)',(name,))
-    return self.id_from_name(name) # wish it wasn't necessary to query again...
+    self.execute('INSERT INTO pages (name, description) VALUES (?, ?)',(name,''))
+    return self.idfromname(name) # wish it wasn't necessary to query again...
   
   def triple_exists(self, subject_id, predicate_id, object_id):
     result = self.query("""SELECT * FROM triples WHERE
@@ -124,134 +141,137 @@ class Graph:
       if len(expressions) is 2: # match both conditions, return union
         results1 = self.list(expressions[0])
         results2 = self.list(expressions[1])
-        results1.extend(results2)
-        results1.sort()
-        return results1
+        union = list(set(results1).union(set(results2)))
+        union.sort()
+        return union
       
       expressions = re.split(' and | AND ',criteria,1)
       if len(expressions) is 2: # match both conditions, return intersection
-        results1 = set(self.list(expressions[0]))
-        results2 = set(self.list(expressions[1]))
-        intersection = results1.intersection(results2)
-        listified = list(intersection)
-        listified.sort()
-        return listified
+        results1 = self.list(expressions[0])
+        results2 = self.list(expressions[1])
+        intersection = list(set(results1).intersection(set(results2)))
+        intersection.sort()
+        return intersection
       
       # match one condition - all queries eventually come down to this
+      # bit of a mess
       operators = self.comparison_operators.keys()
       operators.sort()
       operators.reverse()
-      print operators
       for operator in operators:
         match = re.search(' %s ' % operator,criteria)
         if match is not None:
-          current_operator = self.comparison_operators[operator]
+          current_operator, current_func = self.comparison_operators[operator]
+          params = re.search('(.*) %s (.*)' % operator, criteria).groups()
+          attr, value = params[0], params[-1]
           if len(match.groups()) > 0:
             extraparam = match.groups()[0]
           else:
             extraparam = None
-          params = re.search('(.*) %s (.*)' % operator, criteria).groups()
-          attr, value = params[0], params[-1]
+      op = lambda one,two,param: current_func(self.namefromid(one),two,param)
+      self.connection.create_function(current_operator,3,op)
           break
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
+<<<<<<< .mine
+                             triples.predicate_id = ? AND
+                             %s(triples.object_id,?,?)""" % 
+                             current_operator,
+=======
                              triples.predicate_id = idfromname(?) AND
                              %s(namefromid(triples.object_id),?,?)""" % current_operator,
-                             (attr,value,extraparam)).fetchall()
+>>>>>>> .r229
+                             (self.idfromname(attr),value,extraparam)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()
       return pages
   
   def get(self, page, attribute=None):
     if attribute is None: # return dict with all attributes
-      result = self.query("""SELECT namefromid(predicate_id), namefromid(object_id) FROM triples WHERE
-                             subject_id = idfromname(?)""",(page,)).fetchall()
-      if len(result) > 0:
+      result = self.query("""SELECT predicate_id, object_id FROM triples WHERE
+                             subject_id = ?""",(self.idfromname(page),)).fetchall()
+      if len(result) is not None:
         page = {}
-        for row in result:
-          page[row[0]] = set_or_append(page.get(row[0],None),row[1]) # group plurals here
+        for predicate_id, object_id in result:
+          predicate = self.namefromid(predicate_id)
+          page[predicate] = set_or_append(page.get(predicate,None),self.namefromid(object_id))
         return pluralize_key_if_value_is_list(page)
       else:
         raise NonexistentPageError(page)
     else: # return single string attribute
       if is_plural(attribute): attribute = singularize(attribute)
-      result = self.query("""SELECT namefromid(object_id) FROM triples WHERE
-                             subject_id = idfromname(?) AND
-                             predicate_id = idfromname(?)""",
-                             (page,attribute)).fetchall()
-      if len(result) is 1:
-        return result[0][0]
-      elif len(result) > 1:
-        return [row[0] for row in result]
+      result = self.query("""SELECT object_id FROM triples WHERE
+                             subject_id = ? AND
+                             predicate_id = ?""",
+                             (self.idfromname(page),
+                              self.idfromname(attribute))).fetchall()
+      if len(result) > 1:
+        return [self.namefromid(row[0]) for row in result]
+      elif result is not None:
+        return self.namefromid(result[0][0])
       elif result is None:
         raise NonexistentPageError(page)
   
   def set(self, subject, predicate, object=None):
     if object is None and isinstance(predicate,dict):
-      for item in predicate.iteritems():
-        self.set(subject,item[0],item[1])
+      for predicate, object in predicate.iteritems():
+        self.set(subject,predicate,object)
     else:
-      if is_plural(predicate) and isinstance(object,list):
-        predicate = singularize(predicate)
-      subject_id = self.id_from_name(subject,True)
-      predicate_id = self.id_from_name(predicate,True)
-      # delete any existing value(s)
-      self.execute("""DELETE FROM triples WHERE 
-                      subject_id = ? AND
-                      predicate_id = ?""",
-                   (subject_id,predicate_id))
+      self.unset(subject,predicate)
+      subject_id = self.idfromname(subject,True)
       if is_plural(predicate) and isinstance(object,list): # set multiple values
+        predicate_id = self.idfromname(singularize(predicate),True)
         for value in object:
-          object_id = self.id_from_name(value,True)
+          object_id = self.idfromname(value,True)
           # set new value
           self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                         (subject_id,predicate_id,object_id))
       else: # set one value
-        object_id = self.id_from_name(object,True)
+        predicate_id = self.idfromname(predicate,True)
+        object_id = self.idfromname(object,True)
         self.execute('INSERT INTO triples VALUES (NULL, ?, ?, ?)',
                       (subject_id,predicate_id,object_id))
   
   def unset(self, page, attribute=None):
     if attribute is None: # unset entire page
-      self.execute('DELETE FROM triples WHERE subject_id = idfromname(?)',(page,))
+      self.execute('DELETE FROM triples WHERE subject_id = ?',
+                    (self.idfromname(page,raise_nonexistent=False),))
     else: # unset single attribute
-      if is_plural(attribute):
-        attribute = singularize(attribute)
+      if is_plural(attribute): attribute = singularize(attribute)
       self.execute("""DELETE FROM triples WHERE
-                      subject_id = idfromname(?) AND
-                      predicate_id = idfromname(?)""",
-                              (subject_id,predicate_id))
+                      subject_id = ? AND
+                      predicate_id = ?""",
+                      (self.idfromname(page,raise_nonexistent=False),
+                      self.idfromname(attribute,raise_nonexistent=False)))
   
   def backlinks(self, page, attribute=None):
-    object_id = self.id_from_name(page)
-    if object_id is None:
-      raise NonexistentPageError(page)
+    object_id = self.idfromname(page)
     if attribute is None: # return dict of all backlinks
-      result = self.query("""SELECT namefromid(predicate_id), namefromid(subject_id)
+      result = self.query("""SELECT predicate_id, subject_id
                              FROM triples WHERE object_id = ?""",
                              (object_id,)).fetchall()
       if not result:
         return {}
       else:
         backlinks = {}
-        for triple in result:
+        for triple in [(self.namefromid(i[0]),self.namefromid(i[1])) for i in result]:
           backlinks[triple[0]] = set_or_append(backlinks.get(triple[0],None),triple[1])
         return backlinks
     else:
-      predicate_id = self.id_from_name(attribute)
-      if predicate_id is None:
-        raise NonexistentPageError(attribute)
-      result = self.query("""SELECT namefromid(subject_id) FROM triples WHERE
+      predicate_id = self.idfromname(attribute)
+      result = self.query("""SELECT subject_id FROM triples WHERE
                              object_id = ? AND predicate_id = ?""",
-                             (object_id,predicate_id)).fetchone()
-      if result:
-        return result[0]
+                             (object_id,predicate_id)).fetchall()
+      if len(result) > 1:
+        return [self.namefromid(row[0]) for row in result]
+      elif result is not None:
+        return self.namefromid(result[0][0])
       else:
         return None
   
   def between(self, page1, page2):
-    id1 = self.id_from_name(page1)
-    id2 = self.id_from_name(page2)
+    id1 = self.idfromname(page1)
+    id2 = self.idfromname(page2)
     result = self.query("""SELECT name FROM pages, triples WHERE
                            pages.id = triples.predicate_id AND
                            ((triples.subject_id = ? AND
@@ -260,7 +280,9 @@ class Graph:
                            (triples.subject_id = ? AND
                            triples.object_id = ?))""",
                            (id1,id2,id2,id1)).fetchall()
-    if result:
+    if len(result) is 1:
+      return result[0][0]
+    elif result is not None:
       return [row[0] for row in result]
     else:
       return None # would be cool to find shortest distance between two pages not directly linked
@@ -276,7 +298,7 @@ class Graph:
       else:
         return result[0]
     else: # set description
-      page_id = self.id_from_name(page,True) # just so page will be created if nonexistent
+      page_id = self.idfromname(page,True) # just so page will be created if nonexistent
       self.execute('UPDATE pages SET description = ? WHERE id = ?',(description,page_id))
   
   def rename(self, old, new):

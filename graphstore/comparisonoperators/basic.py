@@ -1,7 +1,11 @@
 import re
 
+<<<<<<< .mine
+def compare_is(one, two, extraparam):
+=======
 def compare_is(one, two, slag):
   log((one, two, one.lower() == two.lower()))
+>>>>>>> .r229
   return one.lower() == two.lower()
 compare_is.pattern = 'is'
 
