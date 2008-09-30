@@ -16,25 +16,19 @@ class Graph:
       print 'creating schema'
       self.create_schema()
     self.connection = sqlite3.connect(database_path)
-<<<<<<< .mine
-=======
     self.cursor = self.connection.cursor()
     self.connection.create_function('idfromname',1,self.id_from_name)
     self.connection.create_function('namefromid',1,self.name_from_id)
->>>>>>> .r229
     # register comparison operators
-<<<<<<< .mine
     for functionname in dir(comparisonoperators):
       operator = comparisonoperators.__dict__[functionname]
       if hasattr(operator,'pattern'): # to check if it's supposed to be a comp. op.
         self.comparison_operators[operator.pattern] = (functionname,operator)
-=======
     for operator in dir(comparisonoperators):
       obj = comparisonoperators.__dict__[operator]
       try:
         self.connection.create_function(operator,3,obj)
         self.comparison_operators[obj.pattern] = operator
->>>>>>> .r229
       except AttributeError: # it doesn't have a 'pattern' attribute
         pass
     if not os.path.exists(database_path): self.create_schema()
@@ -49,7 +43,6 @@ class Graph:
     return len(self.list())
   
   def create_schema(self):
-<<<<<<< .mine
     self.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                         name text, 
                                         description text)""")
@@ -57,7 +50,6 @@ class Graph:
                                           subject_id numeric,
                                           predicate_id numeric,
                                           object_id numeric)""")
-=======
     connection = sqlite3.connect(self.database_path)
     # print self.database_path
     cursor = connection.cursor()
@@ -70,7 +62,6 @@ class Graph:
                                             object_id numeric)""")
     connection.commit()
     connection.close()
->>>>>>> .r229
   
   def query(self, query, replacements=(), printit=False):
     if printit: print query, replacements
@@ -173,14 +164,11 @@ class Graph:
           break
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
-<<<<<<< .mine
                              triples.predicate_id = ? AND
                              %s(triples.object_id,?,?)""" % 
                              current_operator,
-=======
                              triples.predicate_id = idfromname(?) AND
                              %s(namefromid(triples.object_id),?,?)""" % current_operator,
->>>>>>> .r229
                              (self.idfromname(attr),value,extraparam)).fetchall()
       pages = [row[0] for row in result]
       pages.sort()

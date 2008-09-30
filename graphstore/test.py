@@ -1,4 +1,4 @@
-import unittest, sys
+import unittest
 from graph import Graph
 
 class GraphstoreTest(unittest.TestCase):
