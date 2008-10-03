@@ -79,6 +79,14 @@ class Graph:
     self.execute('INSERT INTO pages (name, description) VALUES (?, ?)',(name,''))
     return self.idfromname(name) # wish it wasn't necessary to query again...
   
+  def resolve_name(self, name):
+    """capitalized properly"""
+    result = self.query('SELECT name FROM pages WHERE name LIKE ?',(name,)).fetchone()
+    if result is not None:
+      return result[0]
+    else:
+      raise NonexistentPageError(name)
+  
   def triple_exists(self, subject_id, predicate_id, object_id):
     result = self.query("""SELECT * FROM triples WHERE
                            subject_id = ? AND predicate_id = ? AND object_id = ?""",
@@ -92,7 +100,7 @@ class Graph:
     return self.backlinks(page).keys()
   
   def list(self, criteria=None):
-    if criteria is None:
+    if not criteria:
       return [row[0] for row in self.query('SELECT name FROM pages').fetchall()]
     else: # the magic of braindump
       
@@ -138,10 +146,19 @@ class Graph:
       pages = [row[0] for row in result]
       return sorted(pages)
   
-  def select(self, criteria=None, orderby=None):
+  def select(self, criteria=None, attributes=['metadata'], orderby=None):
     # TODO: multiple attrs, asc/desc
-    data = [{'name':page,'metadata':self.get(page)} for page in self.list(criteria)]
-    return sorted(data,key=lambda a: a['metadata'][orderby])
+    data = []
+    for page in self.list(criteria):
+      pagedata = {'name': page}
+      if 'metadata' in attributes: pagedata['metadata'] = self.get(page)
+      if 'description' in attributes: pagedata['description'] = self.describe(page)
+      if 'backlinks' in attributes: pagedata['backlinks'] = self.backlinks(page)
+      data.append(pagedata)
+    if orderby is not None:
+      return sorted(data,key=lambda a: a['metadata'][orderby])
+    else:
+      return data
   
   def get(self, page, attribute=None):
     if attribute is None: # return dict with all attributes
@@ -246,7 +263,7 @@ class Graph:
   
   def describe(self, page, description=None): # should this be split up into 2 methods?
     if description is None: # get description
-      result = self.query('SELECT description FROM pages WHERE name = ?',
+      result = self.query('SELECT description FROM pages WHERE name LIKE ?',
                           (page,)).fetchone()
       if not result:
         raise NonexistentPageError(page)

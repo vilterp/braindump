@@ -1,0 +1,40 @@
+{% extends 'visualize.jinja' %}
+{% block name %}Timeline{% endblock %}
+{% block head %}
+  <script src="http://simile.mit.edu/timeline/api/timeline-api.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      // create
+      var bandInfos = [
+        Timeline.createBandInfo({
+          width: '70%', 
+          intervalUnit: Timeline.DateTime.MONTH, 
+          intervalPixels: 100
+        }),
+        Timeline.createBandInfo({
+          width: '30%', 
+          intervalUnit: Timeline.DateTime.YEAR, 
+          intervalPixels: 200
+        })
+      ]
+      tl = Timeline.create(document.getElementById('timeline'), bandInfos);
+      resizeTimerID = null;
+      // redo layout on resize
+      $(document).resize(function(){
+        function onResize() {
+          if (resizeTimerID == null) {
+            resizeTimerID = window.setTimeout(function() {
+              resizeTimerID = null;
+              tl.layout();
+            }, 500);
+          }
+        }
+      })
+    })
+  </script>
+{% endblock %}
+{% block fields %}
+{% endblock %}
+{% block visualization %}
+  <div id="timeline" style="height: 150px; border: 1px solid #aaa"></div>
+{% endblock %}

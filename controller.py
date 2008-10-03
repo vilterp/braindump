@@ -1,36 +1,28 @@
 from framework import *
 
-# TODO: RESTify
-
 class Main:
   
   def index(self, criteria=None, format='html'):
     """main api."""
     graph = cherrypy.thread_data.graph
-    pages = {}
-    pageslist = graph.list(criteria)
-    if pageslist:
-      for page in pageslist:
-        pages[page] = dict(name=page,
-                           metadata=graph.get(page),
-                           description=graph.describe(page),
-                           backlinks=graph.backlinks(page))
+    pages = graph.select(criteria)
     return render('index',format,pages=pages,criteria=criteria)
   index.exposed = True
   
   def list(self, criteria=None, **params):
     """for index's ajax interface: returns a simple <ul>"""
-    try:
-      pages = cherrypy.thread_data.graph.list(criteria)
-    except:
-      pages = []
+    pages = cherrypy.thread_data.graph.select(criteria)
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
+  
+  def visualize(self, visualization):
+    return render(visualization)
+  visualize.exposed = True
   
   def show(self, pagename, format='html'):
     graph = cherrypy.thread_data.graph
     try:
-      page = dict(name=pagename,
+      page = dict(name=graph.resolve_name(pagename),
                   metadata=graph.get(pagename),
                   description=graph.describe(pagename),
                   backlinks=graph.backlinks(pagename))
@@ -48,7 +40,7 @@ class Main:
     if description is not None: #save description
       cherrypy.thread_data.graph.describe(page,description)
       return render('description-html',page=dict(description=description))
-    elif object is not None and predicate is not None:
+    elif object is not None and predicate is not None: # save datum
       cherrypy.thread_data.graph.set(page, predicate, object)
       return render('datum',datum_tuple=(predicate,object))
   save.exposed = True

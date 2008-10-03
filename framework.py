@@ -21,7 +21,7 @@ additional_filters = {
   'smartstr': helpers.smart_str,
   'textilize': textile.textile,
   'yamlize': lambda obj: yaml.safe_dump(obj,default_flow_style=False),
-  'jsonify': simplejson.dumps
+  'jsonify': lambda obj: simplejson.dumps(obj,indent=2)
 }
 environments = {}
 for format in [format for format in os.listdir('templates') if '.' not in format]:

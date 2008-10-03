@@ -1,0 +1,27 @@
+{% extends 'layout.jinja' %}
+{% block title %} &raquo; visualize{# TODO: put name here too... #}{% endblock %}
+{% block heading %} &raquo; visualize &raquo; {% block name %}{% endblock %}{% endblock %}
+{% block head %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#fields_form').submit(function(){
+        fields = $(this).serializeArray()
+        fields.format = 'json'
+        $.get('/',criteria,function(){
+          drawVisualization(response)
+        },'json')
+        return false
+      })
+    })
+  </script>
+{% endblock %}
+{% block content %}
+  <div id="controls">
+    <form id="fields_form">
+      {% block fields %}{% endblock %}
+    </form>
+  </div>
+  <div id="visualization">
+    {% block visualization %}{% endblock %}
+  </div>
+{% endblock %}
