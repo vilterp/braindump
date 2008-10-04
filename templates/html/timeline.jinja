@@ -17,24 +17,49 @@
           intervalPixels: 200
         })
       ]
+      bandInfos[1].syncWith = 0;
+      bandInfos[1].highlight = true;
       tl = Timeline.create(document.getElementById('timeline'), bandInfos);
       resizeTimerID = null;
       // redo layout on resize
       $(document).resize(function(){
-        function onResize() {
-          if (resizeTimerID == null) {
-            resizeTimerID = window.setTimeout(function() {
-              resizeTimerID = null;
-              tl.layout();
-            }, 500);
-          }
+        if (resizeTimerID == null) {
+          resizeTimerID = window.setTimeout(function() {
+            resizeTimerID = null;
+            tl.layout();
+          }, 500);
         }
       })
+      // add events
+      var parseDateTimeFunction = this._events.getUnit().getParser(dateTimeFormat);
+      for(var i=0; i < data.events.length; i++){
+        var event = data.events[i];
+        var evt = new Timeline.DefaultEventSource.Event(
+          parseDateTimeFunction(event.start),
+          parseDateTimeFunction(event.end),
+          parseDateTimeFunction(event.latestStart),
+          parseDateTimeFunction(event.earliestEnd),
+          event.isDuration || false,
+          event.title,
+          event.description,
+          this._resolveRelativeURL(event.image, base),
+          this._resolveRelativeURL(event.link, base),
+          this._resolveRelativeURL(event.icon, base),
+          event.color,
+          event.textColor
+        );
+        evt._obj = event;
+        evt.getProperty = function(name) {
+            return this._obj[name];
+        };
+        evt.setWikiInfo(wikiURL, wikiSection);
+        this.add(evt);
+      }
     })
   </script>
 {% endblock %}
 {% block fields %}
 {% endblock %}
 {% block visualization %}
-  <div id="timeline" style="height: 150px; border: 1px solid #aaa"></div>
+  <div id="timeline" style="height: 450px; border: 1px solid #aaa"></div>
 {% endblock %}
