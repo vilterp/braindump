@@ -2,10 +2,15 @@ from framework import *
 
 class Main:
   
-  def index(self, criteria=None, format='html'):
+  def index(self, criteria=None, sections='metadata|description', format='html'):
     """main api."""
     graph = cherrypy.thread_data.graph
-    pages = graph.select(criteria)
+    try:
+      sections = sections.split('|')
+      pages = graph.select(criteria,sections=sections)
+      for page in pages: page['url'] = helpers.pageurl(page['name'])
+    except graphstore.util.NonexistentPageError:
+      pages = []
     return render('index',format,pages=pages,criteria=criteria)
   index.exposed = True
   
@@ -15,8 +20,8 @@ class Main:
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
-  def visualize(self, visualization):
-    return render(visualization)
+  def visualize(self, visualization, criteria=None):
+    return render(visualization,criteria=criteria)
   visualize.exposed = True
   
   def show(self, pagename, format='html'):

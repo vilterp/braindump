@@ -30,7 +30,7 @@ def pagelink(page, **options):
     return link(page,'/show/%s' % escape(page), **options)
 
 def pageurl(page, **params):
-  return url('/show/%s' % page, **params)
+  return url('/show/%s' % escape(page), **params)
 
 def load_css(source):
   if '.css' not in source: source += '.css'

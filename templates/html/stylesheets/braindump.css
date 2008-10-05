@@ -78,3 +78,8 @@ img.control:hover {
   argh!! how do I un-indent this?!
 }
 */
+/* visualization controls */
+div#controls {
+  padding: 5px;
+  margin: 5px;
+}

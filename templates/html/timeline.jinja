@@ -1,61 +1,51 @@
 {% extends 'visualize.jinja' %}
 {% block name %}Timeline{% endblock %}
-{% block head %}
+{% block scripts %}
   <script src="http://simile.mit.edu/timeline/api/timeline-api.js" type="text/javascript"></script>
   <script type="text/javascript">
-    $(document).ready(function(){
+    // TODO: dynamically set zoom according to range of dates
+    function drawVisualization(data) {
+      $('#timeline').html('') // clear preexisting timeline
+      eventsource = new Timeline.DefaultEventSource()
       // create
       var bandInfos = [
         Timeline.createBandInfo({
+          eventSource: eventsource,
           width: '70%', 
           intervalUnit: Timeline.DateTime.MONTH, 
           intervalPixels: 100
         }),
         Timeline.createBandInfo({
+          eventSource: eventsource,
           width: '30%', 
           intervalUnit: Timeline.DateTime.YEAR, 
           intervalPixels: 200
         })
       ]
-      bandInfos[1].syncWith = 0;
-      bandInfos[1].highlight = true;
-      tl = Timeline.create(document.getElementById('timeline'), bandInfos);
-      resizeTimerID = null;
-      // redo layout on resize
-      $(document).resize(function(){
-        if (resizeTimerID == null) {
-          resizeTimerID = window.setTimeout(function() {
-            resizeTimerID = null;
-            tl.layout();
-          }, 500);
-        }
-      })
+      bandInfos[1].syncWith = 0
+      bandInfos[1].highlight = true
+      tl = Timeline.create(document.getElementById('timeline'), bandInfos)
       // add events
-      var parseDateTimeFunction = this._events.getUnit().getParser(dateTimeFormat);
-      for(var i=0; i < data.events.length; i++){
-        var event = data.events[i];
-        var evt = new Timeline.DefaultEventSource.Event(
-          parseDateTimeFunction(event.start),
-          parseDateTimeFunction(event.end),
-          parseDateTimeFunction(event.latestStart),
-          parseDateTimeFunction(event.earliestEnd),
-          event.isDuration || false,
-          event.title,
-          event.description,
-          this._resolveRelativeURL(event.image, base),
-          this._resolveRelativeURL(event.link, base),
-          this._resolveRelativeURL(event.icon, base),
-          event.color,
-          event.textColor
-        );
-        evt._obj = event;
-        evt.getProperty = function(name) {
-            return this._obj[name];
-        };
-        evt.setWikiInfo(wikiURL, wikiSection);
-        this.add(evt);
+      if(data.length) {
+        // translate into timeline format
+        events = {events:[]}
+        for(i=0; i < data.length; i++) {
+          evt = data[i]
+          events['events'][i] = {
+            'title': evt['name'],
+            'link': evt['url'],
+            'start': evt['metadata']['date'],
+            'description': evt['description']
+          }
+        }
+        eventsource.loadJSON(events,"{{ url('') }}")
+        // scroll timeline to earliest date
+        tl.getBand(0).setCenterVisibleDate(eventsource.getEarliestDate())
+        tl.getBand(0).setCenterVisibleDate(eventsource.getEarliestDate())
       }
-    })
+      // redo layout on resize
+      $(document).resize(tl.layout)
+    }
   </script>
 {% endblock %}
 {% block fields %}

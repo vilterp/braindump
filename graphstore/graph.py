@@ -146,14 +146,14 @@ class Graph:
       pages = [row[0] for row in result]
       return sorted(pages)
   
-  def select(self, criteria=None, attributes=['metadata'], orderby=None):
+  def select(self, criteria=None, sections=['metadata'], orderby=None):
     # TODO: multiple attrs, asc/desc
     data = []
     for page in self.list(criteria):
       pagedata = {'name': page}
-      if 'metadata' in attributes: pagedata['metadata'] = self.get(page)
-      if 'description' in attributes: pagedata['description'] = self.describe(page)
-      if 'backlinks' in attributes: pagedata['backlinks'] = self.backlinks(page)
+      if 'metadata' in sections: pagedata['metadata'] = self.get(page)
+      if 'description' in sections: pagedata['description'] = self.describe(page)
+      if 'backlinks' in sections: pagedata['backlinks'] = self.backlinks(page)
       data.append(pagedata)
     if orderby is not None:
       return sorted(data,key=lambda a: a['metadata'][orderby])

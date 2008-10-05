@@ -12,7 +12,7 @@ $(document).ready(function(){
     controls = $('#editing_metadata, #adding_metadata').children('#metadata_form').children('#edit_controls')
     controls.replaceWith($('#saving_indicator').clone().show())
     $.ajax({
-      url: '/save/' + pagename,
+      url: '/save/' + escape(pagename),
       data: $('#editing_metadata, #adding_metadata').children('#metadata_form').serialize(),
       success: function(response){
         $('#adding_metadata, #editing_metadata').replaceWith($(response).attr('id','just_edited'))
@@ -21,19 +21,21 @@ $(document).ready(function(){
         $('#just_edited').removeAttr('id')
       }
     })
+    return false
   }
   function unset_metadata() {
     datum = $(this).parent().parent()
     $.ajax({
-      url: '/unset/' + pagename,
+      url: '/unset/' + escape(pagename),
       data: {predicate: datum.children('.predicate').html()},
       success: function(){
         datum.remove()
       }
     })
+    return false
   }
   function save_on_enter(event) {
-    if(event.which == 13) { // other enter key?
+    if(event.which == 13) {
       save_metadata()
     }
   }
@@ -106,10 +108,10 @@ $(document).ready(function(){
     cancel_any_edits()
     original = $(this).html()
     $(this).removeAttr('title')
-    $(this).load('/edit_description/' + pagename,function(){
+    $(this).load('/edit_description/' + escape(pagename),function(){
       $('textarea[name="description"]').focus()
       $('#save_description_button').click(function(){
-        $('#description').load('/save/' + pagename,
+        $('#description').load('/save/' + escape(pagename),
           $('textarea[name="description"]').serializeArray(),
           function(){
             $('#description').attr('title','double-click to edit')
