@@ -1,0 +1,16 @@
+{% extends 'visualize.jinja' %}
+{% block name %}Table{% endblock %}
+{% block scripts %}
+  {{ load_js('jquery.tablesorter.min') }}
+  <script type="text/javascript">
+    function drawVisualization(data) {
+      // get all attributes and make header
+      // put each page's data in a row
+      // tablesorterize it
+    }
+  </script>
+  {{ load_css('tablesorter-blue.css') }}
+{% endblock %}
+{% block visualization %}
+  <table></table>
+{% endblock %}
