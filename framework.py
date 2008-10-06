@@ -1,6 +1,8 @@
 import cherrypy, jinja2, graphstore, re, os, mimetypes, more_mime_types, helpers
 import simplejson, yaml, textile
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 def redirect(url):
   """redirect the browser to url"""
   cherrypy.response.status = 302
@@ -24,8 +26,10 @@ additional_filters = {
   'jsonify': lambda obj: simplejson.dumps(obj,indent=2)
 }
 environments = {}
-for format in [format for format in os.listdir('templates') if '.' not in format]:
-  environments[format] = jinja2.Environment(loader=jinja2.FileSystemLoader('templates/%s' % format))
+templatesdir = os.path.join(basedir,'templates')
+for format in [format for format in os.listdir(templatesdir) if '.' not in format]:
+  formatpath = '%s/%s' % (templatesdir,format)
+  environments[format] = jinja2.Environment(loader=jinja2.FileSystemLoader(formatpath))
   environments[format].filters.update(additional_filters)
 
 def add_to_context(context, themodule):
