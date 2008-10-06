@@ -8,13 +8,14 @@
 {% block content %}
   <div id="controls">
     <form id="fields_form">
-      criteria: <input type="text" name="criteria" id='criteria_input' value="{{ criteria if criteria }}"/>
+      criteria: <input type="text" name="criteria" value="{{ criteria if criteria }}"/>
       <br/>
       <br/>
       {% block fields %}{% endblock %}
       <br/>
       <input type="submit" value="Visualize"/>
       <span id="working" style="display: none">{{ image('spinner.gif') }} Working...</span>
+      <span id="noresults" style="display: none">{{ image('deny.png') }} Sorry, no results for that criteria.</span>
     </form>
   </div>
   <div id="visualization">

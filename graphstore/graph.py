@@ -79,7 +79,7 @@ class Graph:
     self.execute('INSERT INTO pages (name, description) VALUES (?, ?)',(name,''))
     return self.idfromname(name) # wish it wasn't necessary to query again...
   
-  def resolve_name(self, name):
+  def normalize_name(self, name):
     """capitalized properly"""
     result = self.query('SELECT name FROM pages WHERE name LIKE ?',(name,)).fetchone()
     if result is not None:
@@ -135,16 +135,18 @@ class Graph:
           attr, value = params[0], params[-1]
           current_operator, current_func = self.comparison_operators[operator]
           break
-      op = lambda one,two: current_func(one,two,*matches)
-      self.connection.create_function(current_operator,2,op)
+      try:
+        op = lambda one,two: current_func(one,two,*matches)
+        self.connection.create_function(current_operator,2,op)
+      except:
+        raise NoMatchingComparisonOperatorError(criteria)
       result = self.query("""SELECT pages.name FROM pages, triples WHERE
                              pages.id = triples.subject_id AND
                              triples.predicate_id = ? AND
                              %s((SELECT name FROM pages WHERE id = triples.object_id),?)""" % 
                              current_operator,
                              (self.idfromname(attr),value)).fetchall()
-      pages = [row[0] for row in result]
-      return sorted(pages)
+      return sorted([row[0] for row in result])
   
   def select(self, criteria=None, sections=['metadata'], orderby=None):
     # TODO: multiple attrs, asc/desc

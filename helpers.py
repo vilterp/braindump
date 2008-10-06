@@ -26,6 +26,8 @@ def link(text, href='#', **options):
 def pagelink(page, **options):
   if isinstance(page,list):
     return list_to_human([pagelink(ind_page,**options) for ind_page in page])
+  elif isinstace(page,dict) and page.has_key('name'):
+    return pagelink(page['name'])
   else:
     return link(page,'/show/%s' % escape(page), **options)
 

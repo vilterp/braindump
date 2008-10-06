@@ -20,8 +20,8 @@ class GraphstoreTest(unittest.TestCase):
     g.create_page('spam')
     self.assertEquals(g.query('SELECT * FROM pages').fetchall(),[(1,'spam','')])
   
-  def testResolveName(self):
-    self.assertEquals(self.g.resolve_name('GroCeRY LiST'),'grocery list')
+  def testNormalizeName(self):
+    self.assertEquals(self.g.normalize_name('GroCeRY LiST'),'grocery list')
   
   def testIdCache(self):
     # these only test id's being set in idfromname (called in set())

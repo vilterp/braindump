@@ -8,7 +8,7 @@
       <a href="#" id="visibility_toggle" accesskey="f">{{ 'Hide' if criteria else 'Filter' }}</a>
       <form id="criteria_form"{{ ' style="display:none"' if not criteria }}>
         list pages where
-        <input type="text" name="criteria" value="{{ criteria if criteria }}" size="30" id="criteria_input"/>
+        <input type="text" name="criteria" value="{{ criteria if criteria }}" size="30" id="criteria"/>
         <input type="submit" value="Update"/>
         <a href="#" id="clear_link"{{ ' style="display: none"' if not criteria }}>clear</a>
       </form>

@@ -40,3 +40,6 @@ def pluralize_key_if_value_is_list(the_dict):
 
 class NonexistentPageError(NameError):
   pass
+
+class NoMatchingComparisonOperatorError(NameError):
+  pass

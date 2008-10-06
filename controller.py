@@ -1,4 +1,5 @@
 from framework import *
+from graphstore.util import *
 
 class Main:
   
@@ -9,15 +10,21 @@ class Main:
       sections = sections.split('|')
       pages = graph.select(criteria,sections=sections)
       for page in pages: page['url'] = helpers.pageurl(page['name'])
-    except graphstore.util.NonexistentPageError:
+    except NonexistentPageError:
+      pages = []
+    except NoMatchingComparisonOperatorError:
       pages = []
     return render('index',format,pages=pages,criteria=criteria)
   index.exposed = True
   
   def list(self, criteria=None, **params):
     """for index's ajax interface: returns a simple <ul>"""
-    pages = cherrypy.thread_data.graph.select(criteria)
-    return render('list',pages=pages,criteria=criteria)
+    try:
+      pages = cherrypy.thread_data.graph.list(criteria)
+    except NonexistentPageError:
+      pages = []
+    except NoMatchingComparisonOperatorError:
+      return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
   def visualize(self, visualization, criteria=None):

@@ -5,23 +5,23 @@ $(document).ready(function(){
     if($('#criteria_form').css('display') == 'none') {
       this.innerHTML = 'Hide'
       $('#criteria_form').show()
-      $('#criteria_input').focus()
+      $('#criteria').focus()
     } else {
       this.innerHTML = 'Filter'
-      $('#criteria_input').blur()
+      $('#criteria').blur()
       $('#criteria_form').hide()
     }
   })
   
   // clear criteria box when 'clear' link clicked
   $('#clear_link').click(function(){
-    $('#criteria_input').attr('value','')
+    $('#criteria').attr('value','')
     $(this).hide()
-    $('#criteria_input').focus()
+    $('#criteria').focus()
   })
   
   // only show clear link when there's something to clear
-  $('#criteria_input').keyup(function(){
+  $('#criteria').keyup(function(){
     if(this.value == '') {
       $('#clear_link').hide()
     } else {
