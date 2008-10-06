@@ -3,34 +3,16 @@
 {% block heading %} &raquo; visualize &raquo; {% block name %}{% endblock %}{% endblock %}
 {% block head %}
   {% block scripts %}{% endblock %}
-  <script type="text/javascript">
-    function loadAndDraw() {
-      $('#working').show()
-      params = {
-        format:'json',
-        criteria: $('#criteria_input').val()
-      }
-      $.getJSON("{{ url('/') }}",params,function(response){
-        drawVisualization(response)
-        $('#working').hide()
-      })
-      return false
-    }
-    $(document).ready(function(){
-      $('#fields_form').submit(loadAndDraw)
-      if($('#criteria_input').val()) { // render if criteria exists
-        loadAndDraw()
-      } else { // otherwise draw empty one
-        drawVisualization([])
-      }
-    })
-  </script>
+  {{ load_js('visualize') }}
 {% endblock %}
 {% block content %}
   <div id="controls">
     <form id="fields_form">
-      criteria: <input type="text" name="criteria" id='criteria_input' value="{{ criteria if criteria }}"/><br/>
+      criteria: <input type="text" name="criteria" id='criteria_input' value="{{ criteria if criteria }}"/>
+      <br/>
+      <br/>
       {% block fields %}{% endblock %}
+      <br/>
       <input type="submit" value="Visualize"/>
       <span id="working" style="display: none">{{ image('spinner.gif') }} Working...</span>
     </form>

@@ -38,7 +38,8 @@ def load_css(source):
 
 def load_js(source):
   if '.js' not in source: source += '.js'
-  return '<script type="text/javascript" src="%s"></script>' % url('/javascripts/'+source)
+  if not 'http://' in source: source = url('/javascripts/' + source)
+  return '<script type="text/javascript" src="%s"></script>' % source
 
 def load_dynamic_js(source, **args):
   if '.js' not in source: source += '.js'

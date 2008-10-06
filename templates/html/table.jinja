@@ -2,15 +2,31 @@
 {% block name %}Table{% endblock %}
 {% block scripts %}
   {{ load_js('jquery.tablesorter.min') }}
+  {{ load_css('tablesorter-blue.css') }}
   <script type="text/javascript">
+    function clearVisualization() {
+      $('#sorted_table').html('')
+    }
     function drawVisualization(data) {
       // get all attributes and make header
+      $('#table').append('<tr id="table_heading"></tr>')
+      $('#table_heading').append('<td>name</td>')
+      for(attr in data[0]) {
+        $('#table_heading').append('<td>'+attr+'</td>')
+      }
       // put each page's data in a row
+      for(page in data) {
+        $('#table').append('<tr>')
+        for(attr in data[page]) {
+          $('#table').append('<th>'+data[page][attr]+'</th>')
+        }
+        $('#table').append('</tr>')
+      }
       // tablesorterize it
+      $('#table').tablesorter()
     }
   </script>
-  {{ load_css('tablesorter-blue.css') }}
 {% endblock %}
 {% block visualization %}
-  <table></table>
+  <table id="table" class="tablesorter" width="100%"></table>
 {% endblock %}
