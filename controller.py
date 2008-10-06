@@ -24,7 +24,8 @@ class Main:
     except NonexistentPageError:
       pages = []
     except NoMatchingComparisonOperatorError:
-      return render('list',pages=pages,criteria=criteria)
+      pages = []
+    return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
   def visualize(self, visualization, criteria=None):
