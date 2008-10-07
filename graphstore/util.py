@@ -37,9 +37,3 @@ def pluralize_key_if_value_is_list(the_dict):
       the_dict[pluralize(attribute)] = the_dict[attribute]
       del the_dict[attribute]
   return the_dict
-
-class NonexistentPageError(NameError):
-  pass
-
-class NoMatchingComparisonOperatorError(NameError):
-  pass

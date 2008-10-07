@@ -1,5 +1,7 @@
 from framework import *
-from graphstore.util import *
+from graphstore.errors import *
+
+# TODO: RESTify. how does CP expose the request method?
 
 class Main:
   
@@ -35,11 +37,11 @@ class Main:
   def show(self, pagename, format='html'):
     graph = cherrypy.thread_data.graph
     try:
-      page = dict(name=graph.resolve_name(pagename),
+      page = dict(name=graph.normalize_name(pagename),
                   metadata=graph.get(pagename),
                   description=graph.describe(pagename),
                   backlinks=graph.backlinks(pagename))
-    except: # page doesn't exist
+    except NonexistentPageError:
       page = dict(name=pagename)
     return render('show',format,page=page)
   show.exposed = True
