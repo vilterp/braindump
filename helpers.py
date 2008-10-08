@@ -43,10 +43,6 @@ def load_js(source):
   if not 'http://' in source: source = url('/javascripts/' + source)
   return '<script type="text/javascript" src="%s"></script>' % source
 
-def load_dynamic_js(source, **args):
-  if '.js' not in source: source += '.js'
-  return '<script type="text/javascript" src="%s"></script>' % url('/dynamic_javascripts/'+source, **args)
-
 def autodiscovery_link(source, title, type="atom"):
   # TODO: opensearch
   mimetype = mimetypes.guess_type('.' + type)[0]

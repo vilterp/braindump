@@ -22,8 +22,8 @@ cherrypy.engine.subscribe('start_thread',init_graph)
 additional_filters = {
   'smartstr': helpers.smart_str,
   'textilize': textile.textile,
-  'yamlize': lambda obj: yaml.safe_dump(obj,default_flow_style=False),
-  'jsonify': lambda obj: simplejson.dumps(obj,indent=2)
+  'toyaml': lambda obj: yaml.safe_dump(obj,default_flow_style=False),
+  'tojson': lambda obj: simplejson.dumps(obj,indent=2)
 }
 environments = {}
 templatesdir = os.path.join(basedir,'templates')
