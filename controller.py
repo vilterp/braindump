@@ -30,6 +30,11 @@ class Main:
     return render('list',pages=pages,criteria=criteria)
   list.exposed = True
   
+  def dump(self, criteria=None, format='yaml'):
+    pages = cherrypy.thread_data.graph.select(criteria)
+    return render('index',pages=pages,format=format)
+  dump.exposed = True
+  
   def visualize(self, visualization, criteria=None):
     return render(visualization,criteria=criteria)
   visualize.exposed = True

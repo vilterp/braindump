@@ -28,6 +28,6 @@
   <span class="sidebar_heading">This List:</span>
   <ul>
     <li><a href="{{ url('/') }}{{ '?criteria=%s' % escape(criteria) if criteria }}" id="permalink">permalink</a></li>
-    <li><a href="{{ url('/?format=dump') }}{{ '&amp;criteria=%s' % escape(criteria) if criteria }}" id="dump_link">dump &raquo;</a></li>
+    <li><a href="{{ url('/dump') }}{{ '&amp;criteria=%s' % escape(criteria) if criteria }}" id="dump_link">dump &raquo;</a></li>
   </ul>
 {% endblock %}

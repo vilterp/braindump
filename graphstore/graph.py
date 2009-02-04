@@ -1,6 +1,6 @@
 import sqlite3, re, os, inspect, comparisonoperators
 from util import *
-from util import *
+from errors import *
 
 # TODO: don't pass 3rd to comparison operators if they don't take 3 params
 # TODO: set('red','type','color') on set('apple','color','red')
