@@ -8,10 +8,9 @@ from util import *
 
 class Graph:
   
-  def __init__(self, database_path, language='en-us'):
+  def __init__(self, database_path):
     self.id_cache = {}
     self.comparison_operators = {}
-    self.langauge = language
     self.database_path = database_path
     self.connection = sqlite3.connect(database_path)
     self.cursor = self.connection.cursor()
@@ -23,12 +22,6 @@ class Graph:
     if not os.path.exists(database_path) or database_path == ':memory:':
       self.create_schema()
   
-  def set_language(self, language):
-    self.language = language
-  
-  def name_attr_id():
-    return self.idfromname('%s_name',self.language)
-  
   def __repr__(self):
     return "<Graph source:%s>" % os.path.abspath(self.database_path)
   
@@ -39,15 +32,13 @@ class Graph:
     return len(self.list())
   
   def create_schema(self):
+    self.execute("""CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        name text, 
+                                        description text)""")
     self.execute("""CREATE TABLE triples (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                           subject_id numeric,
                                           predicate_id numeric,
-                                          object_id numeric,
-                                          object_literal varchar)""")
-    self.execute('CREATE TABLE entities (id INTEGER PRIMARY KEY AUTOINCREMENT)')
-    self.execute("""INSERT INTO triples (subject_id, predicate_id, object_literal)
-                    VALUES (?,?,?)""",(1,1,'%s_name' % self.language))
-    self.execute('INSERT INTO entities (?)',(1))
+                                          object_id numeric)""")
   
   def query(self, query, replacements=(), printit=False):
     if printit: print query, replacements
@@ -61,10 +52,7 @@ class Graph:
     if name.lower() in [key.lower() for key in self.id_cache.keys()]:
       return case_insensitive_lookup(self.id_cache,name)
     else:
-      result = self.query("""SELECT subject_id FROM triples WHERE
-                             predicate_id = ? AND
-                             object_literal LIKE ?""",
-                             (self.name_attr_id(),name)).fetchone()
+      result = self.query('SELECT id, name FROM pages WHERE name LIKE ?',(name,)).fetchone()
       # LIKE: case insensitive
       if not result: # not there
         if create_if_nonexistent: # create it
@@ -81,46 +69,36 @@ class Graph:
     if id in self.id_cache.values():
       return find_key(self.id_cache,id)
     else:
-      result = self.query("""SELECT object_literal FROM triples WHERE
-                             predicate_id = ? AND
-                             subject_id = ?""",
-                             (self.name_attr_id(),id,)).fetchone()
-      self.id_cache[result[0]] = id
-      return result[0]
+      result = self.query('SELECT name FROM pages WHERE id = ?',(id,)).fetchone()
+      if not result:
+        raise NonexistentPageError(id) # this wouldn't ever happen... where would the id # come from..
+      else:
+        self.id_cache[result[0]] = id
+        return result[0]
   
   def create_page(self, name):
-    self.execute('INSERT INTO entities () VALUES ()')
-    newid = self.query('SELECT id FROM entities ORDER BY id DESC').fetchone()
-    self.execute("""INSERT INTO triples (subject_id,predicate_id,object_literal)
-                    VALUES (?,?,?)""",(newid,self.name_attr_id(),name))
-    return newid
-  
-  def rename(self, old, new):
-    self.execute('UPDATE triples SET object_literal = ? WHERE object_literal = ?',(new,old))
-    # update id cache
-    if old in self.id_cache:
-      self.id_cache[new] = self.id_cache[old]
-      del self.id_cache[old]
+    self.execute('INSERT INTO pages (name, description) VALUES (?, ?)',(name,''))
+    return self.idfromname(name) # wish it wasn't necessary to query again...
   
   def normalize_name(self, name):
     """capitalized properly"""
-    result = self.query("""SELECT object_literal FROM triples WHERE object_literal LIKE ?""",
-                           (name,)).fetchone()
+    result = self.query('SELECT name FROM pages WHERE name LIKE ?',(name,)).fetchone()
     if result is not None:
       return result[0]
     else:
       raise NonexistentPageError(name)
   
-  def triple_exists(self, subject_id, predicate_id, object_id=None, object_literal=None):
-    if object_literal is None:
-      result = self.query("""SELECT * FROM triples WHERE
-                             subject_id = ? AND predicate_id = ? AND object_id = ?""",
-                             (subject_id,predicate_id,object_id)).fetchone()
+  def triple_exists(self, subject_id, predicate_id, object_id):
+    result = self.query("""SELECT * FROM triples WHERE
+                           subject_id = ? AND predicate_id = ? AND object_id = ?""",
+                                      (subject_id,predicate_id,object_id)).fetchone()
+    if result is None:
+      return False
     else:
-      result = self.query("""SELECT * FROM triples WHERE
-                             subject_id = ? AND predicate_id = ? AND object_literal = ?""",
-                             (subject_id,predicate_id,object_literal)).fetchone()
-    return result is None
+      return True
+  
+  def infer_types(self, page):
+    return self.backlinks(page).keys()
   
   def list(self, criteria=None):
     if not criteria:
@@ -208,7 +186,7 @@ class Graph:
         return [self.namefromid(row[0]) for row in result]
       elif result is not None:
         return self.namefromid(result[0][0])
-      else:
+      elif result is None:
         raise NonexistentPageError(page)
   
   def set(self, subject, predicate, object=None):
@@ -268,9 +246,6 @@ class Graph:
       else:
         return None
   
-  def infer_types(self, page):
-    return self.backlinks(page).keys()
-  
   def between(self, page1, page2):
     id1 = self.idfromname(page1)
     id2 = self.idfromname(page2)
@@ -289,9 +264,24 @@ class Graph:
     else:
       return None # would be cool to find shortest distance between two pages not directly linked
   
-  def describe(self, page, description=None):
-    if description is None:
-      return self.get(page,'%s_description' % self.langauge)
-    else:
-      self.set(page,'%s_description' % self.language)
+  def describe(self, page, description=None): # should this be split up into 2 methods?
+    if description is None: # get description
+      result = self.query('SELECT description FROM pages WHERE name LIKE ?',
+                          (page,)).fetchone()
+      if not result:
+        raise NonexistentPageError(page)
+      elif result[0] is None:
+        return ''
+      else:
+        return result[0]
+    else: # set description
+      page_id = self.idfromname(page,True) # just so page will be created if nonexistent
+      self.execute('UPDATE pages SET description = ? WHERE id = ?',(description,page_id))
+  
+  def rename(self, old, new):
+    self.execute('UPDATE pages SET name = ? WHERE name = ?',(new,old))
+    # update id cache
+    if old in self.id_cache:
+      self.id_cache[new] = self.id_cache[old]
+      del self.id_cache[old]
   
